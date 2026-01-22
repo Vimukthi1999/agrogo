@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "256000708187",
+    "project_id": "agrogo-eed74",
+    "storage_bucket": "agrogo-eed74.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:256000708187:android:69a36589242615ade6797e",
+        "android_client_info": {
+          "package_name": "com.example.agrogo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBYwu3MwHrOJwQMTVmCt85OB9UsNSlvhcU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -72,14 +72,26 @@ class SigninView extends GetView<SigninController> {
                             obscureText: true,
                           ),
                           const SizedBox(height: 20),
-                          ElevatedButton(
-                            onPressed: () {
-                              controller.login(
-                                controller.emailController.text.trim(),
-                                controller.passwordController.text.trim(),
-                              );
-                            },
-                            child: const Text("Login"),
+                          Obx(
+                            () => ElevatedButton(
+                              onPressed: controller.isLoading.value
+                                  ? null
+                                  : () {
+                                      controller.login(
+                                        controller.emailController.text.trim(),
+                                        controller.passwordController.text.trim(),
+                                      );
+                                    },
+                              child: controller.isLoading.value
+                                  ? SizedBox(
+                                      height: 20,
+                                      width: 20,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                      ),
+                                    )
+                                  : const Text("Login"),
+                            ),
                           ),
 
                           const SizedBox(height: 20),

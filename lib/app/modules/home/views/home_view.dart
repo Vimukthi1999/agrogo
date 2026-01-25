@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../models/category_model.dart';
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
@@ -7,10 +8,7 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('HomeView'),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: const Text('HomeView'), centerTitle: true),
       body: SingleChildScrollView(
         child: Stack(
           children: [
@@ -55,15 +53,20 @@ class HomeView extends GetView<HomeController> {
                                 //   fontSize: 14,
                                 // ),
                               ),
-                              const Icon(Icons.keyboard_arrow_down, color: Colors.white70)
+                              const Icon(
+                                Icons.keyboard_arrow_down,
+                                color: Colors.white70,
+                              ),
                             ],
                           ),
                         ],
                       ),
                       const CircleAvatar(
                         radius: 22,
-                        backgroundImage: NetworkImage('https://i.pravatar.cc/150?img=5'), // Dummy User
-                      )
+                        backgroundImage: NetworkImage(
+                          'https://i.pravatar.cc/150?img=5',
+                        ), // Dummy User
+                      ),
                     ],
                   ),
 
@@ -92,7 +95,6 @@ class HomeView extends GetView<HomeController> {
 
                   // Weather Widget Card
                   // _buildWeatherCard(),
-
                   const SizedBox(height: 25),
 
                   // Invest By Category
@@ -105,13 +107,70 @@ class HomeView extends GetView<HomeController> {
                     // ),
                   ),
                   const SizedBox(height: 15),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: controller.categories.map((cat) {
-                      return _buildCategoryItem(cat);
-                    }).toList(),
+
+                  StreamBuilder<List<CategoryModel>>(
+                    stream: controller.getCategories(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+
+                      if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                        return const Center(child: Text('No categories found'));
+                      }
+
+                      final categories = snapshot.data!;
+
+                      return GridView.builder(
+                        padding: const EdgeInsets.all(12),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3,
+                              childAspectRatio: 0.9,
+                              crossAxisSpacing: 12,
+                              mainAxisSpacing: 12,
+                            ),
+                        itemCount: categories.length,
+                        itemBuilder: (context, index) {
+                          final category = categories[index];
+
+                          return Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                height: 60,
+                                width: 60,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.green.shade50,
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8),
+                                  child: Image.network(
+                                    category.icon,
+                                    fit: BoxFit.contain,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 6),
+                              Text(
+                                category.name,
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(fontSize: 13),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
                   ),
 
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //   children: controller.categories.map((cat) {
+                  //     return _buildCategoryItem(cat);
+                  //   }).toList(),
+                  // ),
                   const SizedBox(height: 25),
 
                   // Best Offers Header
@@ -174,9 +233,8 @@ class HomeView extends GetView<HomeController> {
                 ],
               ),
             ),
-
           ],
-        )
+        ),
       ),
     );
   }
@@ -195,7 +253,7 @@ class HomeView extends GetView<HomeController> {
                 color: Colors.grey.withOpacity(0.1),
                 spreadRadius: 2,
                 blurRadius: 5,
-              )
+              ),
             ],
           ),
           child: Icon(cat['icon'], color: cat['color'], size: 28),
@@ -204,11 +262,10 @@ class HomeView extends GetView<HomeController> {
         Text(
           cat['label'],
           // style: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 12),
-        )
+        ),
       ],
     );
   }
-
 }
 
 

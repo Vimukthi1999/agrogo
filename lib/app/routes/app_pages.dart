@@ -4,6 +4,8 @@ import '../modules/favorites/bindings/favorites_binding.dart';
 import '../modules/favorites/views/favorites_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
+import '../modules/nav/bindings/nav_binding.dart';
+import '../modules/nav/views/nav_view.dart';
 import '../modules/onboarding/bindings/onboarding_binding.dart';
 import '../modules/onboarding/views/onboarding_view.dart';
 import '../modules/settings/bindings/settings_binding.dart';
@@ -57,6 +59,11 @@ class AppPages {
       name: _Paths.SIGNUP,
       page: () => const SignupView(),
       binding: SignupBinding(),
+    ),
+    GetPage(
+      name: _Paths.NAV,
+      page: () => const NavView(),
+      binding: NavBinding(),
     ),
   ];
 }

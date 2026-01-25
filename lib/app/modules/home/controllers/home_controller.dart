@@ -1,20 +1,43 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../models/category_model.dart';
+
 class HomeController extends GetxController {
+  final categories = <CategoryModel>[].obs;
+  final isLoading = true.obs;
 
-
-// Data for "Invest by Category"
-  final List<Map<String, dynamic>> categories = [
-    {'icon': Icons.hourglass_bottom, 'label': 'Duration', 'color': Colors.blue},
-    {'icon': Icons.monetization_on, 'label': 'Return', 'color': Colors.green},
-    {'icon': Icons.trending_down, 'label': 'Low Risk', 'color': Colors.redAccent},
-    {'icon': Icons.shield, 'label': 'Safety', 'color': Colors.orange},
-  ];
-  
   @override
   void onInit() {
     super.onInit();
+    // fetchCategories();
+  }
+
+  // void fetchCategories() async {
+  //   try {
+  //     final snapshot = await FirebaseFirestore.instance
+  //         .collection('categories')
+  //         .get();
+
+  //     categories.value = snapshot.docs
+  //         .map((doc) => CategoryModel.fromFirestore(doc.id, doc.data()))
+  //         .toList();
+  //   } finally {
+  //     isLoading.value = false;
+  //   }
+  // }
+
+  Stream<List<CategoryModel>> getCategories() {
+    return FirebaseFirestore.instance
+        .collection('categories')
+        // .where('isActive', isEqualTo: true)
+        .snapshots()
+        .map((snapshot) {
+          return snapshot.docs
+              .map((doc) => CategoryModel.fromMap(doc.id, doc.data()))
+              .toList();
+        });
   }
 
   @override
@@ -26,6 +49,4 @@ class HomeController extends GetxController {
   void onClose() {
     super.onClose();
   }
-
-
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../routes/app_pages.dart';
 import '../controllers/signup_controller.dart';
 
 class SignupView extends GetView<SignupController> {
@@ -15,11 +16,8 @@ class SignupView extends GetView<SignupController> {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                // Color(0xFF0056D2), // Gradient start color
-                Color(0xFF173046), // Gradient start color
-                // Color(0xFF4A90E2), // Gradient end color
+                Color(0xFF173046),
                 Color(0xFF74848A),
-                // Colors.white,
               ],
             ),
           ),
@@ -45,23 +43,23 @@ class SignupView extends GetView<SignupController> {
                         children: [
                           SizedBox(height: 10),
                           Text(
-                            "Sign In".tr,
+                            "Sign Up".tr,
                             style: Theme.of(context).textTheme.headlineSmall,
                           ),
                           SizedBox(height: 10),
                           Text(
-                            "Please Enter Your Credentials Below To Access Your Account"
-                                .tr,
+                            "Create Your Account To Get Started".tr,
                             style: Theme.of(context).textTheme.bodySmall,
                           ),
                           SizedBox(height: 10),
-
                           TextField(
                             controller: controller.emailController,
                             decoration: const InputDecoration(
                               labelText: "Email",
                             ),
+                            keyboardType: TextInputType.emailAddress,
                           ),
+                          SizedBox(height: 12),
                           TextField(
                             controller: controller.passwordController,
                             decoration: const InputDecoration(
@@ -69,15 +67,51 @@ class SignupView extends GetView<SignupController> {
                             ),
                             obscureText: true,
                           ),
+                          SizedBox(height: 12),
+                          TextField(
+                            controller: controller.confirmPasswordController,
+                            decoration: const InputDecoration(
+                              labelText: "Confirm Password",
+                            ),
+                            obscureText: true,
+                          ),
                           const SizedBox(height: 20),
-                          ElevatedButton(
-                            onPressed: () {
-                              controller.register(
-                                controller.emailController.text.trim(),
-                                controller.passwordController.text.trim(),
-                              );
-                            },
-                            child: const Text("Register"),
+                          Obx(
+                            () => ElevatedButton(
+                              onPressed: controller.isLoading.value
+                                  ? null
+                                  : () {
+                                      controller.register(
+                                        controller.emailController.text.trim(),
+                                        controller.passwordController.text.trim(),
+                                        controller.confirmPasswordController.text.trim(),
+                                      );
+                                    },
+                              child: controller.isLoading.value
+                                  ? SizedBox(
+                                      height: 20,
+                                      width: 20,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                      ),
+                                    )
+                                  : const Text("Register"),
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          Center(
+                            child: GestureDetector(
+                              onTap: () {
+                                Get.offNamed(Routes.SIGNIN);
+                              },
+                              child: Text(
+                                "Already have an account? Sign In".tr,
+                                style: TextStyle(
+                                  color: Theme.of(context).primaryColor,
+                                  decoration: TextDecoration.underline,
+                                ),
+                              ),
+                            ),
                           ),
                         ],
                       ),

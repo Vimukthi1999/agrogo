@@ -45,33 +45,49 @@ class NavView extends GetView<NavController> {
         ),
         bottomNavigationBar: Obx(
           () => Container(
-            margin: EdgeInsets.only(bottom: 7, top: 7),
+            margin: const EdgeInsets.only(bottom: 7, top: 7),
             child: ClipRRect(
-              borderRadius: BorderRadius.all(Radius.circular(50)),
+              borderRadius: const BorderRadius.all(Radius.circular(50)),
               child: Container(
                 decoration: BoxDecoration(
-                  boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 20)],
+                  boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 20)],
                 ),
                 child: BottomNavigationBar(
                   currentIndex: controller.selectedIndex.value,
-
                   onTap: controller.changePage,
+                  type: BottomNavigationBarType.fixed,
+                  backgroundColor: Colors.white,
+                  selectedItemColor: const Color(0xFF1E7044),
+                  unselectedItemColor: Colors.grey[400],
+                  selectedLabelStyle: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12,
+                  ),
+                  unselectedLabelStyle: const TextStyle(
+                    fontSize: 11,
+                  ),
+                  iconSize: 24,
+                  elevation: 5,
                   items: [
                     BottomNavigationBarItem(
-                      icon: Icon(Icons.home, size: 25),
-                      label: 'Home',
+                      icon: const Icon(Icons.home_outlined),
+                      activeIcon: const Icon(Icons.home),
+                      label: 'Home'.tr,
                     ),
                     BottomNavigationBarItem(
-                      icon: Icon(Icons.home, size: 25),
-                      label: 'My Ads',
+                      icon: const Icon(Icons.post_add_outlined),
+                      activeIcon: const Icon(Icons.post_add),
+                      label: 'My Ads'.tr,
                     ),
                     BottomNavigationBarItem(
-                      icon: Icon(Icons.home, size: 25),
-                      label: 'Favorites',
+                      icon: const Icon(Icons.favorite_outline),
+                      activeIcon: const Icon(Icons.favorite),
+                      label: 'Favorites'.tr,
                     ),
                     BottomNavigationBarItem(
-                      icon: Icon(Icons.settings, size: 25),
-                      label: 'Profile',
+                      icon: const Icon(Icons.person_outline),
+                      activeIcon: const Icon(Icons.person),
+                      label: 'Profile'.tr,
                     ),
                   ],
                 ),

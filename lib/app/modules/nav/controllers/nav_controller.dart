@@ -71,8 +71,11 @@ class NavController extends GetxController {
   }
 
   void changePage(int index) {
-    selectedIndex.value = index;
-    Get.offAndToNamed(pages[index], id: 1);
+    // Only navigate if the index is different from the current one
+    if (selectedIndex.value != index) {
+      selectedIndex.value = index;
+      Get.offAndToNamed(pages[index], id: 1);
+    }
   }
 
   @override

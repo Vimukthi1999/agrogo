@@ -8,23 +8,30 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('HomeView'), centerTitle: true),
       body: SingleChildScrollView(
         child: Stack(
           children: [
+            // Header Background
             Container(
-              height: 320,
+              height: 380,
               decoration: const BoxDecoration(
-                color: Color(0xFF1E7044),
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Color(0xFF1E7044),
+                    Color(0xFF2D9B5F),
+                  ],
+                ),
                 borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(30),
-                  bottomRight: Radius.circular(30),
+                  bottomLeft: Radius.circular(40),
+                  bottomRight: Radius.circular(40),
                 ),
               ),
             ),
 
             Padding(
-              padding: const EdgeInsets.fromLTRB(20, 60, 20, 20),
+              padding: const EdgeInsets.fromLTRB(20, 50, 20, 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -36,75 +43,114 @@ class HomeView extends GetView<HomeController> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Hello, Good Morning",
-                            // style: GoogleFonts.poppins(
-                            //   color: Colors.white,
-                            //   fontSize: 20,
-                            //   fontWeight: FontWeight.w600,
-                            // ),
+                            "Hello, Good Morning".tr,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 0.5,
+                            ),
                           ),
-                          const SizedBox(height: 5),
+                          const SizedBox(height: 8),
                           Row(
                             children: [
-                              Text(
-                                "Sunday, 01 Dec 2024",
-                                // style: GoogleFonts.poppins(
-                                //   color: Colors.white70,
-                                //   fontSize: 14,
-                                // ),
-                              ),
                               const Icon(
-                                Icons.keyboard_arrow_down,
+                                Icons.calendar_today,
                                 color: Colors.white70,
+                                size: 16,
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                "Sunday, 25 Jan 2026".tr,
+                                style: const TextStyle(
+                                  color: Colors.white70,
+                                  fontSize: 13,
+                                  letterSpacing: 0.3,
+                                ),
                               ),
                             ],
                           ),
                         ],
                       ),
-                      const CircleAvatar(
-                        radius: 22,
-                        backgroundImage: NetworkImage(
-                          'https://i.pravatar.cc/150?img=5',
-                        ), // Dummy User
+                      Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: Colors.white,
+                            width: 2,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.2),
+                              blurRadius: 8,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: const CircleAvatar(
+                          radius: 25,
+                          backgroundImage: NetworkImage(
+                            'https://i.pravatar.cc/150?img=5',
+                          ),
+                        ),
                       ),
                     ],
                   ),
 
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 25),
 
                   // Search Bar
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.2),
+                      color: Colors.white,
                       borderRadius: BorderRadius.circular(15),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 10,
+                          offset: const Offset(0, 5),
+                        ),
+                      ],
                     ),
-                    child: const TextField(
-                      style: TextStyle(color: Colors.white),
+                    child: TextField(
+                      style: const TextStyle(
+                        color: Color(0xFF1E7044),
+                        fontSize: 14,
+                      ),
                       decoration: InputDecoration(
                         border: InputBorder.none,
-                        hintText: "Search here...",
-                        hintStyle: TextStyle(color: Colors.white60),
-                        icon: Icon(Icons.search, color: Colors.white60),
-                        suffixIcon: Icon(Icons.mic, color: Colors.white60),
+                        hintText: "Search products, categories...".tr,
+                        hintStyle: const TextStyle(
+                          color: Colors.grey,
+                          fontSize: 14,
+                        ),
+                        icon: const Icon(
+                          Icons.search,
+                          color: Color(0xFF1E7044),
+                          size: 22,
+                        ),
+                        suffixIcon: const Icon(
+                          Icons.filter_list,
+                          color: Color(0xFF1E7044),
+                          size: 22,
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(vertical: 14),
                       ),
                     ),
                   ),
 
-                  const SizedBox(height: 25),
+                  const SizedBox(height: 30),
 
-                  // Weather Widget Card
-                  // _buildWeatherCard(),
-                  const SizedBox(height: 25),
-
-                  // Invest By Category
+                  // Categories By Section
                   Text(
-                    "Invest by Category",
-                    // style: GoogleFonts.poppins(
-                    //   fontSize: 18,
-                    //   fontWeight: FontWeight.bold,
-                    //   color: Colors.black87,
-                    // ),
+                    "Categories".tr,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 0.5,
+                    ),
                   ),
                   const SizedBox(height: 15),
 
@@ -121,121 +167,395 @@ class HomeView extends GetView<HomeController> {
 
                       final categories = snapshot.data!;
 
-                      return GridView.builder(
-                        padding: const EdgeInsets.all(12),
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
-                              childAspectRatio: 0.9,
-                              crossAxisSpacing: 12,
-                              mainAxisSpacing: 12,
-                            ),
-                        itemCount: categories.length,
-                        itemBuilder: (context, index) {
-                          final category = categories[index];
+                      return SizedBox(
+                        height: 120,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: categories.length,
+                          itemBuilder: (context, index) {
+                            final category = categories[index];
 
-                          return Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                height: 60,
-                                width: 60,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Colors.green.shade50,
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8),
-                                  child: Image.network(
-                                    category.icon,
-                                    fit: BoxFit.contain,
+                            return Container(
+                              width: 100,
+                              margin: const EdgeInsets.only(right: 12),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(18),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.08),
+                                    blurRadius: 8,
+                                    offset: const Offset(0, 3),
                                   ),
-                                ),
+                                ],
                               ),
-                              const SizedBox(height: 6),
-                              Text(
-                                category.name,
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(fontSize: 13),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    height: 50,
+                                    width: 50,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: const Color(0xFF1E7044).withOpacity(0.1),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8),
+                                      child: Image.network(
+                                        category.icon,
+                                        fit: BoxFit.contain,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    category.name,
+                                    textAlign: TextAlign.center,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                      color: Color(0xFF1E7044),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          );
-                        },
+                            );
+                          },
+                        ),
                       );
                     },
                   ),
 
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //   children: controller.categories.map((cat) {
-                  //     return _buildCategoryItem(cat);
-                  //   }).toList(),
-                  // ),
-                  const SizedBox(height: 25),
+                  const SizedBox(height: 35),
 
-                  // Best Offers Header
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Best Offers",
-                        // style: GoogleFonts.poppins(
-                        //   fontSize: 18,
-                        //   fontWeight: FontWeight.bold,
-                        //   color: Colors.black87,
-                        // ),
-                      ),
-                      Text(
-                        "View all",
-                        // style: GoogleFonts.poppins(
-                        //   fontSize: 14,
-                        //   fontWeight: FontWeight.w500,
-                        //   color: const Color(0xFF1E7044),
-                        // ),
-                      ),
-                    ],
+                  // Best Offers Section
+                  Container(
+                    margin: const EdgeInsets.only(top: 10),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 30,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(25),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.08),
+                          blurRadius: 15,
+                          offset: const Offset(0, 5),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              "Best Offers",
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF1E7044),
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                // Navigate to all offers
+                              },
+                              child: const Text(
+                                "View all",
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w600,
+                                  color: Color(0xFF1E7044),
+                                  decoration: TextDecoration.underline,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 20),
+
+                        // Featured Offer Card
+                        Container(
+                          height: 180,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(18),
+                            gradient: const LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [
+                                Color(0xFF1E7044),
+                                Color(0xFF2D9B5F),
+                              ],
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: const Color(0xFF1E7044).withOpacity(0.2),
+                                blurRadius: 10,
+                                offset: const Offset(0, 5),
+                              ),
+                            ],
+                          ),
+                          child: Stack(
+                            children: [
+                              // Background pattern
+                              Positioned(
+                                right: -30,
+                                top: -30,
+                                child: Container(
+                                  width: 150,
+                                  height: 150,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.white.withOpacity(0.1),
+                                  ),
+                                ),
+                              ),
+
+                              Padding(
+                                padding: const EdgeInsets.all(24),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 12,
+                                            vertical: 6,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: Colors.white.withOpacity(0.3),
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                          ),
+                                          child: const Text(
+                                            "Limited Offer",
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 11,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(height: 10),
+                                        const Text(
+                                          "Get 40% OFF",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 28,
+                                            fontWeight: FontWeight.bold,
+                                            letterSpacing: 0.5,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 4),
+                                        const Text(
+                                          "on Premium Seeds",
+                                          style: TextStyle(
+                                            color: Colors.white70,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 16,
+                                        vertical: 8,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius:
+                                            BorderRadius.circular(10),
+                                      ),
+                                      child: const Text(
+                                        "Shop Now",
+                                        style: TextStyle(
+                                          color: Color(0xFF1E7044),
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        const SizedBox(height: 20),
+
+                        // Other Offers
+                        SizedBox(
+                          height: 140,
+                          child: ListView(
+                            scrollDirection: Axis.horizontal,
+                            children: [
+                              _buildOfferCard(
+                                "Fertilizers",
+                                "25% OFF",
+                                const Color(0xFF2D5C6F),
+                              ),
+                              const SizedBox(width: 12),
+                              _buildOfferCard(
+                                "Tools",
+                                "30% OFF",
+                                const Color(0xFF1E7044),
+                              ),
+                              const SizedBox(width: 12),
+                              _buildOfferCard(
+                                "Pesticides",
+                                "20% OFF",
+                                const Color(0xFF2D9B5F),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
 
-                  const SizedBox(height: 15),
+                  const SizedBox(height: 30),
 
-                  // Offers List
-                  // SizedBox(
-                  //   height: 160,
-                  //   child: ListView.builder(
-                  //     scrollDirection: Axis.horizontal,
-                  //     itemCount: controller.offerImages.length,
-                  //     itemBuilder: (context, index) {
-                  //       return Container(
-                  //         width: 250,
-                  //         margin: const EdgeInsets.only(right: 15),
-                  //         decoration: BoxDecoration(
-                  //           borderRadius: BorderRadius.circular(20),
-                  //           image: DecorationImage(
-                  //             image: NetworkImage(controller.offerImages[index]),
-                  //             fit: BoxFit.cover,
-                  //           ),
-                  //         ),
-                  //         child: Container(
-                  //           decoration: BoxDecoration(
-                  //             borderRadius: BorderRadius.circular(20),
-                  //             gradient: LinearGradient(
-                  //               begin: Alignment.bottomCenter,
-                  //               end: Alignment.topCenter,
-                  //               colors: [Colors.black.withOpacity(0.6), Colors.transparent],
-                  //             ),
-                  //           ),
-                  //         ),
-                  //       );
-                  //     },
-                  //   ),
-                  // ),
-                  const SizedBox(height: 20),
+                  // Quick Stats Section
+                  Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.08),
+                          blurRadius: 12,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        _buildStatItem("1,234", "Total Orders", Icons.shopping_cart),
+                        _buildStatItem("₹45,890", "Total Spent", Icons.payments),
+                        _buildStatItem("18", "Saved Items", Icons.bookmark),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 40),
                 ],
               ),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildOfferCard(String title, String discount, Color color) {
+    return Container(
+      width: 130,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(15),
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            color,
+            color.withOpacity(0.7),
+          ],
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: color.withOpacity(0.2),
+            blurRadius: 8,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              title,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  discount,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const Text(
+                  "Limited",
+                  style: TextStyle(
+                    color: Colors.white70,
+                    fontSize: 11,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildStatItem(String value, String label, IconData icon) {
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: const Color(0xFF1E7044).withOpacity(0.1),
+            shape: BoxShape.circle,
+          ),
+          child: Icon(
+            icon,
+            color: const Color(0xFF1E7044),
+            size: 24,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          value,
+          style: const TextStyle(
+            color: Color(0xFF1E7044),
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          label,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: Colors.grey[600],
+            fontSize: 11,
+          ),
+        ),
+      ],
     );
   }
 
@@ -267,33 +587,3 @@ class HomeView extends GetView<HomeController> {
     );
   }
 }
-
-
-
-
-// Container(
-//     width: double.infinity,
-//     height: double.infinity,
-//     decoration: const BoxDecoration(
-//       gradient: LinearGradient(
-//         begin: Alignment.topLeft,
-//         end: Alignment.bottomRight,
-//         colors: [
-//           Color.fromARGB(255, 238, 143, 59), // Warm Peach/Cream (Top Left)
-//           Color(0xFFFFFBF7), // Very Light Cream/White (Bottom Right)
-//         ],
-//         // You can adjust stops to control how far the peach color spreads
-//         stops: [0.0, 1.0], 
-//       ),
-//     ),
-//     child: SingleChildScrollView(
-//       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
-//       child: Column(
-//         crossAxisAlignment: CrossAxisAlignment.start,
-//         children: [
-//           // Your UI content goes here...
-//           Text("Hello, Harris", style: TextStyle(fontSize: 24)),
-//         ],
-//       ),
-//     ),
-//   ),

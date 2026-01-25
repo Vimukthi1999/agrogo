@@ -163,8 +163,33 @@ class HomeView extends GetView<HomeController> {
                         return const Center(child: CircularProgressIndicator());
                       }
 
+                      if (snapshot.hasError) {
+                        return Center(
+                          child: Text('Error: ${snapshot.error}'),
+                        );
+                      }
+
                       if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                        return const Center(child: Text('No categories found'));
+                        return Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.category_outlined,
+                                size: 48,
+                                color: Colors.white54,
+                              ),
+                              const SizedBox(height: 12),
+                              const Text(
+                                'No categories found',
+                                style: TextStyle(
+                                  color: Colors.white70,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
                       }
 
                       final categories = snapshot.data!;
@@ -195,8 +220,8 @@ class HomeView extends GetView<HomeController> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Container(
-                                    height: 50,
-                                    width: 50,
+                                    height: 80,
+                                    width: 80,
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
                                       color: const Color(0xFF1E7044).withOpacity(0.1),
@@ -206,10 +231,15 @@ class HomeView extends GetView<HomeController> {
                                       child: Image.network(
                                         category.icon,
                                         fit: BoxFit.contain,
+                                        errorBuilder: (context, error, stackTrace) {
+                                          return Icon(
+                                            Icons.image_not_supported,
+                                            color: const Color(0xFF1E7044),
+                                          );
+                                        },
                                       ),
                                     ),
                                   ),
-                                  const SizedBox(height: 8),
                                   Text(
                                     category.name,
                                     textAlign: TextAlign.center,

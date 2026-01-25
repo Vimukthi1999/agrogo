@@ -1,9 +1,13 @@
 import 'package:get/get.dart';
 
+import '../modules/createad/bindings/createad_binding.dart';
+import '../modules/createad/views/createad_view.dart';
 import '../modules/favorites/bindings/favorites_binding.dart';
 import '../modules/favorites/views/favorites_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
+import '../modules/myads/bindings/myads_binding.dart';
+import '../modules/myads/views/myads_view.dart';
 import '../modules/nav/bindings/nav_binding.dart';
 import '../modules/nav/views/nav_view.dart';
 import '../modules/onboarding/bindings/onboarding_binding.dart';
@@ -64,6 +68,16 @@ class AppPages {
       name: _Paths.NAV,
       page: () => const NavView(),
       binding: NavBinding(),
+    ),
+    GetPage(
+      name: _Paths.MYADS,
+      page: () => const MyadsView(),
+      binding: MyadsBinding(),
+    ),
+    GetPage(
+      name: _Paths.CREATEAD,
+      page: () => const CreateadView(),
+      binding: CreateadBinding(),
     ),
   ];
 }

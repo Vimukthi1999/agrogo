@@ -11,6 +11,8 @@ abstract class Routes {
   static const FAVORITES = _Paths.FAVORITES;
   static const SIGNUP = _Paths.SIGNUP;
   static const NAV = _Paths.NAV;
+  static const MYADS = _Paths.MYADS;
+  static const CREATEAD = _Paths.CREATEAD;
 }
 
 abstract class _Paths {
@@ -23,4 +25,6 @@ abstract class _Paths {
   static const FAVORITES = '/favorites';
   static const SIGNUP = '/signup';
   static const NAV = '/nav';
+  static const MYADS = '/myads';
+  static const CREATEAD = '/createad';
 }

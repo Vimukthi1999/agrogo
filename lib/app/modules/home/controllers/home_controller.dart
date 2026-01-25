@@ -36,9 +36,40 @@ class HomeController extends GetxController {
         .snapshots()
         .map((snapshot) {
           log('Categories snapshot: ${snapshot.docs.length}');
-          return snapshot.docs
-              .map((doc) => CategoryModel.fromMap(doc.id, doc.data()))
-              .toList();
+          
+          if (snapshot.docs.isEmpty) {
+            log('No categories documents found');
+            return [];
+          }
+          
+          try {
+            final categories = snapshot.docs
+                .map((doc) {
+                  try {
+                    final data = doc.data();
+                    log('Document ${doc.id} data: $data');
+                    
+                    // Check if required fields exist
+                    if (!data.containsKey('name') || !data.containsKey('icon')) {
+                      log('Document ${doc.id} missing required fields');
+                      return null;
+                    }
+                    
+                    return CategoryModel.fromMap(doc.id, data);
+                  } catch (e) {
+                    log('Error mapping document ${doc.id}: $e');
+                    return null;
+                  }
+                })
+                .whereType<CategoryModel>() // Filters out null values
+                .toList();
+            
+            log('Successfully mapped ${categories.length} categories');
+            return categories;
+          } catch (e) {
+            log('Error in getCategories: $e');
+            return [];
+          }
         });
   }
 

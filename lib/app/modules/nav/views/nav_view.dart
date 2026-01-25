@@ -63,7 +63,11 @@ class NavView extends GetView<NavController> {
                     ),
                     BottomNavigationBarItem(
                       icon: Icon(Icons.home, size: 25),
-                      label: 'Capture Images',
+                      label: 'My Ads',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.home, size: 25),
+                      label: 'Favorites',
                     ),
                     BottomNavigationBarItem(
                       icon: Icon(Icons.settings, size: 25),

@@ -14,6 +14,11 @@ class SigninController extends GetxController {
 
   Rx<User?> firebaseUser = Rx<User?>(null);
   RxBool isLoading = false.obs;
+  RxBool isPasswordVisible = false.obs;
+  
+  // Validation error states
+  RxString emailError = ''.obs;
+  RxString passwordError = ''.obs;
 
   @override
   void onInit() {
@@ -29,10 +34,47 @@ class SigninController extends GetxController {
     });
   }
 
+  // Email validation
+  bool isValidEmail(String email) {
+    final emailRegex = RegExp(
+      r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+    );
+    return emailRegex.hasMatch(email);
+  }
+
+  // Clear error messages
+  void clearErrors() {
+    emailError.value = '';
+    passwordError.value = '';
+  }
+
+  // Validate inputs before login
+  bool validateInputs(String email, String password) {
+    clearErrors();
+    bool isValid = true;
+
+    if (email.isEmpty) {
+      emailError.value = 'Email is required';
+      isValid = false;
+    } else if (!isValidEmail(email)) {
+      emailError.value = 'Please enter a valid email';
+      isValid = false;
+    }
+
+    if (password.isEmpty) {
+      passwordError.value = 'Password is required';
+      isValid = false;
+    } else if (password.length < 6) {
+      passwordError.value = 'Password must be at least 6 characters';
+      isValid = false;
+    }
+
+    return isValid;
+  }
+
   // Login
   Future<void> login(String email, String password) async {
-    if (email.isEmpty || password.isEmpty) {
-      Get.snackbar("Error", "Email and password cannot be empty");
+    if (!validateInputs(email, password)) {
       return;
     }
 

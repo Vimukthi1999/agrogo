@@ -15,6 +15,13 @@ class SignupController extends GetxController {
 
   Rx<User?> firebaseUser = Rx<User?>(null);
   RxBool isLoading = false.obs;
+  RxBool isPasswordVisible = false.obs;
+  RxBool isConfirmPasswordVisible = false.obs;
+
+  // Validation error states
+  RxString emailError = ''.obs;
+  RxString passwordError = ''.obs;
+  RxString confirmPasswordError = ''.obs;
 
   @override
   void onInit() {
@@ -29,20 +36,67 @@ class SignupController extends GetxController {
     });
   }
 
+  // Email validation
+  bool isValidEmail(String email) {
+    final emailRegex = RegExp(
+      r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+    );
+    return emailRegex.hasMatch(email);
+  }
+
+  // Password strength check
+  String getPasswordStrength(String password) {
+    if (password.isEmpty) return '';
+    if (password.length < 6) return 'Weak';
+    if (password.length < 8) return 'Fair';
+    if (RegExp(r'^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])').hasMatch(password)) {
+      return 'Strong';
+    }
+    return 'Good';
+  }
+
+  // Clear error messages
+  void clearErrors() {
+    emailError.value = '';
+    passwordError.value = '';
+    confirmPasswordError.value = '';
+  }
+
+  // Validate inputs before registration
+  bool validateInputs(String email, String password, String confirmPassword) {
+    clearErrors();
+    bool isValid = true;
+
+    if (email.isEmpty) {
+      emailError.value = 'Email is required';
+      isValid = false;
+    } else if (!isValidEmail(email)) {
+      emailError.value = 'Please enter a valid email';
+      isValid = false;
+    }
+
+    if (password.isEmpty) {
+      passwordError.value = 'Password is required';
+      isValid = false;
+    } else if (password.length < 6) {
+      passwordError.value = 'Password must be at least 6 characters';
+      isValid = false;
+    }
+
+    if (confirmPassword.isEmpty) {
+      confirmPasswordError.value = 'Please confirm your password';
+      isValid = false;
+    } else if (password != confirmPassword) {
+      confirmPasswordError.value = 'Passwords do not match';
+      isValid = false;
+    }
+
+    return isValid;
+  }
+
   // Register
   Future<void> register(String email, String password, String confirmPassword) async {
-    if (email.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
-      Get.snackbar("Error", "All fields are required");
-      return;
-    }
-
-    if (password != confirmPassword) {
-      Get.snackbar("Error", "Passwords do not match");
-      return;
-    }
-
-    if (password.length < 6) {
-      Get.snackbar("Error", "Password must be at least 6 characters");
+    if (!validateInputs(email, password, confirmPassword)) {
       return;
     }
 

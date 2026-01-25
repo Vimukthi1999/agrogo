@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -31,9 +33,9 @@ class HomeController extends GetxController {
   Stream<List<CategoryModel>> getCategories() {
     return FirebaseFirestore.instance
         .collection('categories')
-        // .where('isActive', isEqualTo: true)
         .snapshots()
         .map((snapshot) {
+          log('Categories snapshot: ${snapshot.docs.length}');
           return snapshot.docs
               .map((doc) => CategoryModel.fromMap(doc.id, doc.data()))
               .toList();

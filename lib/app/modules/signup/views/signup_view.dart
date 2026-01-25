@@ -113,41 +113,57 @@ class SignupView extends GetView<SignupController> {
                         ),
                       ),
                       const SizedBox(height: 10),
-                      TextField(
-                        controller: controller.emailController,
-                        keyboardType: TextInputType.emailAddress,
-                        decoration: InputDecoration(
-                          hintText: "Enter your email",
-                          prefixIcon: const Icon(
-                            Icons.email_outlined,
-                            color: Color(0xFF173046),
-                            size: 22,
-                          ),
-                          filled: true,
-                          fillColor: Colors.grey[50],
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(
-                              color: Colors.grey[300]!,
-                            ),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(
-                              color: Colors.grey[300]!,
-                              width: 1.5,
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: const BorderSide(
+                      Obx(
+                        () => TextField(
+                          controller: controller.emailController,
+                          keyboardType: TextInputType.emailAddress,
+                          onChanged: (value) {
+                            if (value.isEmpty) {
+                              controller.emailError.value = '';
+                            }
+                          },
+                          decoration: InputDecoration(
+                            hintText: "Enter your email",
+                            prefixIcon: const Icon(
+                              Icons.email_outlined,
                               color: Color(0xFF173046),
-                              width: 2,
+                              size: 22,
                             ),
-                          ),
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 14,
+                            filled: true,
+                            fillColor: Colors.grey[50],
+                            errorText: controller.emailError.isEmpty
+                                ? null
+                                : controller.emailError.value,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(
+                                color: controller.emailError.isNotEmpty
+                                    ? Colors.red
+                                    : Colors.grey[300]!,
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(
+                                color: controller.emailError.isNotEmpty
+                                    ? Colors.red
+                                    : Colors.grey[300]!,
+                                width: 1.5,
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(
+                                color: controller.emailError.isNotEmpty
+                                    ? Colors.red
+                                    : const Color(0xFF173046),
+                                width: 2,
+                              ),
+                            ),
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 14,
+                            ),
                           ),
                         ),
                       ),
@@ -163,46 +179,69 @@ class SignupView extends GetView<SignupController> {
                         ),
                       ),
                       const SizedBox(height: 10),
-                      TextField(
-                        controller: controller.passwordController,
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          hintText: "Create a password",
-                          prefixIcon: const Icon(
-                            Icons.lock_outlined,
-                            color: Color(0xFF173046),
-                            size: 22,
-                          ),
-                          suffixIcon: const Icon(
-                            Icons.visibility_outlined,
-                            color: Colors.grey,
-                            size: 22,
-                          ),
-                          filled: true,
-                          fillColor: Colors.grey[50],
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(
-                              color: Colors.grey[300]!,
-                            ),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(
-                              color: Colors.grey[300]!,
-                              width: 1.5,
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: const BorderSide(
+                      Obx(
+                        () => TextField(
+                          controller: controller.passwordController,
+                          obscureText: !controller.isPasswordVisible.value,
+                          onChanged: (value) {
+                            if (value.isEmpty) {
+                              controller.passwordError.value = '';
+                            }
+                          },
+                          decoration: InputDecoration(
+                            hintText: "Create a password",
+                            prefixIcon: const Icon(
+                              Icons.lock_outlined,
                               color: Color(0xFF173046),
-                              width: 2,
+                              size: 22,
                             ),
-                          ),
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 14,
+                            suffixIcon: GestureDetector(
+                              onTap: () {
+                                controller.isPasswordVisible.toggle();
+                              },
+                              child: Icon(
+                                controller.isPasswordVisible.value
+                                    ? Icons.visibility_outlined
+                                    : Icons.visibility_off_outlined,
+                                color: const Color(0xFF173046),
+                                size: 22,
+                              ),
+                            ),
+                            filled: true,
+                            fillColor: Colors.grey[50],
+                            errorText: controller.passwordError.isEmpty
+                                ? null
+                                : controller.passwordError.value,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(
+                                color: controller.passwordError.isNotEmpty
+                                    ? Colors.red
+                                    : Colors.grey[300]!,
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(
+                                color: controller.passwordError.isNotEmpty
+                                    ? Colors.red
+                                    : Colors.grey[300]!,
+                                width: 1.5,
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(
+                                color: controller.passwordError.isNotEmpty
+                                    ? Colors.red
+                                    : const Color(0xFF173046),
+                                width: 2,
+                              ),
+                            ),
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 14,
+                            ),
                           ),
                         ),
                       ),
@@ -218,46 +257,69 @@ class SignupView extends GetView<SignupController> {
                         ),
                       ),
                       const SizedBox(height: 10),
-                      TextField(
-                        controller: controller.confirmPasswordController,
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          hintText: "Re-enter your password",
-                          prefixIcon: const Icon(
-                            Icons.lock_outlined,
-                            color: Color(0xFF173046),
-                            size: 22,
-                          ),
-                          suffixIcon: const Icon(
-                            Icons.visibility_outlined,
-                            color: Colors.grey,
-                            size: 22,
-                          ),
-                          filled: true,
-                          fillColor: Colors.grey[50],
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(
-                              color: Colors.grey[300]!,
-                            ),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(
-                              color: Colors.grey[300]!,
-                              width: 1.5,
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: const BorderSide(
+                      Obx(
+                        () => TextField(
+                          controller: controller.confirmPasswordController,
+                          obscureText: !controller.isConfirmPasswordVisible.value,
+                          onChanged: (value) {
+                            if (value.isEmpty) {
+                              controller.confirmPasswordError.value = '';
+                            }
+                          },
+                          decoration: InputDecoration(
+                            hintText: "Re-enter your password",
+                            prefixIcon: const Icon(
+                              Icons.lock_outlined,
                               color: Color(0xFF173046),
-                              width: 2,
+                              size: 22,
                             ),
-                          ),
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 14,
+                            suffixIcon: GestureDetector(
+                              onTap: () {
+                                controller.isConfirmPasswordVisible.toggle();
+                              },
+                              child: Icon(
+                                controller.isConfirmPasswordVisible.value
+                                    ? Icons.visibility_outlined
+                                    : Icons.visibility_off_outlined,
+                                color: const Color(0xFF173046),
+                                size: 22,
+                              ),
+                            ),
+                            filled: true,
+                            fillColor: Colors.grey[50],
+                            errorText: controller.confirmPasswordError.isEmpty
+                                ? null
+                                : controller.confirmPasswordError.value,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(
+                                color: controller.confirmPasswordError.isNotEmpty
+                                    ? Colors.red
+                                    : Colors.grey[300]!,
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(
+                                color: controller.confirmPasswordError.isNotEmpty
+                                    ? Colors.red
+                                    : Colors.grey[300]!,
+                                width: 1.5,
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(
+                                color: controller.confirmPasswordError.isNotEmpty
+                                    ? Colors.red
+                                    : const Color(0xFF173046),
+                                width: 2,
+                              ),
+                            ),
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 14,
+                            ),
                           ),
                         ),
                       ),

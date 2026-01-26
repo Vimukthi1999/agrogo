@@ -31,7 +31,7 @@ class HomeView extends GetView<HomeController> {
             ),
 
             Padding(
-              padding: const EdgeInsets.fromLTRB(20, 50, 20, 20),
+              padding: const EdgeInsets.fromLTRB(10, 50, 10, 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -39,6 +39,26 @@ class HomeView extends GetView<HomeController> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.white, width: 2),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.2),
+                              blurRadius: 8,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: const CircleAvatar(
+                          radius: 25,
+                          backgroundImage: NetworkImage(
+                            'https://i.pravatar.cc/150?img=5',
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 8),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -72,24 +92,43 @@ class HomeView extends GetView<HomeController> {
                           ),
                         ],
                       ),
-                      Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(color: Colors.white, width: 2),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
-                              blurRadius: 8,
-                              offset: const Offset(0, 4),
+                      Row(
+                        children: [
+                          // Notification Icon
+                          GestureDetector(
+                            onTap: () {
+                              // Handle notification tap
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.white.withOpacity(0.2),
+                              ),
+                              child: Stack(
+                                children: [
+                                  const Icon(
+                                    Icons.notifications_outlined,
+                                    color: Colors.white,
+                                    size: 24,
+                                  ),
+                                  Positioned(
+                                    top: 6,
+                                    right: 6,
+                                    child: Container(
+                                      width: 8,
+                                      height: 8,
+                                      decoration: const BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Color(0xFFFF4444),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ],
-                        ),
-                        child: const CircleAvatar(
-                          radius: 25,
-                          backgroundImage: NetworkImage(
-                            'https://i.pravatar.cc/150?img=5',
                           ),
-                        ),
+                        ],
                       ),
                     ],
                   ),
@@ -258,239 +297,247 @@ class HomeView extends GetView<HomeController> {
                     },
                   ),
 
-                  const SizedBox(height: 35),
-
-                  // Best Offers Section
-                  Container(
-                    margin: const EdgeInsets.only(top: 10),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 30,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(25),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.08),
-                          blurRadius: 15,
-                          offset: const Offset(0, 5),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Text(
-                              "Best Offers",
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFF1E7044),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                // Navigate to all offers
-                              },
-                              child: const Text(
-                                "View all",
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w600,
-                                  color: Color(0xFF1E7044),
-                                  decoration: TextDecoration.underline,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 20),
-
-                        // Featured Offer Card
-                        Container(
-                          height: 180,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(18),
-                            gradient: const LinearGradient(
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                              colors: [Color(0xFF1E7044), Color(0xFF2D9B5F)],
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: const Color(0xFF1E7044).withOpacity(0.2),
-                                blurRadius: 10,
-                                offset: const Offset(0, 5),
-                              ),
-                            ],
-                          ),
-                          child: Stack(
-                            children: [
-                              // Background pattern
-                              Positioned(
-                                right: -30,
-                                top: -30,
-                                child: Container(
-                                  width: 150,
-                                  height: 150,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.white.withOpacity(0.1),
-                                  ),
-                                ),
-                              ),
-
-                              Padding(
-                                padding: const EdgeInsets.all(24),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Container(
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 12,
-                                            vertical: 6,
-                                          ),
-                                          decoration: BoxDecoration(
-                                            color: Colors.white.withOpacity(
-                                              0.3,
-                                            ),
-                                            borderRadius: BorderRadius.circular(
-                                              20,
-                                            ),
-                                          ),
-                                          child: const Text(
-                                            "Limited Offer",
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 11,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(height: 10),
-                                        const Text(
-                                          "Get 40% OFF",
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 28,
-                                            fontWeight: FontWeight.bold,
-                                            letterSpacing: 0.5,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 4),
-                                        const Text(
-                                          "on Premium Seeds",
-                                          style: TextStyle(
-                                            color: Colors.white70,
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 16,
-                                        vertical: 8,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      child: const Text(
-                                        "Shop Now",
-                                        style: TextStyle(
-                                          color: Color(0xFF1E7044),
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        const SizedBox(height: 20),
-
-                        // Other Offers
-                        SizedBox(
-                          height: 140,
-                          child: ListView(
-                            scrollDirection: Axis.horizontal,
-                            children: [
-                              _buildOfferCard(
-                                "Fertilizers",
-                                "25% OFF",
-                                const Color(0xFF2D5C6F),
-                              ),
-                              const SizedBox(width: 12),
-                              _buildOfferCard(
-                                "Tools",
-                                "30% OFF",
-                                const Color(0xFF1E7044),
-                              ),
-                              const SizedBox(width: 12),
-                              _buildOfferCard(
-                                "Pesticides",
-                                "20% OFF",
-                                const Color(0xFF2D9B5F),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
                   const SizedBox(height: 30),
 
+                  // Best Offers Section
+                  // Container(
+                  //   margin: const EdgeInsets.only(top: 10),
+                  //   padding: const EdgeInsets.symmetric(
+                  //     horizontal: 20,
+                  //     vertical: 30,
+                  //   ),
+                  //   decoration: BoxDecoration(
+                  //     color: Colors.white,
+                  //     borderRadius: BorderRadius.circular(25),
+                  //     boxShadow: [
+                  //       BoxShadow(
+                  //         color: Colors.black.withOpacity(0.08),
+                  //         blurRadius: 15,
+                  //         offset: const Offset(0, 5),
+                  //       ),
+                  //     ],
+                  //   ),
+                  //   child: Column(
+                  //     crossAxisAlignment: CrossAxisAlignment.start,
+                  //     children: [
+                  //       Row(
+                  //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //         children: [
+                  //           const Text(
+                  //             "Best Offers",
+                  //             style: TextStyle(
+                  //               fontSize: 18,
+                  //               fontWeight: FontWeight.bold,
+                  //               color: Color(0xFF1E7044),
+                  //             ),
+                  //           ),
+                  //           GestureDetector(
+                  //             onTap: () {
+                  //               // Navigate to all offers
+                  //             },
+                  //             child: const Text(
+                  //               "View all",
+                  //               style: TextStyle(
+                  //                 fontSize: 13,
+                  //                 fontWeight: FontWeight.w600,
+                  //                 color: Color(0xFF1E7044),
+                  //                 decoration: TextDecoration.underline,
+                  //               ),
+                  //             ),
+                  //           ),
+                  //         ],
+                  //       ),
+                  //       const SizedBox(height: 20),
+
+                  //       // Featured Offer Card
+                  //       Container(
+                  //         height: 180,
+                  //         decoration: BoxDecoration(
+                  //           borderRadius: BorderRadius.circular(18),
+                  //           gradient: const LinearGradient(
+                  //             begin: Alignment.topLeft,
+                  //             end: Alignment.bottomRight,
+                  //             colors: [Color(0xFF1E7044), Color(0xFF2D9B5F)],
+                  //           ),
+                  //           boxShadow: [
+                  //             BoxShadow(
+                  //               color: const Color(0xFF1E7044).withOpacity(0.2),
+                  //               blurRadius: 10,
+                  //               offset: const Offset(0, 5),
+                  //             ),
+                  //           ],
+                  //         ),
+                  //         child: Stack(
+                  //           children: [
+                  //             // Background pattern
+                  //             Positioned(
+                  //               right: -30,
+                  //               top: -30,
+                  //               child: Container(
+                  //                 width: 150,
+                  //                 height: 150,
+                  //                 decoration: BoxDecoration(
+                  //                   shape: BoxShape.circle,
+                  //                   color: Colors.white.withOpacity(0.1),
+                  //                 ),
+                  //               ),
+                  //             ),
+
+                  //             Padding(
+                  //               padding: const EdgeInsets.all(24),
+                  //               child: Column(
+                  //                 crossAxisAlignment: CrossAxisAlignment.start,
+                  //                 mainAxisAlignment:
+                  //                     MainAxisAlignment.spaceBetween,
+                  //                 children: [
+                  //                   Column(
+                  //                     crossAxisAlignment:
+                  //                         CrossAxisAlignment.start,
+                  //                     children: [
+                  //                       Container(
+                  //                         padding: const EdgeInsets.symmetric(
+                  //                           horizontal: 12,
+                  //                           vertical: 6,
+                  //                         ),
+                  //                         decoration: BoxDecoration(
+                  //                           color: Colors.white.withOpacity(
+                  //                             0.3,
+                  //                           ),
+                  //                           borderRadius: BorderRadius.circular(
+                  //                             20,
+                  //                           ),
+                  //                         ),
+                  //                         child: const Text(
+                  //                           "Limited Offer",
+                  //                           style: TextStyle(
+                  //                             color: Colors.white,
+                  //                             fontSize: 11,
+                  //                             fontWeight: FontWeight.bold,
+                  //                           ),
+                  //                         ),
+                  //                       ),
+                  //                       const SizedBox(height: 10),
+                  //                       const Text(
+                  //                         "Get 40% OFF",
+                  //                         style: TextStyle(
+                  //                           color: Colors.white,
+                  //                           fontSize: 28,
+                  //                           fontWeight: FontWeight.bold,
+                  //                           letterSpacing: 0.5,
+                  //                         ),
+                  //                       ),
+                  //                       const SizedBox(height: 4),
+                  //                       const Text(
+                  //                         "on Premium Seeds",
+                  //                         style: TextStyle(
+                  //                           color: Colors.white70,
+                  //                           fontSize: 14,
+                  //                         ),
+                  //                       ),
+                  //                     ],
+                  //                   ),
+                  //                   Container(
+                  //                     padding: const EdgeInsets.symmetric(
+                  //                       horizontal: 16,
+                  //                       vertical: 8,
+                  //                     ),
+                  //                     decoration: BoxDecoration(
+                  //                       color: Colors.white,
+                  //                       borderRadius: BorderRadius.circular(10),
+                  //                     ),
+                  //                     child: const Text(
+                  //                       "Shop Now",
+                  //                       style: TextStyle(
+                  //                         color: Color(0xFF1E7044),
+                  //                         fontSize: 12,
+                  //                         fontWeight: FontWeight.bold,
+                  //                       ),
+                  //                     ),
+                  //                   ),
+                  //                 ],
+                  //               ),
+                  //             ),
+                  //           ],
+                  //         ),
+                  //       ),
+
+                  //       const SizedBox(height: 20),
+
+                  //       // Other Offers
+                  //       SizedBox(
+                  //         height: 140,
+                  //         child: ListView(
+                  //           scrollDirection: Axis.horizontal,
+                  //           children: [
+                  //             _buildOfferCard(
+                  //               "Fertilizers",
+                  //               "25% OFF",
+                  //               const Color(0xFF2D5C6F),
+                  //             ),
+                  //             const SizedBox(width: 12),
+                  //             _buildOfferCard(
+                  //               "Tools",
+                  //               "30% OFF",
+                  //               const Color(0xFF1E7044),
+                  //             ),
+                  //             const SizedBox(width: 12),
+                  //             _buildOfferCard(
+                  //               "Pesticides",
+                  //               "20% OFF",
+                  //               const Color(0xFF2D9B5F),
+                  //             ),
+                  //           ],
+                  //         ),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
+
+                  // const SizedBox(height: 30),
+
                   // Quick Stats Section
-                  Container(
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.08),
-                          blurRadius: 12,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        _buildStatItem(
-                          "1,234",
-                          "Total Orders",
-                          Icons.shopping_cart,
-                        ),
-                        _buildStatItem(
-                          "₹45,890",
-                          "Total Spent",
-                          Icons.payments,
-                        ),
-                        _buildStatItem("18", "Saved Items", Icons.bookmark),
-                      ],
+                  // Container(
+                  //   padding: const EdgeInsets.all(20),
+                  //   decoration: BoxDecoration(
+                  //     color: Colors.white,
+                  //     borderRadius: BorderRadius.circular(20),
+                  //     boxShadow: [
+                  //       BoxShadow(
+                  //         color: Colors.black.withOpacity(0.08),
+                  //         blurRadius: 12,
+                  //         offset: const Offset(0, 4),
+                  //       ),
+                  //     ],
+                  //   ),
+                  //   child: Row(
+                  //     mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  //     children: [
+                  //       _buildStatItem(
+                  //         "1,234",
+                  //         "Total Orders",
+                  //         Icons.shopping_cart,
+                  //       ),
+                  //       _buildStatItem(
+                  //         "₹45,890",
+                  //         "Total Spent",
+                  //         Icons.payments,
+                  //       ),
+                  //       _buildStatItem("18", "Saved Items", Icons.bookmark),
+                  //     ],
+                  //   ),
+                  // ),
+
+                  // const SizedBox(height: 20),
+                  
+                  Text(
+                    "Freash Deals".tr,
+                    style: const TextStyle(
+                      color: Color(0xFF1E7044),
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
 
-                  const SizedBox(height: 20),
-
-                  // Two Column Grid Layout
                   GridView.count(
                     crossAxisCount: 2,
                     shrinkWrap: true,
@@ -517,7 +564,6 @@ class HomeView extends GetView<HomeController> {
                       ),
                     ],
                   ),
-                  
 
                   const SizedBox(height: 40),
                 ],

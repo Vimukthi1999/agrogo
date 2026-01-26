@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../routes/app_pages.dart';
+import '../../common/containers_decorations.dart' show backgroundDecorationSignUp;
 import '../controllers/signup_controller.dart';
 
 class SignupView extends GetView<SignupController> {
@@ -9,16 +10,7 @@ class SignupView extends GetView<SignupController> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color(0xFF173046),
-              Color(0xFF2D5C6F),
-            ],
-          ),
-        ),
+        decoration: backgroundDecorationSignUp(),
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -341,7 +333,7 @@ class SignupView extends GetView<SignupController> {
                                     );
                                   },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF173046),
+                              backgroundColor: Theme.of(context).primaryColor,
                               disabledBackgroundColor: Colors.grey[400],
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),

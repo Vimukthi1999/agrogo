@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import '../controllers/settings_controller.dart';
 
@@ -35,14 +34,14 @@ class ChangePw extends GetView<SettingsController> {
                   controller: controller.currentPwController,
                   textInputAction: TextInputAction.done,
                   decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.lock, size: 20.w),
+                    prefixIcon: Icon(Icons.lock, size: 20),
                     hintText: 'Password'.tr,
                     suffixIcon: IconButton(
                       icon: Icon(
                         controller.isCurrentPasswordVisible.value
                             ? Icons.visibility
                             : Icons.visibility_off,
-                        size: 20.w,
+                        size: 20,
                       ),
                       onPressed: () {
                         controller.isCurrentPasswordVisible.value =
@@ -70,14 +69,14 @@ class ChangePw extends GetView<SettingsController> {
                   controller: controller.newPwController,
                   textInputAction: TextInputAction.done,
                   decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.lock, size: 20.w),
+                    prefixIcon: Icon(Icons.lock, size: 20),
                     hintText: 'Password'.tr,
                     suffixIcon: IconButton(
                       icon: Icon(
                         controller.isNewPasswordVisible.value
                             ? Icons.visibility
                             : Icons.visibility_off,
-                        size: 20.w,
+                        size: 20,
                       ),
                       onPressed: () {
                         controller.isNewPasswordVisible.value =
@@ -106,14 +105,14 @@ class ChangePw extends GetView<SettingsController> {
                   controller: controller.confirmPwController,
                   textInputAction: TextInputAction.done,
                   decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.lock, size: 20.w),
+                    prefixIcon: Icon(Icons.lock, size: 20),
                     hintText: 'Password'.tr,
                     suffixIcon: IconButton(
                       icon: Icon(
                         controller.isConfirmPasswordVisible.value
                             ? Icons.visibility
                             : Icons.visibility_off,
-                        size: 20.w,
+                        size: 20,
                       ),
                       onPressed: () {
                         controller.isConfirmPasswordVisible.value =

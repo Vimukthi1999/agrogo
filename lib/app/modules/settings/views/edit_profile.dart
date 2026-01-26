@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import '../controllers/settings_controller.dart';
 
@@ -40,7 +39,7 @@ class _EditProfileState extends State<EditProfile> {
                 textInputAction: TextInputAction.done,
                 keyboardType: TextInputType.text,
                 decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.boy, size: 20.w),
+                  prefixIcon: Icon(Icons.boy, size: 20),
                   hintText: 'Name'.tr,
                 ),
                 // validator: (value) => AValidator.validateText(value, 'Name'.tr),
@@ -58,7 +57,7 @@ class _EditProfileState extends State<EditProfile> {
                 textInputAction: TextInputAction.done,
                 keyboardType: TextInputType.text,
                 decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.sms, size: 20.w),
+                  prefixIcon: Icon(Icons.sms, size: 20),
                   hintText: 'Email'.tr,
                 ),
                 // validator: (value) => AValidator.validateText(value, 'Email'.tr),

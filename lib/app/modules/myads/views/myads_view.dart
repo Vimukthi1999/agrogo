@@ -1,24 +1,362 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
-
+import '../../../routes/app_pages.dart';
 import '../controllers/myads_controller.dart';
 
 class MyadsView extends GetView<MyadsController> {
   const MyadsView({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('MyadsView'),
-        centerTitle: true,
-      ),
-      body: const Center(
-        child: Text(
-          'MyadsView is working',
-          style: TextStyle(fontSize: 20),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Header Section
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.fromLTRB(20, 50, 20, 30),
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [Color(0xFF1E7044), Color(0xFF2D9B5F)],
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "My Ads".tr,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    "Manage and track your listings".tr,
+                    style: TextStyle(
+                      color: Colors.white.withOpacity(0.7),
+                      fontSize: 14,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        Get.toNamed(Routes.CREATEAD);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        elevation: 3,
+                      ),
+                      icon: const Icon(
+                        Icons.add_circle_outline,
+                        color: Color(0xFF1E7044),
+                        size: 22,
+                      ),
+                      label: Text(
+                        "Create New Ad".tr,
+                        style: const TextStyle(
+                          color: Color(0xFF1E7044),
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // Ads List Section
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Filter/Sort Row
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Your Listings".tr,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF1E7044),
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 6,
+                        ),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey[300]!),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.filter_list,
+                              size: 18,
+                              color: Colors.grey[600],
+                            ),
+                            const SizedBox(width: 6),
+                            Text(
+                              "Filter".tr,
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey[600],
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+
+                  // Ads List or Empty State
+                  Obx(
+                    () => controller.userAds.isEmpty
+                        ? _buildEmptyState()
+                        : ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: controller.userAds.length,
+                            itemBuilder: (context, index) {
+                              final ad = controller.userAds[index];
+                              return _buildAdCard(ad);
+                            },
+                          ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
+  }
+
+  Widget _buildEmptyState() {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 60),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(30),
+              decoration: BoxDecoration(
+                color: const Color(0xFF1E7044).withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                Icons.post_add_outlined,
+                size: 64,
+                color: const Color(0xFF1E7044).withOpacity(0.5),
+              ),
+            ),
+            const SizedBox(height: 20),
+            Text(
+              "No Ads Yet".tr,
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF1E7044),
+              ),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              "Create your first ad to get started".tr,
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAdCard(dynamic ad) {
+    return GestureDetector(
+      onTap: () {
+        // Navigate to ad detail
+      },
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.08),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            // Ad Image
+            Container(
+              width: 120,
+              height: 120,
+              margin: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                color: Colors.grey[200],
+                image: DecorationImage(
+                  image: NetworkImage(ad['image'] ?? ''),
+                  fit: BoxFit.cover,
+                  onError: (exception, stackTrace) {},
+                ),
+              ),
+              child: (ad['image'] == null || ad['image'].isEmpty)
+                  ? Icon(Icons.image_not_supported, color: Colors.grey[400])
+                  : null,
+            ),
+
+            // Ad Details
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Title
+                    Text(
+                      ad['title'] ?? 'Untitled',
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF1E7044),
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+
+                    // Category
+                    Text(
+                      ad['category'] ?? 'N/A',
+                      style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                    ),
+                    const SizedBox(height: 8),
+
+                    // Price and Status
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          ad['price'] ?? '₹0',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF1E7044),
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 4,
+                          ),
+                          decoration: BoxDecoration(
+                            color: _getStatusColor(ad['status']),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Text(
+                            ad['status'] ?? 'Active',
+                            style: const TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            // Action Button
+            Padding(
+              padding: const EdgeInsets.only(right: 12),
+              child: PopupMenuButton(
+                itemBuilder: (context) => [
+                  PopupMenuItem(
+                    child: Row(
+                      children: const [
+                        Icon(Icons.edit, size: 18),
+                        SizedBox(width: 8),
+                        Text('Edit'),
+                      ],
+                    ),
+                    onTap: () {
+                      // Edit ad
+                    },
+                  ),
+                  PopupMenuItem(
+                    child: Row(
+                      children: const [
+                        Icon(Icons.remove_red_eye, size: 18),
+                        SizedBox(width: 8),
+                        Text('View'),
+                      ],
+                    ),
+                    onTap: () {
+                      // View ad
+                    },
+                  ),
+                  PopupMenuItem(
+                    child: Row(
+                      children: const [
+                        Icon(Icons.delete, size: 18, color: Colors.red),
+                        SizedBox(width: 8),
+                        Text('Delete', style: TextStyle(color: Colors.red)),
+                      ],
+                    ),
+                    onTap: () {
+                      // Delete ad
+                    },
+                  ),
+                ],
+                icon: const Icon(Icons.more_vert, color: Color(0xFF1E7044)),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Color _getStatusColor(String? status) {
+    switch (status?.toLowerCase()) {
+      case 'active':
+        return const Color(0xFF1E7044);
+      case 'pending':
+        return Colors.orange;
+      case 'sold':
+        return Colors.grey;
+      case 'expired':
+        return Colors.red;
+      default:
+        return const Color(0xFF1E7044);
+    }
   }
 }

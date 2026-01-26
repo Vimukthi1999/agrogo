@@ -264,7 +264,7 @@ class SigninView extends GetView<SigninController> {
                                     );
                                   },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF173046),
+                              backgroundColor: Theme.of(context).primaryColor,
                               disabledBackgroundColor: Colors.grey[400],
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
@@ -333,8 +333,8 @@ class SigninView extends GetView<SigninController> {
                             Get.offNamed(Routes.SIGNUP);
                           },
                           style: OutlinedButton.styleFrom(
-                            side: const BorderSide(
-                              color: Color(0xFF173046),
+                            side: BorderSide(
+                              color: Theme.of(context).primaryColor,
                               width: 2,
                             ),
                             shape: RoundedRectangleBorder(

@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../models/category_model.dart';
+import '../../common/item_card.dart';
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
@@ -15,15 +16,12 @@ class HomeView extends GetView<HomeController> {
           children: [
             // Header Background
             Container(
-              height: 380,
+              height: 200,
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: [
-                    Color(0xFF1E7044),
-                    Color(0xFF2D9B5F),
-                  ],
+                  colors: [Color(0xFF1E7044), Color(0xFF2D9B5F)],
                 ),
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(40),
@@ -77,10 +75,7 @@ class HomeView extends GetView<HomeController> {
                       Container(
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          border: Border.all(
-                            color: Colors.white,
-                            width: 2,
-                          ),
+                          border: Border.all(color: Colors.white, width: 2),
                           boxShadow: [
                             BoxShadow(
                               color: Colors.black.withOpacity(0.2),
@@ -137,7 +132,9 @@ class HomeView extends GetView<HomeController> {
                           color: Color(0xFF1E7044),
                           size: 22,
                         ),
-                        contentPadding: const EdgeInsets.symmetric(vertical: 14),
+                        contentPadding: const EdgeInsets.symmetric(
+                          vertical: 14,
+                        ),
                       ),
                     ),
                   ),
@@ -148,7 +145,7 @@ class HomeView extends GetView<HomeController> {
                   Text(
                     "Categories".tr,
                     style: const TextStyle(
-                      color: Colors.white,
+                      color: Color(0xFF1E7044),
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                       letterSpacing: 0.5,
@@ -164,9 +161,7 @@ class HomeView extends GetView<HomeController> {
                       }
 
                       if (snapshot.hasError) {
-                        return Center(
-                          child: Text('Error: ${snapshot.error}'),
-                        );
+                        return Center(child: Text('Error: ${snapshot.error}'));
                       }
 
                       if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -224,19 +219,22 @@ class HomeView extends GetView<HomeController> {
                                     width: 80,
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
-                                      color: const Color(0xFF1E7044).withOpacity(0.1),
+                                      color: const Color(
+                                        0xFF1E7044,
+                                      ).withOpacity(0.1),
                                     ),
                                     child: Padding(
                                       padding: const EdgeInsets.all(8),
                                       child: Image.network(
                                         category.icon,
                                         fit: BoxFit.contain,
-                                        errorBuilder: (context, error, stackTrace) {
-                                          return Icon(
-                                            Icons.image_not_supported,
-                                            color: const Color(0xFF1E7044),
-                                          );
-                                        },
+                                        errorBuilder:
+                                            (context, error, stackTrace) {
+                                              return Icon(
+                                                Icons.image_not_supported,
+                                                color: const Color(0xFF1E7044),
+                                              );
+                                            },
                                       ),
                                     ),
                                   ),
@@ -320,10 +318,7 @@ class HomeView extends GetView<HomeController> {
                             gradient: const LinearGradient(
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight,
-                              colors: [
-                                Color(0xFF1E7044),
-                                Color(0xFF2D9B5F),
-                              ],
+                              colors: [Color(0xFF1E7044), Color(0xFF2D9B5F)],
                             ),
                             boxShadow: [
                               BoxShadow(
@@ -366,9 +361,12 @@ class HomeView extends GetView<HomeController> {
                                             vertical: 6,
                                           ),
                                           decoration: BoxDecoration(
-                                            color: Colors.white.withOpacity(0.3),
-                                            borderRadius:
-                                                BorderRadius.circular(20),
+                                            color: Colors.white.withOpacity(
+                                              0.3,
+                                            ),
+                                            borderRadius: BorderRadius.circular(
+                                              20,
+                                            ),
                                           ),
                                           child: const Text(
                                             "Limited Offer",
@@ -406,8 +404,7 @@ class HomeView extends GetView<HomeController> {
                                       ),
                                       decoration: BoxDecoration(
                                         color: Colors.white,
-                                        borderRadius:
-                                            BorderRadius.circular(10),
+                                        borderRadius: BorderRadius.circular(10),
                                       ),
                                       child: const Text(
                                         "Shop Now",
@@ -476,12 +473,51 @@ class HomeView extends GetView<HomeController> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        _buildStatItem("1,234", "Total Orders", Icons.shopping_cart),
-                        _buildStatItem("₹45,890", "Total Spent", Icons.payments),
+                        _buildStatItem(
+                          "1,234",
+                          "Total Orders",
+                          Icons.shopping_cart,
+                        ),
+                        _buildStatItem(
+                          "₹45,890",
+                          "Total Spent",
+                          Icons.payments,
+                        ),
                         _buildStatItem("18", "Saved Items", Icons.bookmark),
                       ],
                     ),
                   ),
+
+                  const SizedBox(height: 20),
+
+                  // Two Column Grid Layout
+                  GridView.count(
+                    crossAxisCount: 2,
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    crossAxisSpacing: 15,
+                    mainAxisSpacing: 15,
+                    childAspectRatio: 0.75,
+                    children: const [
+                      ProductCard(
+                        title: "John Deere 6135E-135 HP Tractor",
+                        price: "৳ 16,80,590",
+                        imageUrl:
+                            "https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/John_Deere_6130R.jpg/640px-John_Deere_6130R.jpg",
+                        rating: 4.5,
+                        reviewCount: 256,
+                      ),
+                      ProductCard(
+                        title: "Yanmar Combine Harvester AG600GA",
+                        price: "৳ 36,00,000",
+                        imageUrl:
+                            "https://upload.wikimedia.org/wikipedia/commons/2/23/Yanmar_Combine_Harvester.jpg",
+                        rating: 4.8,
+                        reviewCount: 122,
+                      ),
+                    ],
+                  ),
+                  
 
                   const SizedBox(height: 40),
                 ],
@@ -501,10 +537,7 @@ class HomeView extends GetView<HomeController> {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            color,
-            color.withOpacity(0.7),
-          ],
+          colors: [color, color.withOpacity(0.7)],
         ),
         boxShadow: [
           BoxShadow(
@@ -541,10 +574,7 @@ class HomeView extends GetView<HomeController> {
                 ),
                 const Text(
                   "Limited",
-                  style: TextStyle(
-                    color: Colors.white70,
-                    fontSize: 11,
-                  ),
+                  style: TextStyle(color: Colors.white70, fontSize: 11),
                 ),
               ],
             ),
@@ -563,11 +593,7 @@ class HomeView extends GetView<HomeController> {
             color: const Color(0xFF1E7044).withOpacity(0.1),
             shape: BoxShape.circle,
           ),
-          child: Icon(
-            icon,
-            color: const Color(0xFF1E7044),
-            size: 24,
-          ),
+          child: Icon(icon, color: const Color(0xFF1E7044), size: 24),
         ),
         const SizedBox(height: 8),
         Text(
@@ -582,10 +608,7 @@ class HomeView extends GetView<HomeController> {
         Text(
           label,
           textAlign: TextAlign.center,
-          style: TextStyle(
-            color: Colors.grey[600],
-            fontSize: 11,
-          ),
+          style: TextStyle(color: Colors.grey[600], fontSize: 11),
         ),
       ],
     );

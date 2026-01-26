@@ -18,7 +18,7 @@ class SettingsView extends GetView<SettingsController> {
             // Header Section
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.fromLTRB(20, 50, 20, 30),
+              padding: const EdgeInsets.fromLTRB(20, 50, 20, 20),
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
@@ -67,7 +67,6 @@ class SettingsView extends GetView<SettingsController> {
                             "Customize your account settings".tr,
                             style: Theme.of(context).textTheme.bodySmall,
                           ),
-                          SizedBox(height: 15),
                           ProfileMenuCard(
                             title: "Edit Profile".tr,
                             subTitle: "Change your profile details".tr,
@@ -111,7 +110,6 @@ class SettingsView extends GetView<SettingsController> {
                             "Customize your app settings".tr,
                             style: Theme.of(context).textTheme.bodySmall,
                           ),
-                          SizedBox(height: 15),
                           ListTile(
                             contentPadding: EdgeInsets.zero,
                             title: Row(
@@ -171,7 +169,6 @@ class SettingsView extends GetView<SettingsController> {
                             "More".tr,
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
-                          SizedBox(height: 5),
 
                           // ProfileMenuCard(
                           //   title: "About Us",
@@ -227,7 +224,7 @@ class SettingsView extends GetView<SettingsController> {
                             },
                           ),
 
-                          SizedBox(height: 10),
+                          SizedBox(height: 5),
                           Text(
                             "Version: 1.0.0",
                             // "Version: ".tr + dotenv.env['APPVERSION']!,

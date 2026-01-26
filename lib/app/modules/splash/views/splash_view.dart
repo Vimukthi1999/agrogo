@@ -37,6 +37,7 @@ class SplashView extends GetView<SplashController> {
                 text: 'Agro',
                 style: TextStyle(
                   fontSize: 42,
+                  color: Colors.black,
                 ),
                 children: [
                   TextSpan(

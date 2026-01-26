@@ -32,14 +32,14 @@ class SigninView extends GetView<SigninController> {
                           ),
                         ],
                       ),
-                      padding: const EdgeInsets.all(30),
+                      padding: const EdgeInsets.all(20),
                       child: Icon(
                         Icons.agriculture,
                         size: 60,
                         color: Colors.white,
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 10),
                     Text(
                       "AgroGo".tr,
                       style: const TextStyle(
@@ -67,7 +67,7 @@ class SigninView extends GetView<SigninController> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 30,
-                    vertical: 40,
+                    vertical: 30,
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -85,7 +85,7 @@ class SigninView extends GetView<SigninController> {
                         "Sign in to your account to continue".tr,
                         style: TextStyle(color: Colors.grey[600], fontSize: 14),
                       ),
-                      const SizedBox(height: 30),
+                      const SizedBox(height: 20),
 
                       // Email Field
                       Text(
@@ -96,7 +96,7 @@ class SigninView extends GetView<SigninController> {
                           fontSize: 13,
                         ),
                       ),
-                      const SizedBox(height: 10),
+                      const SizedBox(height: 8),
                       Obx(
                         () => TextField(
                           controller: controller.emailController,
@@ -150,7 +150,7 @@ class SigninView extends GetView<SigninController> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 10),
 
                       // Password Field
                       Text(
@@ -161,7 +161,7 @@ class SigninView extends GetView<SigninController> {
                           fontSize: 13,
                         ),
                       ),
-                      const SizedBox(height: 10),
+                      const SizedBox(height: 8),
                       Obx(
                         () => TextField(
                           controller: controller.passwordController,
@@ -228,7 +228,7 @@ class SigninView extends GetView<SigninController> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 10),
 
                       // Forgot Password Link
                       Align(
@@ -247,7 +247,7 @@ class SigninView extends GetView<SigninController> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 25),
+                      const SizedBox(height: 15),
 
                       // Login Button
                       Obx(

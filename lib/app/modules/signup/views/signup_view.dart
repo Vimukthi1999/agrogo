@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../routes/app_pages.dart';
-import '../../common/containers_decorations.dart' show backgroundDecorationSignUp;
+import '../../common/containers_decorations.dart';
 import '../controllers/signup_controller.dart';
 
 class SignupView extends GetView<SignupController> {

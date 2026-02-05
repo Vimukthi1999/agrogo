@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,6 +9,8 @@ import '../../../routes/app_pages.dart';
 
 class SignupController extends GetxController {
   FirebaseAuth auth = FirebaseAuth.instance;
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -102,10 +105,28 @@ class SignupController extends GetxController {
 
     try {
       isLoading.value = true;
-      await auth.createUserWithEmailAndPassword(
+      UserCredential userCredential = await auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
+
+      String userId = userCredential.user!.uid;
+
+
+    await firestore.collection('users').doc(userId).set({
+      'name': 'Geshan Silva',
+      'role': 'farmer',
+      'phone': '+94XXXXXXXX',
+      'email': email,
+      'district': 'Matara',
+      'province': 'Southern',
+      'location': {
+        'latitude': 6.9271,
+        'longitude': 79.8612,
+      },
+      'createdAt': FieldValue.serverTimestamp(),
+    });
+
       isLoading.value = false;
       Get.snackbar("Success", "Account created successfully!");
     } on FirebaseAuthException catch (e) {

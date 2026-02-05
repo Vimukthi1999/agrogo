@@ -201,76 +201,68 @@ class CreateadView extends GetView<CreateadController> {
               // Location, District, Town Row
               _buildSectionTitle('Location'.tr),
               const SizedBox(height: 10),
-              Row(
-                children: [
-                  Expanded(
-                    child: Obx(
-                      () => DropdownButtonFormField<String>(
-                        value: controller.selectedDistrict.isEmpty
-                            ? null
-                            : controller.selectedDistrict.value,
-                        decoration: InputDecoration(
-                          labelText: 'District'.tr,
-                          prefixIcon: const Icon(
-                            Icons.location_on_outlined,
-                            color: Color(0xFF1E7044),
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          filled: true,
-                          fillColor: Colors.grey[50],
-                        ),
-                        items: controller.districts
-                            .map((district) => DropdownMenuItem(
-                                  value: district,
-                                  child: Text(district),
-                                ))
-                            .toList(),
-                        onChanged: (value) {
-                          if (value != null) {
-                            controller.updateTowns(value);
-                          }
-                        },
-                      ),
+              Obx(
+                () => DropdownButtonFormField<String>(
+                  value: controller.selectedDistrict.isEmpty
+                      ? null
+                      : controller.selectedDistrict.value,
+                  decoration: InputDecoration(
+                    labelText: 'District'.tr,
+                    prefixIcon: const Icon(
+                      Icons.location_on_outlined,
+                      color: Color(0xFF1E7044),
                     ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Obx(
-                      () => DropdownButtonFormField<String>(
-                        value: controller.selectedTown.isEmpty
-                            ? null
-                            : controller.selectedTown.value,
-                        decoration: InputDecoration(
-                          labelText: 'Town'.tr,
-                          prefixIcon: const Icon(
-                            Icons.location_city_outlined,
-                            color: Color(0xFF1E7044),
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          filled: true,
-                          fillColor: Colors.grey[50],
-                        ),
-                        items: (controller.townsByDistrict[
-                                    controller.selectedDistrict.value] ??
-                                [])
-                            .map((town) => DropdownMenuItem(
-                                  value: town,
-                                  child: Text(town),
-                                ))
-                            .toList(),
-                        onChanged: (value) {
-                          if (value != null) {
-                            controller.selectedTown.value = value;
-                          }
-                        },
-                      ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
                     ),
+                    filled: true,
+                    fillColor: Colors.grey[50],
                   ),
-                ],
+                  items: controller.districts
+                      .map((district) => DropdownMenuItem(
+                            value: district,
+                            child: Text(district),
+                          ))
+                      .toList(),
+                  onChanged: (value) {
+                    if (value != null) {
+                      controller.updateTowns(value);
+                    }
+                  },
+                ),
+              ),
+              const SizedBox(height: 12),
+              Obx(
+                () => DropdownButtonFormField<String>(
+                  value: controller.selectedTown.isEmpty
+                      ? null
+                      : controller.selectedTown.value,
+                  decoration: InputDecoration(
+                    labelText: 'Town'.tr,
+                    prefixIcon: const Icon(
+                      Icons.location_city_outlined,
+                      color: Color(0xFF1E7044),
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    filled: true,
+                    fillColor: Colors.grey[50],
+                  ),
+                  items: (controller.townsByDistrict[
+                              controller.selectedDistrict.value] ??
+                          [])
+                      .map((town) => DropdownMenuItem(
+                            value: town,
+                            child: Text(town),
+                          ))
+                      .toList(),
+                  onChanged: (value) {
+                    if (value != null) {
+                      controller.selectedTown.value = value;
+                    }
+                  },
+                ),
               ),
               const SizedBox(height: 20),
 

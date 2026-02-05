@@ -16,17 +16,15 @@ class SigninController extends GetxController {
   RxBool isLoading = false.obs;
   RxBool isPasswordVisible = false.obs;
   
-  // Validation error states
   RxString emailError = ''.obs;
   RxString passwordError = ''.obs;
 
   @override
   void onInit() {
     super.onInit();
-    // Check if user is already signed in
+
     firebaseUser.bindStream(auth.authStateChanges());
     
-    // Listen to auth state changes and navigate if user is signed in
     ever<User?>(firebaseUser, (User? user) {
       if (user != null) {
         Get.offAllNamed(Routes.NAV);

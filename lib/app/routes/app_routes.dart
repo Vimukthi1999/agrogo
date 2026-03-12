@@ -13,7 +13,6 @@ abstract class Routes {
   static const NAV = _Paths.NAV;
   static const MYADS = _Paths.MYADS;
   static const CREATEAD = _Paths.CREATEAD;
-  static const TEST = _Paths.TEST;
 }
 
 abstract class _Paths {
@@ -28,5 +27,4 @@ abstract class _Paths {
   static const NAV = '/nav';
   static const MYADS = '/myads';
   static const CREATEAD = '/createad';
-  static const TEST = '/test';
 }

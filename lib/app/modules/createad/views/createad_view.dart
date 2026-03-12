@@ -22,7 +22,7 @@ class CreateadView extends GetView<CreateadController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Title Field
+
               _buildSectionTitle('Ad Title'.tr),
               const SizedBox(height: 10),
               Obx(
@@ -37,7 +37,7 @@ class CreateadView extends GetView<CreateadController> {
               ),
               const SizedBox(height: 20),
 
-              // Description Field
+
               _buildSectionTitle('Description'.tr),
               const SizedBox(height: 10),
               Obx(
@@ -53,7 +53,7 @@ class CreateadView extends GetView<CreateadController> {
               ),
               const SizedBox(height: 20),
 
-              // Quantity and Price Row
+
               Row(
                 children: [
                   Expanded(
@@ -103,7 +103,7 @@ class CreateadView extends GetView<CreateadController> {
               ),
               const SizedBox(height: 20),
 
-              // Category Selection
+
               _buildSectionTitle('Category'.tr),
               const SizedBox(height: 10),
               Obx(
@@ -198,7 +198,7 @@ class CreateadView extends GetView<CreateadController> {
               ),
               const SizedBox(height: 20),
 
-              // Location, District, Town Row
+
               _buildSectionTitle('Location'.tr),
               const SizedBox(height: 10),
               Obx(
@@ -266,7 +266,7 @@ class CreateadView extends GetView<CreateadController> {
               ),
               const SizedBox(height: 20),
 
-              // Images Section
+
               _buildSectionTitle('Product Images'.tr),
               const SizedBox(height: 10),
               Obx(
@@ -407,7 +407,7 @@ class CreateadView extends GetView<CreateadController> {
               ),
               const SizedBox(height: 30),
 
-              // Submit Button
+
               Obx(
                 () => SizedBox(
                   width: double.infinity,

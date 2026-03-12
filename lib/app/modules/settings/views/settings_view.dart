@@ -15,7 +15,6 @@ class SettingsView extends GetView<SettingsController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Header Section
             Container(
               width: double.infinity,
               padding: const EdgeInsets.fromLTRB(20, 50, 20, 20),
@@ -43,7 +42,7 @@ class SettingsView extends GetView<SettingsController> {
               ),
             ),
 
-            /// Account Settings Card
+            
             Padding(
               padding: EdgeInsets.all(10),
               child: Column(
@@ -71,7 +70,7 @@ class SettingsView extends GetView<SettingsController> {
                             title: "Edit Profile".tr,
                             subTitle: "Change your profile details".tr,
                             press: () {
-                              // Navigate to edit profile page
+                              
                               Get.to(() => const EditProfile());
                             },
                           ),
@@ -79,7 +78,7 @@ class SettingsView extends GetView<SettingsController> {
                             title: "Change Password".tr,
                             subTitle: "Change your password".tr,
                             press: () {
-                              // Navigate to change password page
+                             
                               Get.to(() => const ChangePw());
                             },
                           ),
@@ -90,7 +89,7 @@ class SettingsView extends GetView<SettingsController> {
 
                   SizedBox(height: 10),
 
-                  /// App Settings Card
+                  
                   Card(
                     elevation: 2,
                     shape: RoundedRectangleBorder(
@@ -119,17 +118,7 @@ class SettingsView extends GetView<SettingsController> {
                                   "Change App Theme".tr,
                                   style: Theme.of(context).textTheme.titleSmall,
                                 ),
-                                // Obx(
-                                //   () => Switch(
-                                //     value:
-                                //         controller.foundThemeController.isDarkMode(),
-                                //     onChanged: (bool value) {
-                                //       controller.foundThemeController.toggleThemeMode(
-                                //         value ? ThemeMode.dark : ThemeMode.light,
-                                //       );
-                                //     },
-                                //   ),
-                                // ),
+                                
                               ],
                             ),
                           ),
@@ -137,16 +126,10 @@ class SettingsView extends GetView<SettingsController> {
                             title: "Change Language".tr,
                             subTitle: "Selected Language: ".tr,
                             press: () {
-                              // showChangeLanguageDialog();
+                              
                             },
                           ),
 
-                          // Text(
-                          //   "Change App Color",
-                          //   style: Theme.of(context).textTheme.titleSmall,
-                          // ),
-                          // SizedBox(height: 5.h),
-                          // ColorChanageDropdown(),
                         ],
                       ),
                     ),
@@ -154,7 +137,7 @@ class SettingsView extends GetView<SettingsController> {
 
                   SizedBox(height: 10),
 
-                  /// More Section Card
+                
                   Card(
                     elevation: 2,
                     shape: RoundedRectangleBorder(
@@ -170,55 +153,16 @@ class SettingsView extends GetView<SettingsController> {
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
 
-                          // ProfileMenuCard(
-                          //   title: "About Us",
-                          //   subTitle: "Learn more about us",
-                          //   press: () {},
-                          // ),
-                          // ProfileMenuCard(
-                          //   title: "Privacy Policy",
-                          //   subTitle: "Learn more about our privacy policy",
-                          //   press: () {},
-                          // ),
-                          // ProfileMenuCard(
-                          //   title: "Terms and Conditions",
-                          //   subTitle: "Learn more about our terms and conditions",
-                          //   press: () {},
-                          // ),
-                          // ProfileMenuCard(
-                          //   title: "Help Center",
-                          //   subTitle: "Get help from our support team",
-                          //   press: () {},
-                          // ),
+                         
                           ProfileMenuCard(
-                            title: "Logout".tr,
-                            subTitle: "Logout from your account".tr,
+                            title: "Logout",
+                            subTitle: "Logout from your account",
                             press: () async {
-                              // controller.logout();
-                              // apiFailedWithErrors(
-                              // "Logout",
-                              // [
-                              //   "Are you sure you want to logout?",
-                              //   "This will remove your account from this device.",
-                              // ],
-                              // );
-
-                              // apiFailedWithUnauthorized(
-                              //   "Logout",
-                              //   [
-                              //     "Are you sure you want to logout?",
-                              //     "This will remove your account from this device.",
-                              //   ],
-                              // );
-
-                              // showYesNoAppDialog(
-                              //   "Logout",
-                              //   "Are you sure you want to logout?",
-                              // );
+                             
 
                               final shouldExit = await showAppExitDialog();
                               if (shouldExit) {
-                                // Perform logout action
+                               
                                 controller.logout();
                               }
                             },
@@ -227,7 +171,7 @@ class SettingsView extends GetView<SettingsController> {
                           SizedBox(height: 5),
                           Text(
                             "Version: 1.0.0",
-                            // "Version: ".tr + dotenv.env['APPVERSION']!,
+                            
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
                         ],

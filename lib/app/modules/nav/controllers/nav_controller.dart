@@ -59,19 +59,13 @@ class NavController extends GetxController {
       );
     }
 
-    // if (settings.name == Routes.IMAGES_SUBMIT) {
-    //   return GetPageRoute(
-    //     settings: settings,
-    //     page: () => const ImagesSubmitView(),
-    //     binding: ImagesSubmitBinding(),
-    //   );
-    // }
+   
 
     return null;
   }
 
   void changePage(int index) {
-    // Only navigate if the index is different from the current one
+    
     if (selectedIndex.value != index) {
       selectedIndex.value = index;
       Get.offAndToNamed(pages[index], id: 1);

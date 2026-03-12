@@ -49,7 +49,7 @@ class HomeController extends GetxController {
                     final data = doc.data();
                     log('Document ${doc.id} data: $data');
                     
-                    // Check if required fields exist
+                    
                     if (!data.containsKey('name') || !data.containsKey('icon')) {
                       log('Document ${doc.id} missing required fields');
                       return null;
@@ -61,7 +61,7 @@ class HomeController extends GetxController {
                     return null;
                   }
                 })
-                .whereType<CategoryModel>() // Filters out null values
+                .whereType<CategoryModel>() 
                 .toList();
             
             log('Successfully mapped ${categories.length} categories');

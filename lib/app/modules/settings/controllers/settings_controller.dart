@@ -14,7 +14,7 @@ class SettingsController extends GetxController {
   var isNewPasswordVisible = false.obs;
   var isConfirmPasswordVisible = false.obs;
 
-  // final ThemeController foundThemeController = Get.find();
+
 
 
   @override

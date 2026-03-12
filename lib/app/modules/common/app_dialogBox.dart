@@ -23,5 +23,5 @@ Future<bool> showAppExitDialog() async {
     ),
   );
 
-  return shouldExit ?? false; // Default to false if the user doesn't confirm
+  return shouldExit ?? false;
 }

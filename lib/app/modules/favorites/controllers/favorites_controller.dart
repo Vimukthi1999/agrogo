@@ -7,7 +7,6 @@ class FavoritesController extends GetxController {
   final searchQuery = ''.obs;
   final filterCategory = ''.obs;
 
-  // Categories for filtering
   final categories = <String>[
     'All',
     'Seeds',
@@ -24,34 +23,17 @@ class FavoritesController extends GetxController {
     fetchFavorites();
   }
 
-  // Fetch favorite items from Firebase
+
   void fetchFavorites() {
     isLoading.value = true;
     try {
-      // TODO: Fetch from Firestore where isFavorited == true
       favoriteItems.value = [];
       
-      // Sample data for testing
-      // favoriteItems.value = [
-      //   {
-      //     'id': '1',
-      //     'title': 'Premium Organic Seeds',
-      //     'price': '₹500',
-      //     'originalPrice': '₹750',
-      //     'image': 'https://via.placeholder.com/200',
-      //     'category': 'Seeds',
-      //     'rating': 4.5,
-      //     'reviews': 124,
-      //     'distance': '5 km away',
-      //     'seller': 'Farmer John',
-      //   },
-      // ];
     } finally {
       isLoading.value = false;
     }
   }
 
-  // Get filtered items based on search and category
   List<Map<String, dynamic>> getFilteredItems() {
     return favoriteItems.where((item) {
       final matchesSearch = item['title']
@@ -65,7 +47,6 @@ class FavoritesController extends GetxController {
     }).toList();
   }
 
-  // Remove from favorites
   void removeFromFavorites(String itemId) {
     Get.defaultDialog(
       title: 'Remove Favorite',
@@ -77,7 +58,6 @@ class FavoritesController extends GetxController {
         ),
         TextButton(
           onPressed: () {
-            // TODO: Update Firebase
             favoriteItems.removeWhere((item) => item['id'] == itemId);
             Get.back();
             Get.snackbar('Success', 'Removed from favorites');
@@ -88,18 +68,18 @@ class FavoritesController extends GetxController {
     );
   }
 
-  // Share item
+
   void shareItem(String title) {
     Get.snackbar('Share', 'Sharing "$title"');
-    // TODO: Implement share functionality
+
   }
 
-  // Clear search
+
   void clearSearch() {
     searchQuery.value = '';
   }
 
-  // Set category filter
+ 
   void setCategory(String category) {
     filterCategory.value = category;
   }

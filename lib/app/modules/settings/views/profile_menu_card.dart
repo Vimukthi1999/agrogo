@@ -5,11 +5,11 @@ class ProfileMenuCard extends StatelessWidget {
     super.key,
     this.title,
     this.subTitle,
-    // this.svgSrc,
+  
     this.press,
   });
 
-  // final String? svgSrc;
+
   final String? title, subTitle;
   final VoidCallback? press;
 

@@ -19,17 +19,11 @@ class MyApp extends StatelessWidget {
     //   () => 
       GetMaterialApp(
         debugShowCheckedModeBanner: false,
-        // theme: ThemeController.to.themeData.value,
-        // themeMode: ThemeController.to.themeMode.value,
-        // useInheritedMediaQuery: true,
-        // locale: initialLocale,
-        // fallbackLocale: const Locale('en', 'GB'),
         theme: ThemeData(        
         colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 9, 212, 134)),
       ),
         initialRoute: AppPages.INITIAL,
         getPages: AppPages.routes,
-        // translations: AppTranslations(),
       );
     // );
   }

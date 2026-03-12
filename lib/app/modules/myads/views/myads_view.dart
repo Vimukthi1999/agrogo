@@ -13,7 +13,6 @@ class MyadsView extends GetView<MyadsController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Header Section
             Container(
               width: double.infinity,
               padding: const EdgeInsets.fromLTRB(20, 50, 20, 30),
@@ -78,13 +77,13 @@ class MyadsView extends GetView<MyadsController> {
               ),
             ),
 
-            // Ads List Section
+            
             Padding(
               padding: const EdgeInsets.all(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Filter/Sort Row
+                  
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -128,7 +127,7 @@ class MyadsView extends GetView<MyadsController> {
                   ),
                   const SizedBox(height: 20),
 
-                  // Ads List or Empty State
+                 
                   Obx(
                     () => controller.userAds.isEmpty
                         ? _buildEmptyState()
@@ -194,7 +193,7 @@ class MyadsView extends GetView<MyadsController> {
   Widget _buildAdCard(dynamic ad) {
     return GestureDetector(
       onTap: () {
-        // Navigate to ad detail
+        
       },
       child: Container(
         margin: const EdgeInsets.only(bottom: 16),
@@ -211,7 +210,7 @@ class MyadsView extends GetView<MyadsController> {
         ),
         child: Row(
           children: [
-            // Ad Image
+         
             Container(
               width: 120,
               height: 120,
@@ -230,14 +229,14 @@ class MyadsView extends GetView<MyadsController> {
                   : null,
             ),
 
-            // Ad Details
+          
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Title
+                   
                     Text(
                       ad['title'] ?? 'Untitled',
                       maxLines: 2,
@@ -250,14 +249,14 @@ class MyadsView extends GetView<MyadsController> {
                     ),
                     const SizedBox(height: 6),
 
-                    // Category
+                    
                     Text(
                       ad['category'] ?? 'N/A',
                       style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                     ),
                     const SizedBox(height: 8),
 
-                    // Price and Status
+                   
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -294,7 +293,7 @@ class MyadsView extends GetView<MyadsController> {
               ),
             ),
 
-            // Action Button
+           
             Padding(
               padding: const EdgeInsets.only(right: 12),
               child: PopupMenuButton(
@@ -308,7 +307,7 @@ class MyadsView extends GetView<MyadsController> {
                       ],
                     ),
                     onTap: () {
-                      // Edit ad
+                     
                     },
                   ),
                   PopupMenuItem(
@@ -320,7 +319,7 @@ class MyadsView extends GetView<MyadsController> {
                       ],
                     ),
                     onTap: () {
-                      // View ad
+                      
                     },
                   ),
                   PopupMenuItem(
@@ -332,7 +331,7 @@ class MyadsView extends GetView<MyadsController> {
                       ],
                     ),
                     onTap: () {
-                      // Delete ad
+                      
                     },
                   ),
                 ],

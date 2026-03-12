@@ -3,13 +3,13 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 class CreateadController extends GetxController {
-  // Form Controllers
+
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
   final quantityController = TextEditingController();
   final priceController = TextEditingController();
 
-  // State Variables
+
   final selectedImages = <XFile>[].obs;
   final selectedCategory = ''.obs;
   final selectedDistrict = ''.obs;
@@ -19,7 +19,7 @@ class CreateadController extends GetxController {
   final longitude = 0.0.obs;
   final isLoading = false.obs;
 
-  // Error states
+
   final titleError = ''.obs;
   final descriptionError = ''.obs;
   final quantityError = ''.obs;
@@ -27,7 +27,7 @@ class CreateadController extends GetxController {
   final imageError = ''.obs;
   final categoryError = ''.obs;
 
-  // Sample categories (replace with actual data from Firebase)
+
   final categories = <Map<String, dynamic>>[
     {'id': '1', 'name': 'Seeds', 'icon': 'https://via.placeholder.com/50'},
     {'id': '2', 'name': 'Vegetables', 'icon': 'https://via.placeholder.com/50'},
@@ -37,7 +37,7 @@ class CreateadController extends GetxController {
     {'id': '6', 'name': 'Equipment', 'icon': 'https://via.placeholder.com/50'},
   ].obs;
 
-  // Sample districts (replace with actual data)
+
   final districts = <String>[
     'Bangalore',
     'Mangalore',
@@ -47,7 +47,7 @@ class CreateadController extends GetxController {
     'Other',
   ].obs;
 
-  // Sample towns by district
+
   final townsByDistrict = <String, List<String>>{
     'Bangalore': ['Bangalore City', 'Whitefield', 'Indiranagar', 'Koramangala'],
     'Mangalore': ['Mangalore City', 'Surathkal', 'Bajpe', 'Mulki'],
@@ -57,11 +57,10 @@ class CreateadController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    // Get user's current location (implement actual location service)
-    // getCurrentLocation();
+
   }
 
-  // Pick images from gallery
+
   Future<void> pickImages() async {
     try {
       final ImagePicker picker = ImagePicker();
@@ -84,12 +83,12 @@ class CreateadController extends GetxController {
     }
   }
 
-  // Remove image
+
   void removeImage(int index) {
     selectedImages.removeAt(index);
   }
 
-  // Clear all form data
+
   void clearForm() {
     titleController.clear();
     descriptionController.clear();
@@ -101,7 +100,7 @@ class CreateadController extends GetxController {
     selectedTown.value = '';
   }
 
-  // Validate form
+
   bool validateForm() {
     clearErrors();
     bool isValid = true;
@@ -151,7 +150,7 @@ class CreateadController extends GetxController {
     return isValid;
   }
 
-  // Clear all errors
+
   void clearErrors() {
     titleError.value = '';
     descriptionError.value = '';
@@ -161,7 +160,7 @@ class CreateadController extends GetxController {
     categoryError.value = '';
   }
 
-  // Create ad
+
   Future<void> createAd() async {
     if (!validateForm()) {
       return;
@@ -170,24 +169,6 @@ class CreateadController extends GetxController {
     try {
       isLoading.value = true;
 
-      // TODO: Upload images to Firebase Storage
-      // TODO: Create ad document in Firestore with the following data:
-      // {
-      //   'title': titleController.text,
-      //   'description': descriptionController.text,
-      //   'quantity': quantityController.text,
-      //   'price': priceController.text,
-      //   'category': selectedCategory.value,
-      //   'district': selectedDistrict.value,
-      //   'town': selectedTown.value,
-      //   'location': userLocation.value,
-      //   'latitude': latitude.value,
-      //   'longitude': longitude.value,
-      //   'images': [imageUrls],
-      //   'userId': currentUserId,
-      //   'createdAt': DateTime.now(),
-      //   'status': 'Active',
-      // }
 
       Get.snackbar('Success', 'Ad created successfully');
       clearForm();
@@ -199,14 +180,7 @@ class CreateadController extends GetxController {
     }
   }
 
-  // Get current location (implement actual location service)
-  void getCurrentLocation() {
-    // TODO: Implement location service
-    // Use geolocator or location package
-    // Update latitude, longitude, and userLocation
-  }
 
-  // Update towns when district changes
   void updateTowns(String district) {
     selectedDistrict.value = district;
     selectedTown.value = '';

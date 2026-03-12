@@ -32,7 +32,7 @@ class SigninController extends GetxController {
     });
   }
 
-  // Email validation
+  
   bool isValidEmail(String email) {
     final emailRegex = RegExp(
       r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
@@ -40,13 +40,13 @@ class SigninController extends GetxController {
     return emailRegex.hasMatch(email);
   }
 
-  // Clear error messages
+
   void clearErrors() {
     emailError.value = '';
     passwordError.value = '';
   }
 
-  // Validate inputs before login
+ 
   bool validateInputs(String email, String password) {
     clearErrors();
     bool isValid = true;
@@ -70,7 +70,7 @@ class SigninController extends GetxController {
     return isValid;
   }
 
-  // Login
+
   Future<void> login(String email, String password) async {
     if (!validateInputs(email, password)) {
       return;

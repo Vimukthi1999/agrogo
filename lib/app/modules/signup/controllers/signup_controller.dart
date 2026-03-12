@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 
 import '../../../routes/app_pages.dart';
@@ -12,7 +13,9 @@ class SignupController extends GetxController {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
 
+  final nameController = TextEditingController();
   final emailController = TextEditingController();
+  final phoneController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
 
@@ -20,18 +23,62 @@ class SignupController extends GetxController {
   RxBool isLoading = false.obs;
   RxBool isPasswordVisible = false.obs;
   RxBool isConfirmPasswordVisible = false.obs;
+  RxBool isGettingLocation = false.obs;
 
-  // Validation error states
+  
+  RxString accountType = 'farmer'.obs;
+  RxString province = ''.obs;
+  RxString district = ''.obs;
+  RxDouble latitude = 0.0.obs;
+  RxDouble longitude = 0.0.obs;
+
+
+  RxString nameError = ''.obs;
   RxString emailError = ''.obs;
+  RxString phoneError = ''.obs;
   RxString passwordError = ''.obs;
   RxString confirmPasswordError = ''.obs;
+  RxString locationError = ''.obs;
+
+
+  final Map<String, String> districtToProvince = {
+    'Colombo': 'Western',
+    'Gampaha': 'Western',
+    'Kalutara': 'Western',
+    'Matara': 'Southern',
+    'Galle': 'Southern',
+    'Hambantota': 'Southern',
+    'Kandy': 'Central',
+    'Matale': 'Central',
+    'Nuwara Eliya': 'Central',
+    'Jaffna': 'Northern',
+    'Mullaitivu': 'Northern',
+    'Batticaloa': 'Eastern',
+    'Ampara': 'Eastern',
+    'Trincomalee': 'Eastern',
+    'Kurunegala': 'North Western',
+    'Puttalam': 'North Western',
+    'Anuradhapura': 'North Central',
+    'Polonnaruwa': 'North Central',
+    'Badulla': 'Uva',
+    'Monaragala': 'Uva',
+    'Ratnapura': 'Sabaragamuwa',
+    'Kegalle': 'Sabaragamuwa',
+  };
+
+  final List<String> allDistricts = [
+    'Colombo', 'Gampaha', 'Kalutara', 'Matara', 'Galle', 'Hambantota',
+    'Kandy', 'Matale', 'Nuwara Eliya', 'Jaffna', 'Mullaitivu',
+    'Batticaloa', 'Ampara', 'Trincomalee', 'Kurunegala', 'Puttalam',
+    'Anuradhapura', 'Polonnaruwa', 'Badulla', 'Monaragala', 'Ratnapura', 'Kegalle',
+  ];
 
   @override
   void onInit() {
     super.onInit();
     firebaseUser.bindStream(auth.authStateChanges());
     
-    // Listen to auth state changes and navigate if user is signed in
+  
     ever<User?>(firebaseUser, (User? user) {
       if (user != null) {
         Get.offAllNamed(Routes.HOME);
@@ -39,7 +86,7 @@ class SignupController extends GetxController {
     });
   }
 
-  // Email validation
+
   bool isValidEmail(String email) {
     final emailRegex = RegExp(
       r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
@@ -47,7 +94,7 @@ class SignupController extends GetxController {
     return emailRegex.hasMatch(email);
   }
 
-  // Password strength check
+
   String getPasswordStrength(String password) {
     if (password.isEmpty) return '';
     if (password.length < 6) return 'Weak';
@@ -58,23 +105,42 @@ class SignupController extends GetxController {
     return 'Good';
   }
 
-  // Clear error messages
+ 
   void clearErrors() {
+    nameError.value = '';
     emailError.value = '';
+    phoneError.value = '';
     passwordError.value = '';
     confirmPasswordError.value = '';
+    locationError.value = '';
   }
 
-  // Validate inputs before registration
-  bool validateInputs(String email, String password, String confirmPassword) {
+ 
+  bool validateInputs(String name, String email, String phone, String password, String confirmPassword) {
     clearErrors();
     bool isValid = true;
+
+    if (name.isEmpty) {
+      nameError.value = 'Full name is required';
+      isValid = false;
+    } else if (name.length < 3) {
+      nameError.value = 'Name must be at least 3 characters';
+      isValid = false;
+    }
 
     if (email.isEmpty) {
       emailError.value = 'Email is required';
       isValid = false;
     } else if (!isValidEmail(email)) {
       emailError.value = 'Please enter a valid email';
+      isValid = false;
+    }
+
+    if (phone.isEmpty) {
+      phoneError.value = 'Phone number is required';
+      isValid = false;
+    } else if (phone.length < 10) {
+      phoneError.value = 'Please enter a valid phone number';
       isValid = false;
     }
 
@@ -97,9 +163,66 @@ class SignupController extends GetxController {
     return isValid;
   }
 
-  // Register
-  Future<void> register(String email, String password, String confirmPassword) async {
-    if (!validateInputs(email, password, confirmPassword)) {
+  Future<void> getCurrentLocation() async {
+    try {
+      isGettingLocation.value = true;
+      locationError.value = '';
+
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        locationError.value = 'Location permission is required';
+        isGettingLocation.value = false;
+        return;
+      }
+
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+
+      latitude.value = position.latitude;
+      longitude.value = position.longitude;
+
+      _mapLocationToDistrict(position.latitude, position.longitude);
+
+      Get.snackbar('Success', 'Location detected successfully',
+          snackPosition: SnackPosition.BOTTOM);
+    } catch (e) {
+      locationError.value = 'Failed to get location';
+      log('Location error: $e');
+    } finally {
+      isGettingLocation.value = false;
+    }
+  }
+
+  void _mapLocationToDistrict(double lat, double lng) {
+    if (lat >= 5.8 && lat <= 6.8 && lng >= 80.2 && lng <= 80.8) {
+      district.value = 'Matara';
+      province.value = districtToProvince['Matara'] ?? '';
+    } else if (lat >= 6.7 && lat <= 7.1 && lng >= 79.7 && lng <= 80.0) {
+      district.value = 'Colombo';
+      province.value = districtToProvince['Colombo'] ?? '';
+    } else if (lat >= 6.8 && lat <= 7.4 && lng >= 80.4 && lng <= 81.0) {
+      district.value = 'Kandy';
+      province.value = districtToProvince['Kandy'] ?? '';
+    } else {
+      district.value = 'Colombo';
+      province.value = 'Western';
+    }
+  }
+
+  void updateDistrict(String newDistrict) {
+    district.value = newDistrict;
+    province.value = districtToProvince[newDistrict] ?? '';
+  }
+
+
+  Future<void> register(String name, String email, String phone, String password,
+      String confirmPassword) async {
+    if (!validateInputs(name, email, phone, password, confirmPassword)) {
       return;
     }
 
@@ -112,20 +235,21 @@ class SignupController extends GetxController {
 
       String userId = userCredential.user!.uid;
 
-
-    await firestore.collection('users').doc(userId).set({
-      'name': 'Geshan Silva',
-      'role': 'farmer',
-      'phone': '+94XXXXXXXX',
-      'email': email,
-      'district': 'Matara',
-      'province': 'Southern',
-      'location': {
-        'latitude': 6.9271,
-        'longitude': 79.8612,
-      },
-      'createdAt': FieldValue.serverTimestamp(),
-    });
+      await firestore.collection('users').doc(userId).set({
+        'name': name,
+        'email': email,
+        'phone': phone,
+        'role': accountType.value,
+        'accountType': accountType.value,
+        'district': district.value,
+        'province': province.value,
+        'location': {
+          'latitude': latitude.value,
+          'longitude': longitude.value,
+        },
+        'createdAt': FieldValue.serverTimestamp(),
+        'profileComplete': false,
+      });
 
       isLoading.value = false;
       Get.snackbar("Success", "Account created successfully!");
@@ -153,7 +277,9 @@ class SignupController extends GetxController {
 
   @override
   void onClose() {
+    nameController.dispose();
     emailController.dispose();
+    phoneController.dispose();
     passwordController.dispose();
     confirmPasswordController.dispose();
     super.onClose();

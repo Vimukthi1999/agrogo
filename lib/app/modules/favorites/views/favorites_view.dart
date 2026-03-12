@@ -269,7 +269,7 @@ class FavoritesView extends GetView<FavoritesController> {
   Widget _buildFavoritesCard(Map<String, dynamic> item) {
     return GestureDetector(
       onTap: () {
-        // Navigate to product details
+
       },
       child: Container(
         decoration: BoxDecoration(
@@ -286,7 +286,7 @@ class FavoritesView extends GetView<FavoritesController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Image Container
+
             Stack(
               children: [
                 Container(
@@ -310,7 +310,7 @@ class FavoritesView extends GetView<FavoritesController> {
                         )
                       : null,
                 ),
-                // Favorite Button
+       
                 Positioned(
                   top: 8,
                   right: 8,
@@ -336,7 +336,7 @@ class FavoritesView extends GetView<FavoritesController> {
                     ),
                   ),
                 ),
-                // Discount Badge
+             
                 if (item['originalPrice'] != null)
                   Positioned(
                     top: 8,
@@ -362,14 +362,14 @@ class FavoritesView extends GetView<FavoritesController> {
                   ),
               ],
             ),
-            // Details
+          
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(12),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Category
+                   
                     Text(
                       item['category'] ?? 'N/A',
                       style: TextStyle(
@@ -379,7 +379,7 @@ class FavoritesView extends GetView<FavoritesController> {
                       ),
                     ),
                     const SizedBox(height: 4),
-                    // Title
+                  
                     Text(
                       item['title'] ?? 'Product',
                       maxLines: 2,
@@ -391,7 +391,7 @@ class FavoritesView extends GetView<FavoritesController> {
                       ),
                     ),
                     const Spacer(),
-                    // Rating
+               
                     Row(
                       children: [
                         const Icon(
@@ -410,7 +410,7 @@ class FavoritesView extends GetView<FavoritesController> {
                       ],
                     ),
                     const SizedBox(height: 8),
-                    // Price
+              
                     Row(
                       children: [
                         Text(

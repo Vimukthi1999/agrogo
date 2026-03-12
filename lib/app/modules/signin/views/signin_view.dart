@@ -87,7 +87,7 @@ class SigninView extends GetView<SigninController> {
                       ),
                       const SizedBox(height: 20),
 
-                      // Email Field
+                     
                       Text(
                         "Email Address".tr,
                         style: const TextStyle(
@@ -152,7 +152,7 @@ class SigninView extends GetView<SigninController> {
                       ),
                       const SizedBox(height: 10),
 
-                      // Password Field
+                     
                       Text(
                         "Password".tr,
                         style: const TextStyle(
@@ -230,12 +230,12 @@ class SigninView extends GetView<SigninController> {
                       ),
                       const SizedBox(height: 10),
 
-                      // Forgot Password Link
+                     
                       Align(
                         alignment: Alignment.centerRight,
                         child: TextButton(
                           onPressed: () {
-                            // Add forgot password functionality
+                            
                           },
                           child: Text(
                             "Forgot Password?".tr,
@@ -249,7 +249,7 @@ class SigninView extends GetView<SigninController> {
                       ),
                       const SizedBox(height: 15),
 
-                      // Login Button
+                     
                       Obx(
                         () => SizedBox(
                           width: double.infinity,
@@ -295,7 +295,7 @@ class SigninView extends GetView<SigninController> {
                       ),
                       const SizedBox(height: 16),
 
-                      // Divider with text
+                     
                       Row(
                         children: [
                           Expanded(
@@ -324,7 +324,7 @@ class SigninView extends GetView<SigninController> {
                       ),
                       const SizedBox(height: 16),
 
-                      // Register Button
+                     
                       SizedBox(
                         width: double.infinity,
                         height: 50,

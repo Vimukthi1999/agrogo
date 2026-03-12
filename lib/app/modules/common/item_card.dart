@@ -41,28 +41,26 @@ class ProductCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            // 1. Image and Heart Icon Stack
             Stack(
               children: [
-                // Product Image
                 Container(
                   height: 100,
                   width: double.infinity,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
-                    color: Colors.grey.shade50, // Fallback background
+                    color: Colors.grey.shade50,
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(15),
                     child: Image.network(
                       imageUrl,
-                      fit: BoxFit.contain, // Keeps aspect ratio like screenshot
+                      fit: BoxFit.contain,
                       errorBuilder: (context, error, stackTrace) =>
                           const Icon(Icons.image_not_supported, color: Colors.grey),
                     ),
                   ),
                 ),
-                // Heart Icon
+                
                 const Positioned(
                   top: 0,
                   right: 0,
@@ -77,7 +75,7 @@ class ProductCard extends StatelessWidget {
             
             const SizedBox(height: 8),
 
-            // 2. Title
+          
             Text(
               title,
               maxLines: 2,
@@ -92,7 +90,7 @@ class ProductCard extends StatelessWidget {
 
             const SizedBox(height: 4),
 
-            // 3. Price (Green Color)
+            
             Text(
               price,
               style: const TextStyle(
@@ -104,10 +102,10 @@ class ProductCard extends StatelessWidget {
 
             const SizedBox(height: 4),
 
-            // 4. Rating Row
+          
             Row(
               children: [
-                // Stars
+                
                 ...List.generate(5, (index) {
                   return Icon(
                     index < rating.floor() ? Icons.star : Icons.star_border,
@@ -116,7 +114,7 @@ class ProductCard extends StatelessWidget {
                   );
                 }),
                 const SizedBox(width: 2),
-                // Count
+                
                 Text(
                   "($reviewCount)",
                   style: TextStyle(

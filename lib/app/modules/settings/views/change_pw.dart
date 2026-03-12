@@ -19,11 +19,11 @@ class ChangePw extends GetView<SettingsController> {
       body: SingleChildScrollView(
         padding: EdgeInsets.all(10),
         child: Form(
-          // key: controller.changePwFormKey,
+          
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              /// current pw
+             
               Text(
                 'Current Password'.tr,
                 style: Theme.of(context).textTheme.titleSmall,
@@ -49,16 +49,12 @@ class ChangePw extends GetView<SettingsController> {
                       },
                     ),
                   ),
-                  // validator: (value) => AValidator.validateText(
-                  //   value,
-                  //   'Password'.tr,
-                  // ),
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
               ),
               SizedBox(height: 10),
 
-              /// new pw
+             
               Text(
                 'New Password'.tr,
                 style: Theme.of(context).textTheme.titleSmall,
@@ -84,17 +80,13 @@ class ChangePw extends GetView<SettingsController> {
                       },
                     ),
                   ),
-                  // validator: (value) => AValidator.validateText(
-                  //   value,
-                  //   'New Password'.tr,
-                  // ),
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
               ),
 
               SizedBox(height: 10),
 
-              /// confirm pw
+             
               Text(
                 'Confirm Password'.tr,
                 style: Theme.of(context).textTheme.titleSmall,
@@ -120,17 +112,14 @@ class ChangePw extends GetView<SettingsController> {
                       },
                     ),
                   ),
-                  // validator: (value) => AValidator.validateConfirmPassword(
-                  //   value,
-                  //   controller.newPwController.text,
-                  // ),
+                 
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
               ),
 
               SizedBox(height: 10),
 
-              /// Save Button
+              
               SizedBox(
                 width: double.infinity,
                 child: Obx(

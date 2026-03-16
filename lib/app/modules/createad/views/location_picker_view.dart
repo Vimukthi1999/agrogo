@@ -1,6 +1,8 @@
+import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:get/get.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:latlong2/latlong.dart';
 import '../controllers/createad_controller.dart';
 
 class LocationPickerView extends StatefulWidget {
@@ -13,12 +15,13 @@ class LocationPickerView extends StatefulWidget {
 class _LocationPickerViewState extends State<LocationPickerView> {
   final controller = Get.find<CreateadController>();
   LatLng? _pickedLocation;
+  final MapController _mapController = MapController();
   
   @override
   void initState() {
     super.initState();
     // Default to Colombo or current detected location
-    if (controller.latitude.value != 0.0) {
+    if (controller.latitude.value != 0.0 && controller.longitude.value != 0.0) {
       _pickedLocation = LatLng(controller.latitude.value, controller.longitude.value);
     } else {
       _pickedLocation = const LatLng(6.9271, 79.8612); // Colombo
@@ -36,31 +39,49 @@ class _LocationPickerViewState extends State<LocationPickerView> {
             IconButton(
               icon: const Icon(Icons.check),
               onPressed: () {
-                controller.updateFromMap(_pickedLocation!);
-                Get.back();
+                if (_pickedLocation != null) {
+                  log('Confirming location from AppBar: ${_pickedLocation!.latitude}, ${_pickedLocation!.longitude}');
+                  final success = controller.updateFromMap(_pickedLocation!);
+                  if (success) {
+                    Get.back(); // Returns to Create Ad screen
+                  }
+                }
               },
             ),
         ],
       ),
-      body: GoogleMap(
-        initialCameraPosition: CameraPosition(
-          target: _pickedLocation!,
-          zoom: 13,
+      body: FlutterMap(
+        mapController: _mapController,
+        options: MapOptions(
+          initialCenter: _pickedLocation!,
+          initialZoom: 13,
+          onTap: (tapPosition, point) {
+            setState(() {
+              _pickedLocation = point;
+            });
+          },
         ),
-        onMapCreated: (mapController) {},
-        onTap: (latLng) {
-          setState(() {
-            _pickedLocation = latLng;
-          });
-        },
-        markers: _pickedLocation == null
-            ? {}
-            : {
+        children: [
+          TileLayer(
+            urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+            userAgentPackageName: 'com.agrogo.app',
+          ),
+          if (_pickedLocation != null)
+            MarkerLayer(
+              markers: [
                 Marker(
-                  markerId: const MarkerId('picked'),
-                  position: _pickedLocation!,
+                  point: _pickedLocation!,
+                  width: 80,
+                  height: 80,
+                  child: const Icon(
+                    Icons.location_on,
+                    color: Colors.red,
+                    size: 40,
+                  ),
                 ),
-              },
+              ],
+            ),
+        ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
@@ -68,8 +89,11 @@ class _LocationPickerViewState extends State<LocationPickerView> {
         onPressed: _pickedLocation == null
             ? null
             : () {
-                controller.updateFromMap(_pickedLocation!);
-                Get.back();
+                log('Confirming location from FAB: ${_pickedLocation!.latitude}, ${_pickedLocation!.longitude}');
+                final success = controller.updateFromMap(_pickedLocation!);
+                if (success) {
+                  Get.back(); // Returns to Create Ad screen
+                }
               },
         label: Text('Confirm Location'.tr),
         icon: const Icon(Icons.location_on),

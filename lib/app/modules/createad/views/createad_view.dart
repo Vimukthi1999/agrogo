@@ -832,9 +832,12 @@ class CreateadView extends GetView<CreateadController> {
               icon: Icons.bookmark_outline,
               title: "Use Saved Location".tr,
               subtitle: "Fetch location from your profile".tr,
-              onTap: () {
+              onTap: () async {
                 Get.back();
-                controller.useSavedLocation();
+                final success = await controller.useSavedLocation();
+                if (success) {
+                  // Already on Create Ad screen, just update UI
+                }
               },
             ),
             const SizedBox(height: 12),
@@ -842,9 +845,12 @@ class CreateadView extends GetView<CreateadController> {
               icon: Icons.my_location,
               title: "Detect Current Location".tr,
               subtitle: "Get your current GPS position".tr,
-              onTap: () {
+              onTap: () async {
                 Get.back();
-                controller.getCurrentLocation();
+                final success = await controller.getCurrentLocation();
+                if (success) {
+                  // Already on Create Ad screen, just update UI
+                }
               },
             ),
             const SizedBox(height: 12),

@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../models/category_model.dart';
@@ -180,7 +180,7 @@ class CreateadController extends GetxController {
     super.onInit();
   }
 
-  Future<void> useSavedLocation() async {
+  Future<bool> useSavedLocation() async {
     try {
       isGettingLocation.value = true;
       locationError.value = '';
@@ -188,7 +188,7 @@ class CreateadController extends GetxController {
       final user = FirebaseAuth.instance.currentUser;
       if (user == null) {
         locationError.value = 'User not logged in';
-        return;
+        return false;
       }
 
       final doc = await FirebaseFirestore.instance
@@ -205,25 +205,30 @@ class CreateadController extends GetxController {
           district.value = data['district'] ?? '';
           province.value = data['province'] ?? '';
 
+          log('Saved location fetched: ${latitude.value}, ${longitude.value}');
+
           if (district.isEmpty) {
             _mapLocationToDistrict(latitude.value, longitude.value);
           }
 
           isDistrictAutoDetected.value = true;
           Get.snackbar('Success', 'Saved location used');
+          return true;
         } else {
           locationError.value = 'No saved location found';
         }
       }
+      return false;
     } catch (e) {
       locationError.value = 'Failed to fetch saved location';
       log('Saved location error: $e');
+      return false;
     } finally {
       isGettingLocation.value = false;
     }
   }
 
-  Future<void> getCurrentLocation() async {
+  Future<bool> getCurrentLocation() async {
     try {
       isGettingLocation.value = true;
       locationError.value = '';
@@ -236,12 +241,14 @@ class CreateadController extends GetxController {
       if (permission == LocationPermission.deniedForever) {
         locationError.value = 'Location permission is required';
         isGettingLocation.value = false;
-        return;
+        return false;
       }
 
       Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
       );
+
+      log('Current location detected: ${position.latitude}, ${position.longitude}');
 
       latitude.value = position.latitude;
       longitude.value = position.longitude;
@@ -254,20 +261,29 @@ class CreateadController extends GetxController {
         'Current location detected',
         snackPosition: SnackPosition.BOTTOM,
       );
+      return true;
     } catch (e) {
       locationError.value = 'Failed to get location';
       log('Location error: $e');
+      return false;
     } finally {
       isGettingLocation.value = false;
     }
   }
 
-  void updateFromMap(LatLng pickedLocation) {
-    latitude.value = pickedLocation.latitude;
-    longitude.value = pickedLocation.longitude;
-    _mapLocationToDistrict(latitude.value, longitude.value);
-    isDistrictAutoDetected.value = true;
-    Get.snackbar('Success', 'Location selected from map');
+  bool updateFromMap(LatLng pickedLocation) {
+    try {
+      log('Updating from map: ${pickedLocation.latitude}, ${pickedLocation.longitude}');
+      latitude.value = pickedLocation.latitude;
+      longitude.value = pickedLocation.longitude;
+      _mapLocationToDistrict(latitude.value, longitude.value);
+      isDistrictAutoDetected.value = true;
+      Get.snackbar('Success', 'Location selected from map');
+      return true;
+    } catch (e) {
+      log('Error updating from map: $e');
+      return false;
+    }
   }
 
   void _mapLocationToDistrict(double lat, double lng) {
@@ -282,10 +298,12 @@ class CreateadController extends GetxController {
           lng <= bounds['maxLng']!) {
         district.value = districtName;
         province.value = districtToProvince[districtName] ?? '';
+        log('Location mapped to: $districtName, ${province.value}');
         return;
       }
     }
 
+    log('Location ($lat, $lng) outside hardcoded district bounds. Defaulting to Colombo.');
     // Default to Colombo if no district is found
     district.value = 'Colombo';
     province.value = 'Western';

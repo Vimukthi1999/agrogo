@@ -107,7 +107,7 @@ class SignupController extends GetxController {
   
     ever<User?>(firebaseUser, (User? user) {
       if (user != null) {
-        Get.offAllNamed(Routes.HOME);
+        Get.offAllNamed(Routes.NAV);
       }
     });
   }

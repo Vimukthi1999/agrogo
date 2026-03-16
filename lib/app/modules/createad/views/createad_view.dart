@@ -253,195 +253,198 @@ class CreateadView extends GetView<CreateadController> {
 
               _buildSectionTitle('Location'.tr),
               const SizedBox(height: 10),
-              Obx(
-                () => Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (!controller.isDistrictAutoDetected.value)
-                      ElevatedButton.icon(
-                        onPressed: controller.isGettingLocation.value
-                            ? null
-                            : controller.getCurrentLocation,
-                        icon: controller.isGettingLocation.value
-                            ? const SizedBox(
-                                height: 20,
-                                width: 20,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  valueColor: AlwaysStoppedAnimation<Color>(
-                                    Colors.white,
-                                  ),
-                                ),
-                              )
-                            : const Icon(Icons.location_on_outlined),
-                        label: Text(
-                          controller.isGettingLocation.value
-                              ? 'Detecting Location...'.tr
-                              : 'Auto Detect Location'.tr,
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF1E7044),
-                          foregroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 12,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  RichText(
+                    text: const TextSpan(
+                      children: [
+                        TextSpan(
+                          text: 'Location',
+                          style: TextStyle(
+                            color: Color(0xFF1E7044),
+                            fontWeight: FontWeight.w600,
+                            fontSize: 13,
                           ),
                         ),
-                      )
-                    else
-                      Container(
-                        padding: const EdgeInsets.all(12),
+                        TextSpan(
+                          text: ' *',
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Obx(
+                    () => GestureDetector(
+                      onTap: controller.isGettingLocation.value
+                          ? null
+                          : controller.getCurrentLocation,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 6,
+                        ),
                         decoration: BoxDecoration(
-                          color: Colors.green[50],
-                          border: Border.all(
-                            color: Colors.green[400]!,
-                          ),
-                          borderRadius: BorderRadius.circular(10),
+                          color: const Color(0xFF1E7044).withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(8),
                         ),
                         child: Row(
                           children: [
-                            Icon(
-                              Icons.check_circle_outline,
-                              color: Colors.green[700],
-                              size: 20,
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Location Detected'.tr,
-                                    style: TextStyle(
-                                      color: Colors.green[700],
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 13,
-                                    ),
+                            if (controller.isGettingLocation.value)
+                              const SizedBox(
+                                height: 16,
+                                width: 16,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                    Color(0xFF1E7044),
                                   ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    '${controller.selectedDistrict.value} (Lat: ${controller.latitude.value.toStringAsFixed(4)}, Lng: ${controller.longitude.value.toStringAsFixed(4)})',
-                                    style: TextStyle(
-                                      color: Colors.green[600],
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                ],
+                                ),
+                              )
+                            else
+                              const Icon(
+                                Icons.location_on_outlined,
+                                color: Color(0xFF1E7044),
+                                size: 16,
                               ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                controller.isDistrictAutoDetected.value = false;
-                                controller.selectedDistrict.value = '';
-                                controller.selectedTown.value = '';
-                              },
-                              child: Icon(
-                                Icons.close,
-                                color: Colors.green[700],
-                                size: 20,
+                            const SizedBox(width: 6),
+                            Text(
+                              controller.isGettingLocation.value
+                                  ? 'Detecting...'.tr
+                                  : 'Auto Detect'.tr,
+                              style: const TextStyle(
+                                color: Color(0xFF1E7044),
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
                           ],
                         ),
                       ),
-                    if (controller.locationError.value.isNotEmpty)
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8),
-                        child: Text(
-                          controller.locationError.value,
-                          style: const TextStyle(
-                            color: Colors.red,
-                            fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Obx(
+                () => Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'District'.tr,
+                            style: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: Color(0xFF1E7044),
+                            ),
                           ),
-                        ),
-                      ),
-                    const SizedBox(height: 12),
-                    Text(
-                      'District'.tr,
-                      style: const TextStyle(
-                        color: Color(0xFF1E7044),
-                        fontWeight: FontWeight.w600,
-                        fontSize: 13,
+                          const SizedBox(height: 6),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 12,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.grey[50],
+                              border: Border.all(
+                                color: controller.locationError.value.isNotEmpty
+                                    ? Colors.red
+                                    : Colors.grey[300]!,
+                                width: controller.locationError.value.isNotEmpty
+                                    ? 1.5
+                                    : 1,
+                              ),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Text(
+                              controller.selectedDistrict.isEmpty
+                                  ? 'Not Detected'.tr
+                                  : controller.selectedDistrict.value,
+                              style: TextStyle(
+                                color: controller.selectedDistrict.isEmpty
+                                    ? Colors.grey[500]
+                                    : const Color(0xFF1E7044),
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    const SizedBox(height: 8),
-                    DropdownButtonFormField<String>(
-                      value: controller.selectedDistrict.isEmpty
-                          ? null
-                          : controller.selectedDistrict.value,
-                      decoration: InputDecoration(
-                        labelText: 'District'.tr,
-                        prefixIcon: const Icon(
-                          Icons.location_on_outlined,
-                          color: Color(0xFF1E7044),
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        filled: true,
-                        fillColor: Colors.grey[50],
-                        enabled: !controller.isDistrictAutoDetected.value,
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Town'.tr,
+                            style: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: Color(0xFF1E7044),
+                            ),
+                          ),
+                          const SizedBox(height: 6),
+                          DropdownButtonFormField<String>(
+                            value: controller.selectedTown.isEmpty
+                                ? null
+                                : controller.selectedTown.value,
+                            decoration: InputDecoration(
+                              labelText: 'Town'.tr,
+                              prefixIcon: const Icon(
+                                Icons.location_city_outlined,
+                                color: Color(0xFF1E7044),
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              filled: true,
+                              fillColor: Colors.grey[50],
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 12,
+                              ),
+                            ),
+                            items: (controller.townsByDistrict[
+                                        controller.selectedDistrict.value] ??
+                                    [])
+                                .map((town) => DropdownMenuItem(
+                                      value: town,
+                                      child: Text(town),
+                                    ))
+                                .toList(),
+                            onChanged: (value) {
+                              if (value != null) {
+                                controller.selectedTown.value = value;
+                              }
+                            },
+                          ),
+                        ],
                       ),
-                      items: controller.districts
-                          .map((district) => DropdownMenuItem(
-                                value: district,
-                                child: Text(district),
-                              ))
-                          .toList(),
-                      onChanged: (value) {
-                        if (value != null) {
-                          controller.updateDistrict(value);
-                        }
-                      },
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 12),
-              Text(
-                'Town'.tr,
-                style: const TextStyle(
-                  color: Color(0xFF1E7044),
-                  fontWeight: FontWeight.w600,
-                  fontSize: 13,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Obx(
-                () => DropdownButtonFormField<String>(
-                  value: controller.selectedTown.isEmpty
-                      ? null
-                      : controller.selectedTown.value,
-                  decoration: InputDecoration(
-                    labelText: 'Town'.tr,
-                    prefixIcon: const Icon(
-                      Icons.location_city_outlined,
-                      color: Color(0xFF1E7044),
+              if (controller.locationError.value.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: Text(
+                    controller.locationError.value,
+                    style: const TextStyle(
+                      color: Colors.red,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
                     ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    filled: true,
-                    fillColor: Colors.grey[50],
                   ),
-                  items: (controller.townsByDistrict[
-                              controller.selectedDistrict.value] ??
-                          [])
-                      .map((town) => DropdownMenuItem(
-                            value: town,
-                            child: Text(town),
-                          ))
-                      .toList(),
-                  onChanged: (value) {
-                    if (value != null) {
-                      controller.selectedTown.value = value;
-                    }
-                  },
                 ),
-              ),
               const SizedBox(height: 20),
 
 

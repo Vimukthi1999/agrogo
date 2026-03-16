@@ -38,13 +38,16 @@ class CreateadController extends GetxController {
     'Colombo': 'Western',
     'Gampaha': 'Western',
     'Kalutara': 'Western',
-    'Matara': 'Southern',
-    'Galle': 'Southern',
-    'Hambantota': 'Southern',
     'Kandy': 'Central',
     'Matale': 'Central',
     'Nuwara Eliya': 'Central',
+    'Galle': 'Southern',
+    'Matara': 'Southern',
+    'Hambantota': 'Southern',
     'Jaffna': 'Northern',
+    'Kilinochchi': 'Northern',
+    'Mannar': 'Northern',
+    'Vavuniya': 'Northern',
     'Mullaitivu': 'Northern',
     'Batticaloa': 'Eastern',
     'Ampara': 'Eastern',
@@ -60,79 +63,43 @@ class CreateadController extends GetxController {
   };
 
   final List<String> allDistricts = [
-    'Colombo',
-    'Gampaha',
-    'Kalutara',
-    'Matara',
-    'Galle',
-    'Hambantota',
-    'Kandy',
-    'Matale',
-    'Nuwara Eliya',
-    'Jaffna',
-    'Mullaitivu',
-    'Batticaloa',
-    'Ampara',
-    'Trincomalee',
-    'Kurunegala',
-    'Puttalam',
-    'Anuradhapura',
-    'Polonnaruwa',
-    'Badulla',
-    'Monaragala',
-    'Ratnapura',
-    'Kegalle',
+    'Colombo', 'Gampaha', 'Kalutara', 'Kandy', 'Matale', 'Nuwara Eliya',
+    'Galle', 'Matara', 'Hambantota', 'Jaffna', 'Kilinochchi', 'Mannar',
+    'Vavuniya', 'Mullaitivu', 'Batticaloa', 'Ampara', 'Trincomalee',
+    'Kurunegala', 'Puttalam', 'Anuradhapura', 'Polonnaruwa', 'Badulla',
+    'Monaragala', 'Ratnapura', 'Kegalle'
   ];
 
-  final Map<String, Map<String, double>> districtBounds = {
-    'Colombo': {'minLat': 6.7, 'maxLat': 7.0, 'minLng': 79.8, 'maxLng': 80.2},
-    'Gampaha': {'minLat': 6.9, 'maxLat': 7.3, 'minLng': 80.0, 'maxLng': 80.4},
-    'Kalutara': {'minLat': 6.4, 'maxLat': 6.8, 'minLng': 80.1, 'maxLng': 80.5},
-    'Matara': {'minLat': 5.8, 'maxLat': 6.3, 'minLng': 80.5, 'maxLng': 81.0},
-    'Galle': {'minLat': 6.0, 'maxLat': 6.5, 'minLng': 80.1, 'maxLng': 80.6},
-    'Hambantota': {
-      'minLat': 6.0,
-      'maxLat': 6.5,
-      'minLng': 80.7,
-      'maxLng': 81.5,
-    },
-    'Kandy': {'minLat': 6.8, 'maxLat': 7.3, 'minLng': 80.4, 'maxLng': 81.0},
-    'Matale': {'minLat': 7.3, 'maxLat': 7.7, 'minLng': 80.6, 'maxLng': 81.2},
-    'Nuwara Eliya': {
-      'minLat': 6.8,
-      'maxLat': 7.3,
-      'minLng': 80.5,
-      'maxLng': 81.1,
-    },
-    'Jaffna': {'minLat': 9.5, 'maxLat': 9.8, 'minLng': 79.8, 'maxLng': 80.5},
-    'Mullaitivu': {'minLat': 9.0, 'maxLat': 9.5, 'minLng': 80.3, 'maxLng': 81.0},
-    'Batticaloa': {'minLat': 7.4, 'maxLat': 8.0, 'minLng': 81.4, 'maxLng': 81.8},
-    'Ampara': {'minLat': 6.8, 'maxLat': 7.6, 'minLng': 81.4, 'maxLng': 81.9},
-    'Trincomalee': {'minLat': 8.3, 'maxLat': 8.9, 'minLng': 80.9, 'maxLng': 81.4},
-    'Kurunegala': {'minLat': 7.2, 'maxLat': 8.1, 'minLng': 79.8, 'maxLng': 80.6},
-    'Puttalam': {'minLat': 7.5, 'maxLat': 8.5, 'minLng': 79.7, 'maxLng': 80.1},
-    'Anuradhapura': {
-      'minLat': 8.0,
-      'maxLat': 8.7,
-      'minLng': 80.0,
-      'maxLng': 80.8,
-    },
-    'Polonnaruwa': {
-      'minLat': 7.7,
-      'maxLat': 8.4,
-      'minLng': 81.0,
-      'maxLng': 81.6,
-    },
-    'Badulla': {'minLat': 6.9, 'maxLat': 7.4, 'minLng': 81.0, 'maxLng': 81.6},
-    'Monaragala': {
-      'minLat': 6.6,
-      'maxLat': 7.2,
-      'minLng': 81.2,
-      'maxLng': 81.8,
-    },
-    'Ratnapura': {'minLat': 6.6, 'maxLat': 7.1, 'minLng': 80.4, 'maxLng': 80.9},
-    'Kegalle': {'minLat': 7.1, 'maxLat': 7.6, 'minLng': 80.4, 'maxLng': 80.9},
+  // More accurate district center coordinates for proximity matching
+  final Map<String, LatLng> districtCenters = {
+    'Colombo': LatLng(6.9271, 79.8612),
+    'Gampaha': LatLng(7.0840, 80.0098),
+    'Kalutara': LatLng(6.5854, 79.9607),
+    'Kandy': LatLng(7.2906, 80.6337),
+    'Matale': LatLng(7.4675, 80.6234),
+    'Nuwara Eliya': LatLng(6.9497, 80.7891),
+    'Galle': LatLng(6.0367, 80.2170),
+    'Matara': LatLng(5.9549, 80.5550),
+    'Hambantota': LatLng(6.1245, 81.1185),
+    'Jaffna': LatLng(9.6615, 80.0255),
+    'Kilinochchi': LatLng(9.3803, 80.3847),
+    'Mannar': LatLng(8.9810, 79.9044),
+    'Vavuniya': LatLng(8.7542, 80.4982),
+    'Mullaitivu': LatLng(9.2671, 80.8143),
+    'Batticaloa': LatLng(7.7102, 81.6924),
+    'Ampara': LatLng(7.2840, 81.6740),
+    'Trincomalee': LatLng(8.5873, 81.2152),
+    'Kurunegala': LatLng(7.4863, 80.3647),
+    'Puttalam': LatLng(8.0330, 79.8300),
+    'Anuradhapura': LatLng(8.3114, 80.4037),
+    'Polonnaruwa': LatLng(7.9403, 81.0188),
+    'Badulla': LatLng(6.9934, 81.0550),
+    'Monaragala': LatLng(6.8710, 81.3530),
+    'Ratnapura': LatLng(6.6828, 80.3992),
+    'Kegalle': LatLng(7.2513, 80.3464),
   };
+
+
 
   Stream<List<CategoryModel>> getCategories() {
     return FirebaseFirestore.instance.collection('categories').snapshots().map((
@@ -286,26 +253,27 @@ class CreateadController extends GetxController {
   }
 
   void _mapLocationToDistrict(double lat, double lng) {
-    // Search through all districts to find matching boundaries
-    for (var entry in districtBounds.entries) {
-      String districtName = entry.key;
-      Map<String, double> bounds = entry.value;
+    String closestDistrict = 'Colombo';
+    double minDistance = double.infinity;
 
-      if (lat >= bounds['minLat']! &&
-          lat <= bounds['maxLat']! &&
-          lng >= bounds['minLng']! &&
-          lng <= bounds['maxLng']!) {
-        district.value = districtName;
-        province.value = districtToProvince[districtName] ?? '';
-        log('Location mapped to: $districtName, ${province.value}');
-        return;
+    // Use a simple proximity matching (nearest center) for higher accuracy than rough bounding boxes
+    for (var entry in districtCenters.entries) {
+      double dist = Geolocator.distanceBetween(
+        lat,
+        lng,
+        entry.value.latitude,
+        entry.value.longitude,
+      );
+
+      if (dist < minDistance) {
+        minDistance = dist;
+        closestDistrict = entry.key;
       }
     }
 
-    log('Location ($lat, $lng) outside hardcoded district bounds. Defaulting to Colombo.');
-    // Default to Colombo if no district is found
-    district.value = 'Colombo';
-    province.value = 'Western';
+    district.value = closestDistrict;
+    province.value = districtToProvince[closestDistrict] ?? '';
+    log('Location mapped to: $closestDistrict, ${province.value} (Distance: ${minDistance / 1000}km)');
   }
 
   Future<void> pickImages(ImageSource source) async {

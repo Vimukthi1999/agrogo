@@ -352,6 +352,7 @@ class SignupController extends GetxController {
         'location': {'latitude': latitude.value, 'longitude': longitude.value},
         'createdAt': FieldValue.serverTimestamp(),
         'profileComplete': false,
+        'profileImage': '',
       });
 
       isLoading.value = false;

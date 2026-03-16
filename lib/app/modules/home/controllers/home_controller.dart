@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -9,11 +10,34 @@ import '../../../models/category_model.dart';
 class HomeController extends GetxController {
   final categories = <CategoryModel>[].obs;
   final isLoading = true.obs;
+  final userName = "User".obs;
+  final profileImage = "".obs;
 
   @override
   void onInit() {
     super.onInit();
-    // fetchCategories();
+    fetchUserData();
+  }
+
+  void fetchUserData() {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .snapshots()
+          .listen((snapshot) {
+        if (snapshot.exists) {
+          final data = snapshot.data();
+          if (data != null) {
+            userName.value = data['name'] ?? "User";
+            profileImage.value = data['profileImage'] ?? "";
+          }
+        }
+      }, onError: (error) {
+        log('Error fetching user data: $error');
+      });
+    }
   }
 
   // void fetchCategories() async {

@@ -19,11 +19,9 @@ class ChangePw extends GetView<SettingsController> {
       body: SingleChildScrollView(
         padding: EdgeInsets.all(10),
         child: Form(
-          
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-             
               Text(
                 'Current Password'.tr,
                 style: Theme.of(context).textTheme.titleSmall,
@@ -54,7 +52,6 @@ class ChangePw extends GetView<SettingsController> {
               ),
               SizedBox(height: 10),
 
-             
               Text(
                 'New Password'.tr,
                 style: Theme.of(context).textTheme.titleSmall,
@@ -86,7 +83,6 @@ class ChangePw extends GetView<SettingsController> {
 
               SizedBox(height: 10),
 
-             
               Text(
                 'Confirm Password'.tr,
                 style: Theme.of(context).textTheme.titleSmall,
@@ -112,14 +108,13 @@ class ChangePw extends GetView<SettingsController> {
                       },
                     ),
                   ),
-                 
+
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
               ),
 
               SizedBox(height: 10),
 
-              
               SizedBox(
                 width: double.infinity,
                 child: Obx(

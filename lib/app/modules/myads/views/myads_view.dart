@@ -77,13 +77,11 @@ class MyadsView extends GetView<MyadsController> {
               ),
             ),
 
-            
             Padding(
               padding: const EdgeInsets.all(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -127,7 +125,6 @@ class MyadsView extends GetView<MyadsController> {
                   ),
                   const SizedBox(height: 20),
 
-                 
                   Obx(
                     () => controller.userAds.isEmpty
                         ? _buildEmptyState()
@@ -192,9 +189,7 @@ class MyadsView extends GetView<MyadsController> {
 
   Widget _buildAdCard(dynamic ad) {
     return GestureDetector(
-      onTap: () {
-        
-      },
+      onTap: () {},
       child: Container(
         margin: const EdgeInsets.only(bottom: 16),
         decoration: BoxDecoration(
@@ -210,7 +205,6 @@ class MyadsView extends GetView<MyadsController> {
         ),
         child: Row(
           children: [
-         
             Container(
               width: 120,
               height: 120,
@@ -229,14 +223,12 @@ class MyadsView extends GetView<MyadsController> {
                   : null,
             ),
 
-          
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                   
                     Text(
                       ad['title'] ?? 'Untitled',
                       maxLines: 2,
@@ -249,14 +241,12 @@ class MyadsView extends GetView<MyadsController> {
                     ),
                     const SizedBox(height: 6),
 
-                    
                     Text(
                       ad['category'] ?? 'N/A',
                       style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                     ),
                     const SizedBox(height: 8),
 
-                   
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -293,7 +283,6 @@ class MyadsView extends GetView<MyadsController> {
               ),
             ),
 
-           
             Padding(
               padding: const EdgeInsets.only(right: 12),
               child: PopupMenuButton(
@@ -306,9 +295,7 @@ class MyadsView extends GetView<MyadsController> {
                         Text('Edit'),
                       ],
                     ),
-                    onTap: () {
-                     
-                    },
+                    onTap: () {},
                   ),
                   PopupMenuItem(
                     child: Row(
@@ -318,9 +305,7 @@ class MyadsView extends GetView<MyadsController> {
                         Text('View'),
                       ],
                     ),
-                    onTap: () {
-                      
-                    },
+                    onTap: () {},
                   ),
                   PopupMenuItem(
                     child: Row(
@@ -330,9 +315,7 @@ class MyadsView extends GetView<MyadsController> {
                         Text('Delete', style: TextStyle(color: Colors.red)),
                       ],
                     ),
-                    onTap: () {
-                      
-                    },
+                    onTap: () {},
                   ),
                 ],
                 icon: const Icon(Icons.more_vert, color: Color(0xFF1E7044)),

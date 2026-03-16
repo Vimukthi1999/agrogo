@@ -55,12 +55,14 @@ class ProductCard extends StatelessWidget {
                     child: Image.network(
                       imageUrl,
                       fit: BoxFit.contain,
-                      errorBuilder: (context, error, stackTrace) =>
-                          const Icon(Icons.image_not_supported, color: Colors.grey),
+                      errorBuilder: (context, error, stackTrace) => const Icon(
+                        Icons.image_not_supported,
+                        color: Colors.grey,
+                      ),
                     ),
                   ),
                 ),
-                
+
                 const Positioned(
                   top: 0,
                   right: 0,
@@ -72,10 +74,9 @@ class ProductCard extends StatelessWidget {
                 ),
               ],
             ),
-            
+
             const SizedBox(height: 8),
 
-          
             Text(
               title,
               maxLines: 2,
@@ -90,7 +91,6 @@ class ProductCard extends StatelessWidget {
 
             const SizedBox(height: 4),
 
-            
             Text(
               price,
               style: const TextStyle(
@@ -102,10 +102,8 @@ class ProductCard extends StatelessWidget {
 
             const SizedBox(height: 4),
 
-          
             Row(
               children: [
-                
                 ...List.generate(5, (index) {
                   return Icon(
                     index < rating.floor() ? Icons.star : Icons.star_border,
@@ -114,13 +112,10 @@ class ProductCard extends StatelessWidget {
                   );
                 }),
                 const SizedBox(width: 2),
-                
+
                 Text(
                   "($reviewCount)",
-                  style: TextStyle(
-                    fontSize: 11,
-                    color: Colors.grey.shade500,
-                  ),
+                  style: TextStyle(fontSize: 11, color: Colors.grey.shade500),
                 ),
               ],
             ),

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import '../../../models/category_model.dart';
 import '../controllers/createad_controller.dart';
 
@@ -23,7 +24,6 @@ class CreateadView extends GetView<CreateadController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
               _buildSectionTitle('Ad Title'.tr),
               const SizedBox(height: 10),
               Obx(
@@ -38,7 +38,6 @@ class CreateadView extends GetView<CreateadController> {
               ),
               const SizedBox(height: 20),
 
-
               _buildSectionTitle('Description'.tr),
               const SizedBox(height: 10),
               Obx(
@@ -48,12 +47,12 @@ class CreateadView extends GetView<CreateadController> {
                   errorText: controller.descriptionError.value,
                   maxLines: 4,
                   onChanged: (value) {
-                    if (value.isNotEmpty) controller.descriptionError.value = '';
+                    if (value.isNotEmpty)
+                      controller.descriptionError.value = '';
                   },
                 ),
               ),
               const SizedBox(height: 20),
-
 
               Row(
                 children: [
@@ -104,7 +103,6 @@ class CreateadView extends GetView<CreateadController> {
               ),
               const SizedBox(height: 20),
 
-
               _buildSectionTitle('Category'.tr),
               const SizedBox(height: 10),
               StreamBuilder<List<CategoryModel>>(
@@ -151,84 +149,83 @@ class CreateadView extends GetView<CreateadController> {
                       itemBuilder: (context, index) {
                         final category = categories[index];
 
-                        return Obx(
-                          () {
-                            final isSelected =
-                                controller.selectedCategory.value == category.id;
+                        return Obx(() {
+                          final isSelected =
+                              controller.selectedCategory.value == category.id;
 
-                            return GestureDetector(
-                              onTap: () {
-                                controller.selectedCategory.value = category.id;
-                                controller.categoryError.value = '';
-                              },
-                              child: Container(
-                                width: 110,
-                                margin: const EdgeInsets.only(right: 12),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(18),
-                                  border: isSelected
-                                      ? Border.all(
-                                          color: const Color(0xFF1E7044),
-                                          width: 2.5,
-                                        )
-                                      : null,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: isSelected
-                                          ? const Color(0xFF1E7044)
-                                              .withOpacity(0.3)
-                                          : Colors.black.withOpacity(0.08),
-                                      blurRadius: isSelected ? 12 : 8,
-                                      offset: const Offset(0, 3),
-                                    ),
-                                  ],
-                                ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      height: 70,
-                                      width: 70,
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: const Color(0xFF1E7044)
-                                            .withOpacity(0.1),
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8),
-                                        child: Image.network(
-                                          category.icon,
-                                          fit: BoxFit.contain,
-                                          errorBuilder:
-                                              (context, error, stackTrace) {
-                                            return Icon(
-                                              Icons.image_not_supported,
-                                              color:
-                                                  const Color(0xFF1E7044),
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Text(
-                                      category.name,
-                                      textAlign: TextAlign.center,
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w600,
-                                        color: Color(0xFF1E7044),
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                          return GestureDetector(
+                            onTap: () {
+                              controller.selectedCategory.value = category.id;
+                              controller.categoryError.value = '';
+                            },
+                            child: Container(
+                              width: 110,
+                              margin: const EdgeInsets.only(right: 12),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(18),
+                                border: isSelected
+                                    ? Border.all(
+                                        color: const Color(0xFF1E7044),
+                                        width: 2.5,
+                                      )
+                                    : null,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: isSelected
+                                        ? const Color(
+                                            0xFF1E7044,
+                                          ).withOpacity(0.3)
+                                        : Colors.black.withOpacity(0.08),
+                                    blurRadius: isSelected ? 12 : 8,
+                                    offset: const Offset(0, 3),
+                                  ),
+                                ],
                               ),
-                            );
-                          },
-                        );
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    height: 70,
+                                    width: 70,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: const Color(
+                                        0xFF1E7044,
+                                      ).withOpacity(0.1),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8),
+                                      child: Image.network(
+                                        category.icon,
+                                        fit: BoxFit.contain,
+                                        errorBuilder:
+                                            (context, error, stackTrace) {
+                                              return Icon(
+                                                Icons.image_not_supported,
+                                                color: const Color(0xFF1E7044),
+                                              );
+                                            },
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    category.name,
+                                    textAlign: TextAlign.center,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                      color: Color(0xFF1E7044),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        });
                       },
                     ),
                   );
@@ -250,9 +247,6 @@ class CreateadView extends GetView<CreateadController> {
               ),
               const SizedBox(height: 20),
 
-
-              _buildSectionTitle('Location'.tr),
-              const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -296,26 +290,23 @@ class CreateadView extends GetView<CreateadController> {
                           children: [
                             if (controller.isGettingLocation.value)
                               const SizedBox(
-                                height: 16,
-                                width: 16,
+                                height: 14,
+                                width: 14,
                                 child: CircularProgressIndicator(
                                   strokeWidth: 2,
-                                  valueColor: AlwaysStoppedAnimation<Color>(
-                                    Color(0xFF1E7044),
-                                  ),
                                 ),
                               )
                             else
                               const Icon(
-                                Icons.location_on_outlined,
+                                Icons.my_location,
                                 color: Color(0xFF1E7044),
                                 size: 16,
                               ),
                             const SizedBox(width: 6),
                             Text(
                               controller.isGettingLocation.value
-                                  ? 'Detecting...'.tr
-                                  : 'Auto Detect'.tr,
+                                  ? "Detecting...".tr
+                                  : "Detect".tr,
                               style: const TextStyle(
                                 color: Color(0xFF1E7044),
                                 fontSize: 12,
@@ -338,7 +329,7 @@ class CreateadView extends GetView<CreateadController> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'District'.tr,
+                            "Province".tr,
                             style: const TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
@@ -364,15 +355,15 @@ class CreateadView extends GetView<CreateadController> {
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Text(
-                              controller.selectedDistrict.isEmpty
-                                  ? 'Not Detected'.tr
-                                  : controller.selectedDistrict.value,
+                              controller.province.isEmpty
+                                  ? "Not detected".tr
+                                  : controller.province.value,
                               style: TextStyle(
-                                color: controller.selectedDistrict.isEmpty
-                                    ? Colors.grey[500]
+                                color: controller.province.isEmpty
+                                    ? Colors.grey[600]
                                     : const Color(0xFF1E7044),
+                                fontSize: 13,
                                 fontWeight: FontWeight.w500,
-                                fontSize: 14,
                               ),
                             ),
                           ),
@@ -385,7 +376,7 @@ class CreateadView extends GetView<CreateadController> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Town'.tr,
+                            "District".tr,
                             style: const TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
@@ -393,39 +384,35 @@ class CreateadView extends GetView<CreateadController> {
                             ),
                           ),
                           const SizedBox(height: 6),
-                          DropdownButtonFormField<String>(
-                            value: controller.selectedTown.isEmpty
-                                ? null
-                                : controller.selectedTown.value,
-                            decoration: InputDecoration(
-                              labelText: 'Town'.tr,
-                              prefixIcon: const Icon(
-                                Icons.location_city_outlined,
-                                color: Color(0xFF1E7044),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 12,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.grey[50],
+                              border: Border.all(
+                                color: controller.locationError.value.isNotEmpty
+                                    ? Colors.red
+                                    : Colors.grey[300]!,
+                                width: controller.locationError.value.isNotEmpty
+                                    ? 1.5
+                                    : 1,
                               ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              filled: true,
-                              fillColor: Colors.grey[50],
-                              contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 12,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Text(
+                              controller.district.isEmpty
+                                  ? "Not detected".tr
+                                  : controller.district.value,
+                              style: TextStyle(
+                                color: controller.district.isEmpty
+                                    ? Colors.grey[600]
+                                    : const Color(0xFF1E7044),
+                                fontSize: 13,
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
-                            items: (controller.townsByDistrict[
-                                        controller.selectedDistrict.value] ??
-                                    [])
-                                .map((town) => DropdownMenuItem(
-                                      value: town,
-                                      child: Text(town),
-                                    ))
-                                .toList(),
-                            onChanged: (value) {
-                              if (value != null) {
-                                controller.selectedTown.value = value;
-                              }
-                            },
                           ),
                         ],
                       ),
@@ -447,7 +434,6 @@ class CreateadView extends GetView<CreateadController> {
                 ),
               const SizedBox(height: 20),
 
-
               _buildSectionTitle('Product Images'.tr),
               const SizedBox(height: 10),
               Obx(
@@ -456,7 +442,7 @@ class CreateadView extends GetView<CreateadController> {
                   children: [
                     if (controller.selectedImages.isEmpty)
                       GestureDetector(
-                        onTap: controller.pickImages,
+                        onTap: () => _showImageSourceDialog(context),
                         child: Container(
                           width: double.infinity,
                           height: 150,
@@ -498,11 +484,11 @@ class CreateadView extends GetView<CreateadController> {
                             physics: const NeverScrollableScrollPhysics(),
                             gridDelegate:
                                 const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
-                              crossAxisSpacing: 12,
-                              mainAxisSpacing: 12,
-                              childAspectRatio: 1,
-                            ),
+                                  crossAxisCount: 3,
+                                  crossAxisSpacing: 12,
+                                  mainAxisSpacing: 12,
+                                  childAspectRatio: 1,
+                                ),
                             itemCount: controller.selectedImages.length,
                             itemBuilder: (context, index) {
                               final image = controller.selectedImages[index];
@@ -512,31 +498,31 @@ class CreateadView extends GetView<CreateadController> {
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(12),
                                       image: DecorationImage(
-                                        image: FileImage(
-                                          File(image.path),
-                                        ),
+                                        image: FileImage(File(image.path)),
                                         fit: BoxFit.cover,
                                       ),
                                     ),
                                   ),
                                   Positioned(
-                                    top: 0,
-                                    right: 0,
-                                    child: GestureDetector(
-                                      onTap: () =>
-                                          controller.removeImage(index),
-                                      child: Container(
-                                        decoration: const BoxDecoration(
+                                    top: 6,
+                                    right: 6,
+                                    child: Row(
+                                      children: [
+                                        _buildImageAction(
+                                          icon: Icons.refresh,
+                                          color: Colors.blue,
+                                          onTap: () => _showImageSourceDialog(
+                                              context,
+                                              index: index),
+                                        ),
+                                        const SizedBox(width: 6),
+                                        _buildImageAction(
+                                          icon: Icons.close,
                                           color: Colors.red,
-                                          shape: BoxShape.circle,
+                                          onTap: () =>
+                                              controller.removeImage(index),
                                         ),
-                                        padding: const EdgeInsets.all(4),
-                                        child: const Icon(
-                                          Icons.close,
-                                          color: Colors.white,
-                                          size: 16,
-                                        ),
-                                      ),
+                                      ],
                                     ),
                                   ),
                                 ],
@@ -546,7 +532,7 @@ class CreateadView extends GetView<CreateadController> {
                           const SizedBox(height: 12),
                           if (controller.selectedImages.length < 5)
                             GestureDetector(
-                              onTap: controller.pickImages,
+                              onTap: () => _showImageSourceDialog(context),
                               child: Container(
                                 width: double.infinity,
                                 padding: const EdgeInsets.symmetric(
@@ -587,7 +573,6 @@ class CreateadView extends GetView<CreateadController> {
                 ),
               ),
               const SizedBox(height: 30),
-
 
               Obx(
                 () => SizedBox(
@@ -630,6 +615,101 @@ class CreateadView extends GetView<CreateadController> {
               const SizedBox(height: 20),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  void _showImageSourceDialog(BuildContext context, {int? index}) {
+    Get.bottomSheet(
+      Container(
+        padding: const EdgeInsets.all(20),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          ),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              index == null ? 'Add Image'.tr : 'Retake Image'.tr,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF1E7044),
+              ),
+            ),
+            const SizedBox(height: 20),
+            Row(
+              children: [
+                Expanded(
+                  child: _buildSourceOption(
+                    icon: Icons.camera_alt_outlined,
+                    label: 'Camera'.tr,
+                    onTap: () {
+                      Get.back();
+                      if (index == null) {
+                        controller.pickImages(ImageSource.camera);
+                      } else {
+                        controller.retakeImage(index, ImageSource.camera);
+                      }
+                    },
+                  ),
+                ),
+                const SizedBox(width: 20),
+                Expanded(
+                  child: _buildSourceOption(
+                    icon: Icons.photo_library_outlined,
+                    label: 'Gallery'.tr,
+                    onTap: () {
+                      Get.back();
+                      if (index == null) {
+                        controller.pickImages(ImageSource.gallery);
+                      } else {
+                        controller.retakeImage(index, ImageSource.gallery);
+                      }
+                    },
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSourceOption({
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 20),
+        decoration: BoxDecoration(
+          color: Colors.grey[50],
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: Colors.grey[200]!),
+        ),
+        child: Column(
+          children: [
+            Icon(icon, color: const Color(0xFF1E7044), size: 30),
+            const SizedBox(height: 8),
+            Text(
+              label,
+              style: const TextStyle(
+                color: Color(0xFF1E7044),
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -687,6 +767,35 @@ class CreateadView extends GetView<CreateadController> {
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 16,
           vertical: 14,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildImageAction({
+    required IconData icon,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          color: color.withOpacity(0.9),
+          shape: BoxShape.circle,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        padding: const EdgeInsets.all(6),
+        child: Icon(
+          icon,
+          color: Colors.white,
+          size: 14,
         ),
       ),
     );

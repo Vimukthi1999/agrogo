@@ -23,7 +23,7 @@ class SplashView extends GetView<SplashController> {
                 // controller.animationController
                 //   ..duration = composition.duration
                 //   ..repeat();
-                
+
                 controller.animationController
                   ..duration = composition.duration
                   ..forward().whenComplete(() {
@@ -35,19 +35,16 @@ class SplashView extends GetView<SplashController> {
             RichText(
               text: TextSpan(
                 text: 'Agro',
-                style: TextStyle(
-                  fontSize: 42,
-                  color: Colors.black,
-                ),
+                style: TextStyle(fontSize: 42, color: Colors.black),
                 children: [
                   TextSpan(
-                      text: 'Go',
-                      style: TextStyle(
-                        fontSize: 42,
-                        color: Colors.green,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    text: 'Go',
+                    style: TextStyle(
+                      fontSize: 42,
+                      color: Colors.green,
+                      fontWeight: FontWeight.bold,
                     ),
+                  ),
                 ],
               ),
             ),

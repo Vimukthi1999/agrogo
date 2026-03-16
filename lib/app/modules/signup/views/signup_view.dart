@@ -79,22 +79,20 @@ class SignupView extends GetView<SignupController> {
                     children: [
                       Text(
                         "Create Account".tr,
-                        style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                        style: Theme.of(context).textTheme.headlineSmall
+                            ?.copyWith(
                               fontWeight: FontWeight.bold,
                               color: const Color(0xFF173046),
                             ),
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        "Sign up to get started with your agricultural journey".tr,
-                        style: TextStyle(
-                          color: Colors.grey[600],
-                          fontSize: 14,
-                        ),
+                        "Sign up to get started with your agricultural journey"
+                            .tr,
+                        style: TextStyle(color: Colors.grey[600], fontSize: 14),
                       ),
                       const SizedBox(height: 30),
 
-                     
                       RichText(
                         text: const TextSpan(
                           style: TextStyle(
@@ -132,7 +130,6 @@ class SignupView extends GetView<SignupController> {
                       ),
                       const SizedBox(height: 20),
 
-                    
                       Text(
                         "Account Type".tr,
                         style: const TextStyle(
@@ -147,7 +144,8 @@ class SignupView extends GetView<SignupController> {
                           children: [
                             Expanded(
                               child: GestureDetector(
-                                onTap: () => controller.accountType.value = 'farmer',
+                                onTap: () =>
+                                    controller.accountType.value = 'farmer',
                                 child: _buildAccountTypeButton(
                                   label: "Farmer",
                                   icon: Icons.agriculture,
@@ -159,11 +157,13 @@ class SignupView extends GetView<SignupController> {
                             const SizedBox(width: 12),
                             Expanded(
                               child: GestureDetector(
-                                onTap: () => controller.accountType.value = 'buyer',
+                                onTap: () =>
+                                    controller.accountType.value = 'buyer',
                                 child: _buildAccountTypeButton(
                                   label: "Buyer",
                                   icon: Icons.shopping_cart_outlined,
-                                  isSelected: controller.accountType.value == 'buyer',
+                                  isSelected:
+                                      controller.accountType.value == 'buyer',
                                 ),
                               ),
                             ),
@@ -172,7 +172,6 @@ class SignupView extends GetView<SignupController> {
                       ),
                       const SizedBox(height: 20),
 
-                     
                       RichText(
                         text: const TextSpan(
                           style: TextStyle(
@@ -211,7 +210,6 @@ class SignupView extends GetView<SignupController> {
                       ),
                       const SizedBox(height: 20),
 
-                     
                       RichText(
                         text: const TextSpan(
                           style: TextStyle(
@@ -250,7 +248,6 @@ class SignupView extends GetView<SignupController> {
                       ),
                       const SizedBox(height: 20),
 
-                    
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -287,8 +284,9 @@ class SignupView extends GetView<SignupController> {
                                   vertical: 6,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: const Color(0xFF173046)
-                                      .withOpacity(0.1),
+                                  color: const Color(
+                                    0xFF173046,
+                                  ).withOpacity(0.1),
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: Row(
@@ -350,10 +348,20 @@ class SignupView extends GetView<SignupController> {
                                     decoration: BoxDecoration(
                                       color: Colors.grey[50],
                                       border: Border.all(
-                                        color: controller.locationError.value.isNotEmpty
+                                        color:
+                                            controller
+                                                .locationError
+                                                .value
+                                                .isNotEmpty
                                             ? Colors.red
                                             : Colors.grey[300]!,
-                                        width: controller.locationError.value.isNotEmpty ? 1.5 : 1,
+                                        width:
+                                            controller
+                                                .locationError
+                                                .value
+                                                .isNotEmpty
+                                            ? 1.5
+                                            : 1,
                                       ),
                                       borderRadius: BorderRadius.circular(10),
                                     ),
@@ -395,10 +403,20 @@ class SignupView extends GetView<SignupController> {
                                     decoration: BoxDecoration(
                                       color: Colors.grey[50],
                                       border: Border.all(
-                                        color: controller.locationError.value.isNotEmpty
+                                        color:
+                                            controller
+                                                .locationError
+                                                .value
+                                                .isNotEmpty
                                             ? Colors.red
                                             : Colors.grey[300]!,
-                                        width: controller.locationError.value.isNotEmpty ? 1.5 : 1,
+                                        width:
+                                            controller
+                                                .locationError
+                                                .value
+                                                .isNotEmpty
+                                            ? 1.5
+                                            : 1,
                                       ),
                                       borderRadius: BorderRadius.circular(10),
                                     ),
@@ -435,7 +453,6 @@ class SignupView extends GetView<SignupController> {
                         ),
                       const SizedBox(height: 20),
 
-                      
                       RichText(
                         text: const TextSpan(
                           style: TextStyle(
@@ -475,7 +492,6 @@ class SignupView extends GetView<SignupController> {
                       ),
                       const SizedBox(height: 20),
 
-                      
                       RichText(
                         text: const TextSpan(
                           style: TextStyle(
@@ -502,8 +518,7 @@ class SignupView extends GetView<SignupController> {
                         () => _buildPasswordField(
                           controller: controller.confirmPasswordController,
                           hintText: "Re-enter your password",
-                          isVisible:
-                              controller.isConfirmPasswordVisible.value,
+                          isVisible: controller.isConfirmPasswordVisible.value,
                           onVisibilityToggle: () =>
                               controller.isConfirmPasswordVisible.toggle(),
                           errorText: controller.confirmPasswordError.value,
@@ -516,7 +531,6 @@ class SignupView extends GetView<SignupController> {
                       ),
                       const SizedBox(height: 25),
 
-                      
                       Obx(
                         () => SizedBox(
                           width: double.infinity,
@@ -529,16 +543,13 @@ class SignupView extends GetView<SignupController> {
                                       controller.nameController.text.trim(),
                                       controller.emailController.text.trim(),
                                       controller.phoneController.text.trim(),
-                                      controller.passwordController.text
-                                          .trim(),
-                                      controller
-                                          .confirmPasswordController.text
+                                      controller.passwordController.text.trim(),
+                                      controller.confirmPasswordController.text
                                           .trim(),
                                     );
                                   },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor:
-                                  Theme.of(context).primaryColor,
+                              backgroundColor: Theme.of(context).primaryColor,
                               disabledBackgroundColor: Colors.grey[400],
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
@@ -551,8 +562,7 @@ class SignupView extends GetView<SignupController> {
                                     width: 24,
                                     child: CircularProgressIndicator(
                                       strokeWidth: 2.5,
-                                      valueColor:
-                                          AlwaysStoppedAnimation<Color>(
+                                      valueColor: AlwaysStoppedAnimation<Color>(
                                         Colors.white,
                                       ),
                                     ),
@@ -570,7 +580,6 @@ class SignupView extends GetView<SignupController> {
                       ),
                       const SizedBox(height: 16),
 
-                  
                       Row(
                         children: [
                           Expanded(
@@ -599,7 +608,6 @@ class SignupView extends GetView<SignupController> {
                       ),
                       const SizedBox(height: 16),
 
-                     
                       Center(
                         child: GestureDetector(
                           onTap: () => Get.offNamed(Routes.SIGNIN),
@@ -653,11 +661,7 @@ class SignupView extends GetView<SignupController> {
       onChanged: onChanged,
       decoration: InputDecoration(
         hintText: hintText,
-        prefixIcon: Icon(
-          prefixIcon,
-          color: const Color(0xFF173046),
-          size: 22,
-        ),
+        prefixIcon: Icon(prefixIcon, color: const Color(0xFF173046), size: 22),
         filled: true,
         fillColor: Colors.grey[50],
         errorText: errorText.isEmpty ? null : errorText,
@@ -677,9 +681,7 @@ class SignupView extends GetView<SignupController> {
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(
-            color: errorText.isEmpty
-                ? const Color(0xFF173046)
-                : Colors.red,
+            color: errorText.isEmpty ? const Color(0xFF173046) : Colors.red,
             width: 2,
           ),
         ),
@@ -713,7 +715,9 @@ class SignupView extends GetView<SignupController> {
         suffixIcon: GestureDetector(
           onTap: onVisibilityToggle,
           child: Icon(
-            isVisible ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+            isVisible
+                ? Icons.visibility_outlined
+                : Icons.visibility_off_outlined,
             color: const Color(0xFF173046),
             size: 22,
           ),
@@ -737,9 +741,7 @@ class SignupView extends GetView<SignupController> {
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(
-            color: errorText.isEmpty
-                ? const Color(0xFF173046)
-                : Colors.red,
+            color: errorText.isEmpty ? const Color(0xFF173046) : Colors.red,
             width: 2,
           ),
         ),
@@ -759,12 +761,9 @@ class SignupView extends GetView<SignupController> {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12),
       decoration: BoxDecoration(
-        color:
-            isSelected ? const Color(0xFF173046) : Colors.white,
+        color: isSelected ? const Color(0xFF173046) : Colors.white,
         border: Border.all(
-          color: isSelected
-              ? const Color(0xFF173046)
-              : Colors.grey[300]!,
+          color: isSelected ? const Color(0xFF173046) : Colors.grey[300]!,
           width: 2,
         ),
         borderRadius: BorderRadius.circular(10),
@@ -782,8 +781,7 @@ class SignupView extends GetView<SignupController> {
             Text(
               label.tr,
               style: TextStyle(
-                color:
-                    isSelected ? Colors.white : const Color(0xFF173046),
+                color: isSelected ? Colors.white : const Color(0xFF173046),
                 fontWeight: FontWeight.w600,
                 fontSize: 13,
               ),

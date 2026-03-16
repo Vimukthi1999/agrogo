@@ -9,10 +9,7 @@ class OnboardingView extends GetView<OnboardingController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('OnboardingView'),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: const Text('OnboardingView'), centerTitle: true),
       body: const Center(
         child: Text(
           'OnboardingView is working',

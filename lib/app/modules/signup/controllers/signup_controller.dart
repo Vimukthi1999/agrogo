@@ -12,7 +12,6 @@ class SignupController extends GetxController {
   FirebaseAuth auth = FirebaseAuth.instance;
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final phoneController = TextEditingController();
@@ -25,7 +24,6 @@ class SignupController extends GetxController {
   RxBool isConfirmPasswordVisible = false.obs;
   RxBool isGettingLocation = false.obs;
 
-  
   RxString accountType = 'farmer'.obs;
   RxString province = ''.obs;
   RxString district = ''.obs;
@@ -33,14 +31,12 @@ class SignupController extends GetxController {
   RxDouble longitude = 0.0.obs;
   RxBool isDistrictAutoDetected = false.obs;
 
-
   RxString nameError = ''.obs;
   RxString emailError = ''.obs;
   RxString phoneError = ''.obs;
   RxString passwordError = ''.obs;
   RxString confirmPasswordError = ''.obs;
   RxString locationError = ''.obs;
-
 
   final Map<String, String> districtToProvince = {
     'Colombo': 'Western',
@@ -68,10 +64,28 @@ class SignupController extends GetxController {
   };
 
   final List<String> allDistricts = [
-    'Colombo', 'Gampaha', 'Kalutara', 'Matara', 'Galle', 'Hambantota',
-    'Kandy', 'Matale', 'Nuwara Eliya', 'Jaffna', 'Mullaitivu',
-    'Batticaloa', 'Ampara', 'Trincomalee', 'Kurunegala', 'Puttalam',
-    'Anuradhapura', 'Polonnaruwa', 'Badulla', 'Monaragala', 'Ratnapura', 'Kegalle',
+    'Colombo',
+    'Gampaha',
+    'Kalutara',
+    'Matara',
+    'Galle',
+    'Hambantota',
+    'Kandy',
+    'Matale',
+    'Nuwara Eliya',
+    'Jaffna',
+    'Mullaitivu',
+    'Batticaloa',
+    'Ampara',
+    'Trincomalee',
+    'Kurunegala',
+    'Puttalam',
+    'Anuradhapura',
+    'Polonnaruwa',
+    'Badulla',
+    'Monaragala',
+    'Ratnapura',
+    'Kegalle',
   ];
 
   final Map<String, Map<String, double>> districtBounds = {
@@ -80,21 +94,66 @@ class SignupController extends GetxController {
     'Kalutara': {'minLat': 6.4, 'maxLat': 6.8, 'minLng': 80.1, 'maxLng': 80.5},
     'Matara': {'minLat': 5.8, 'maxLat': 6.3, 'minLng': 80.5, 'maxLng': 81.0},
     'Galle': {'minLat': 6.0, 'maxLat': 6.5, 'minLng': 80.1, 'maxLng': 80.6},
-    'Hambantota': {'minLat': 6.0, 'maxLat': 6.5, 'minLng': 80.7, 'maxLng': 81.5},
+    'Hambantota': {
+      'minLat': 6.0,
+      'maxLat': 6.5,
+      'minLng': 80.7,
+      'maxLng': 81.5,
+    },
     'Kandy': {'minLat': 6.8, 'maxLat': 7.3, 'minLng': 80.4, 'maxLng': 81.0},
     'Matale': {'minLat': 7.3, 'maxLat': 7.7, 'minLng': 80.6, 'maxLng': 81.2},
-    'Nuwara Eliya': {'minLat': 6.8, 'maxLat': 7.2, 'minLng': 80.8, 'maxLng': 81.3},
+    'Nuwara Eliya': {
+      'minLat': 6.8,
+      'maxLat': 7.2,
+      'minLng': 80.8,
+      'maxLng': 81.3,
+    },
     'Jaffna': {'minLat': 9.5, 'maxLat': 9.8, 'minLng': 80.0, 'maxLng': 80.4},
-    'Mullaitivu': {'minLat': 8.5, 'maxLat': 9.0, 'minLng': 81.3, 'maxLng': 81.9},
-    'Batticaloa': {'minLat': 7.5, 'maxLat': 8.2, 'minLng': 81.5, 'maxLng': 81.9},
+    'Mullaitivu': {
+      'minLat': 8.5,
+      'maxLat': 9.0,
+      'minLng': 81.3,
+      'maxLng': 81.9,
+    },
+    'Batticaloa': {
+      'minLat': 7.5,
+      'maxLat': 8.2,
+      'minLng': 81.5,
+      'maxLng': 81.9,
+    },
     'Ampara': {'minLat': 7.0, 'maxLat': 7.8, 'minLng': 81.5, 'maxLng': 82.0},
-    'Trincomalee': {'minLat': 8.3, 'maxLat': 9.0, 'minLng': 81.1, 'maxLng': 81.7},
-    'Kurunegala': {'minLat': 6.8, 'maxLat': 7.5, 'minLng': 80.2, 'maxLng': 80.7},
+    'Trincomalee': {
+      'minLat': 8.3,
+      'maxLat': 9.0,
+      'minLng': 81.1,
+      'maxLng': 81.7,
+    },
+    'Kurunegala': {
+      'minLat': 6.8,
+      'maxLat': 7.5,
+      'minLng': 80.2,
+      'maxLng': 80.7,
+    },
     'Puttalam': {'minLat': 7.6, 'maxLat': 8.3, 'minLng': 79.7, 'maxLng': 80.2},
-    'Anuradhapura': {'minLat': 7.9, 'maxLat': 8.7, 'minLng': 80.3, 'maxLng': 80.9},
-    'Polonnaruwa': {'minLat': 7.9, 'maxLat': 8.4, 'minLng': 81.0, 'maxLng': 81.6},
+    'Anuradhapura': {
+      'minLat': 7.9,
+      'maxLat': 8.7,
+      'minLng': 80.3,
+      'maxLng': 80.9,
+    },
+    'Polonnaruwa': {
+      'minLat': 7.9,
+      'maxLat': 8.4,
+      'minLng': 81.0,
+      'maxLng': 81.6,
+    },
     'Badulla': {'minLat': 6.9, 'maxLat': 7.4, 'minLng': 81.0, 'maxLng': 81.6},
-    'Monaragala': {'minLat': 6.6, 'maxLat': 7.2, 'minLng': 81.2, 'maxLng': 81.8},
+    'Monaragala': {
+      'minLat': 6.6,
+      'maxLat': 7.2,
+      'minLng': 81.2,
+      'maxLng': 81.8,
+    },
     'Ratnapura': {'minLat': 6.6, 'maxLat': 7.1, 'minLng': 80.4, 'maxLng': 80.9},
     'Kegalle': {'minLat': 7.1, 'maxLat': 7.6, 'minLng': 80.4, 'maxLng': 80.9},
   };
@@ -103,8 +162,7 @@ class SignupController extends GetxController {
   void onInit() {
     super.onInit();
     firebaseUser.bindStream(auth.authStateChanges());
-    
-  
+
     ever<User?>(firebaseUser, (User? user) {
       if (user != null) {
         Get.offAllNamed(Routes.NAV);
@@ -112,14 +170,12 @@ class SignupController extends GetxController {
     });
   }
 
-
   bool isValidEmail(String email) {
     final emailRegex = RegExp(
       r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
     );
     return emailRegex.hasMatch(email);
   }
-
 
   String getPasswordStrength(String password) {
     if (password.isEmpty) return '';
@@ -131,7 +187,6 @@ class SignupController extends GetxController {
     return 'Good';
   }
 
- 
   void clearErrors() {
     nameError.value = '';
     emailError.value = '';
@@ -141,8 +196,13 @@ class SignupController extends GetxController {
     locationError.value = '';
   }
 
- 
-  bool validateInputs(String name, String email, String phone, String password, String confirmPassword) {
+  bool validateInputs(
+    String name,
+    String email,
+    String phone,
+    String password,
+    String confirmPassword,
+  ) {
     clearErrors();
     bool isValid = true;
 
@@ -220,8 +280,11 @@ class SignupController extends GetxController {
       _mapLocationToDistrict(position.latitude, position.longitude);
       isDistrictAutoDetected.value = true;
 
-      Get.snackbar('Success', 'Location detected successfully',
-          snackPosition: SnackPosition.BOTTOM);
+      Get.snackbar(
+        'Success',
+        'Location detected successfully',
+        snackPosition: SnackPosition.BOTTOM,
+      );
     } catch (e) {
       locationError.value = 'Failed to get location';
       log('Location error: $e');
@@ -258,9 +321,13 @@ class SignupController extends GetxController {
     }
   }
 
-
-  Future<void> register(String name, String email, String phone, String password,
-      String confirmPassword) async {
+  Future<void> register(
+    String name,
+    String email,
+    String phone,
+    String password,
+    String confirmPassword,
+  ) async {
     if (!validateInputs(name, email, phone, password, confirmPassword)) {
       return;
     }
@@ -282,10 +349,7 @@ class SignupController extends GetxController {
         'accountType': accountType.value,
         'district': district.value,
         'province': province.value,
-        'location': {
-          'latitude': latitude.value,
-          'longitude': longitude.value,
-        },
+        'location': {'latitude': latitude.value, 'longitude': longitude.value},
         'createdAt': FieldValue.serverTimestamp(),
         'profileComplete': false,
       });

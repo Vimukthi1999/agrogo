@@ -42,7 +42,6 @@ class SettingsView extends GetView<SettingsController> {
               ),
             ),
 
-            
             Padding(
               padding: EdgeInsets.all(10),
               child: Column(
@@ -70,7 +69,6 @@ class SettingsView extends GetView<SettingsController> {
                             title: "Edit Profile".tr,
                             subTitle: "Change your profile details".tr,
                             press: () {
-                              
                               Get.to(() => const EditProfile());
                             },
                           ),
@@ -78,7 +76,6 @@ class SettingsView extends GetView<SettingsController> {
                             title: "Change Password".tr,
                             subTitle: "Change your password".tr,
                             press: () {
-                             
                               Get.to(() => const ChangePw());
                             },
                           ),
@@ -89,7 +86,6 @@ class SettingsView extends GetView<SettingsController> {
 
                   SizedBox(height: 10),
 
-                  
                   Card(
                     elevation: 2,
                     shape: RoundedRectangleBorder(
@@ -118,18 +114,14 @@ class SettingsView extends GetView<SettingsController> {
                                   "Change App Theme".tr,
                                   style: Theme.of(context).textTheme.titleSmall,
                                 ),
-                                
                               ],
                             ),
                           ),
                           ProfileMenuCard(
                             title: "Change Language".tr,
                             subTitle: "Selected Language: ".tr,
-                            press: () {
-                              
-                            },
+                            press: () {},
                           ),
-
                         ],
                       ),
                     ),
@@ -137,7 +129,6 @@ class SettingsView extends GetView<SettingsController> {
 
                   SizedBox(height: 10),
 
-                
                   Card(
                     elevation: 2,
                     shape: RoundedRectangleBorder(
@@ -153,16 +144,12 @@ class SettingsView extends GetView<SettingsController> {
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
 
-                         
                           ProfileMenuCard(
                             title: "Logout",
                             subTitle: "Logout from your account",
                             press: () async {
-                             
-
                               final shouldExit = await showAppExitDialog();
                               if (shouldExit) {
-                               
                                 controller.logout();
                               }
                             },
@@ -171,7 +158,7 @@ class SettingsView extends GetView<SettingsController> {
                           SizedBox(height: 5),
                           Text(
                             "Version: 1.0.0",
-                            
+
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
                         ],

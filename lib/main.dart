@@ -16,8 +16,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(        
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 9, 212, 134)),
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color.fromARGB(255, 9, 212, 134),
+        ),
       ),
       initialRoute: AppPages.INITIAL,
       getPages: AppPages.routes,

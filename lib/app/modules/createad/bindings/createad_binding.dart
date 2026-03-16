@@ -5,8 +5,6 @@ import '../controllers/createad_controller.dart';
 class CreateadBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<CreateadController>(
-      () => CreateadController(),
-    );
+    Get.lazyPut<CreateadController>(() => CreateadController());
   }
 }

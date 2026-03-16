@@ -15,7 +15,7 @@ class SigninController extends GetxController {
   Rx<User?> firebaseUser = Rx<User?>(null);
   RxBool isLoading = false.obs;
   RxBool isPasswordVisible = false.obs;
-  
+
   RxString emailError = ''.obs;
   RxString passwordError = ''.obs;
 
@@ -24,7 +24,7 @@ class SigninController extends GetxController {
     super.onInit();
 
     firebaseUser.bindStream(auth.authStateChanges());
-    
+
     ever<User?>(firebaseUser, (User? user) {
       if (user != null) {
         Get.offAllNamed(Routes.NAV);
@@ -32,7 +32,6 @@ class SigninController extends GetxController {
     });
   }
 
-  
   bool isValidEmail(String email) {
     final emailRegex = RegExp(
       r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
@@ -40,13 +39,11 @@ class SigninController extends GetxController {
     return emailRegex.hasMatch(email);
   }
 
-
   void clearErrors() {
     emailError.value = '';
     passwordError.value = '';
   }
 
- 
   bool validateInputs(String email, String password) {
     clearErrors();
     bool isValid = true;
@@ -69,7 +66,6 @@ class SigninController extends GetxController {
 
     return isValid;
   }
-
 
   Future<void> login(String email, String password) async {
     if (!validateInputs(email, password)) {

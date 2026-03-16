@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class SettingsController extends GetxController {
-  
   final loadingUpdateMe = false.obs;
   final loadingUpdatePw = false.obs;
 
@@ -14,9 +13,6 @@ class SettingsController extends GetxController {
   var isCurrentPasswordVisible = false.obs;
   var isNewPasswordVisible = false.obs;
   var isConfirmPasswordVisible = false.obs;
-
-
-
 
   @override
   void onInit() {
@@ -41,5 +37,4 @@ class SettingsController extends GetxController {
   void onClose() {
     super.onClose();
   }
-
 }

@@ -8,7 +8,7 @@ import '../../home/views/home_view.dart';
 
 class NavView extends GetView<NavController> {
   const NavView({super.key});
-  
+
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -60,7 +60,9 @@ class NavView extends GetView<NavController> {
               borderRadius: const BorderRadius.all(Radius.circular(50)),
               child: Container(
                 decoration: BoxDecoration(
-                  boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 20)],
+                  boxShadow: const [
+                    BoxShadow(color: Colors.black26, blurRadius: 20),
+                  ],
                 ),
                 child: BottomNavigationBar(
                   currentIndex: controller.selectedIndex.value,
@@ -73,9 +75,7 @@ class NavView extends GetView<NavController> {
                     fontWeight: FontWeight.bold,
                     fontSize: 12,
                   ),
-                  unselectedLabelStyle: const TextStyle(
-                    fontSize: 11,
-                  ),
+                  unselectedLabelStyle: const TextStyle(fontSize: 11),
                   iconSize: 24,
                   elevation: 5,
                   items: [

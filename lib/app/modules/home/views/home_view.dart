@@ -34,7 +34,6 @@ class HomeView extends GetView<HomeController> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -93,7 +92,6 @@ class HomeView extends GetView<HomeController> {
                       ),
                       Row(
                         children: [
-                          
                           GestureDetector(
                             onTap: () {
                               // Handle notification tap
@@ -134,7 +132,6 @@ class HomeView extends GetView<HomeController> {
 
                   const SizedBox(height: 25),
 
-                
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     decoration: BoxDecoration(
@@ -179,7 +176,6 @@ class HomeView extends GetView<HomeController> {
 
                   const SizedBox(height: 30),
 
-                 
                   Text(
                     "Categories".tr,
                     style: const TextStyle(
@@ -297,7 +293,7 @@ class HomeView extends GetView<HomeController> {
                   ),
 
                   const SizedBox(height: 30),
-                  
+
                   Text(
                     "Freash Deals".tr,
                     style: const TextStyle(
@@ -343,7 +339,4 @@ class HomeView extends GetView<HomeController> {
       ),
     );
   }
-
-
-
 }

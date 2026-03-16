@@ -26,16 +26,11 @@ class _EditProfileState extends State<EditProfile> {
       body: SingleChildScrollView(
         padding: EdgeInsets.all(10),
         child: Form(
-            
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              
-              Text(
-                'Name'.tr,
-                style: Theme.of(context).textTheme.titleSmall,
-              ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Name'.tr, style: Theme.of(context).textTheme.titleSmall),
               TextFormField(
-               
                 textInputAction: TextInputAction.done,
                 keyboardType: TextInputType.text,
                 decoration: InputDecoration(
@@ -46,11 +41,7 @@ class _EditProfileState extends State<EditProfile> {
               ),
               SizedBox(height: 10),
 
-              
-              Text(
-                'Email'.tr,
-                style: Theme.of(context).textTheme.titleSmall,
-              ),
+              Text('Email'.tr, style: Theme.of(context).textTheme.titleSmall),
               TextFormField(
                 textInputAction: TextInputAction.done,
                 keyboardType: TextInputType.text,
@@ -58,12 +49,11 @@ class _EditProfileState extends State<EditProfile> {
                   prefixIcon: Icon(Icons.sms, size: 20),
                   hintText: 'Email'.tr,
                 ),
-                
+
                 style: Theme.of(context).textTheme.bodySmall,
               ),
               SizedBox(height: 10),
 
-              
               SizedBox(
                 width: double.infinity,
                 child: Obx(
@@ -78,7 +68,9 @@ class _EditProfileState extends State<EditProfile> {
                   ),
                 ),
               ),
-            ])),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -86,7 +78,5 @@ class _EditProfileState extends State<EditProfile> {
   @override
   void dispose() {
     super.dispose();
-
-    
   }
 }

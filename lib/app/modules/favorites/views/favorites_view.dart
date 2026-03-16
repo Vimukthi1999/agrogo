@@ -20,10 +20,7 @@ class FavoritesView extends GetView<FavoritesController> {
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: [
-                    Color(0xFF1E7044),
-                    Color(0xFF2D9B5F),
-                  ],
+                  colors: [Color(0xFF1E7044), Color(0xFF2D9B5F)],
                 ),
               ),
               child: Column(
@@ -169,8 +166,8 @@ class FavoritesView extends GetView<FavoritesController> {
                 () => controller.isLoading.value
                     ? const Center(child: CircularProgressIndicator())
                     : controller.favoriteItems.isEmpty
-                        ? _buildEmptyState()
-                        : _buildFavoritesList(),
+                    ? _buildEmptyState()
+                    : _buildFavoritesList(),
               ),
             ),
           ],
@@ -211,12 +208,8 @@ class FavoritesView extends GetView<FavoritesController> {
             Text(
               "Start adding items to your favorites".tr,
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey[600],
-              ),
+              style: TextStyle(fontSize: 14, color: Colors.grey[600]),
             ),
-            
           ],
         ),
       ),
@@ -231,18 +224,11 @@ class FavoritesView extends GetView<FavoritesController> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.search_off,
-              size: 48,
-              color: Colors.grey[400],
-            ),
+            Icon(Icons.search_off, size: 48, color: Colors.grey[400]),
             const SizedBox(height: 12),
             Text(
               "No items found".tr,
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey[600],
-              ),
+              style: TextStyle(fontSize: 16, color: Colors.grey[600]),
             ),
           ],
         ),
@@ -268,9 +254,7 @@ class FavoritesView extends GetView<FavoritesController> {
 
   Widget _buildFavoritesCard(Map<String, dynamic> item) {
     return GestureDetector(
-      onTap: () {
-
-      },
+      onTap: () {},
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -286,7 +270,6 @@ class FavoritesView extends GetView<FavoritesController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
             Stack(
               children: [
                 Container(
@@ -304,13 +287,10 @@ class FavoritesView extends GetView<FavoritesController> {
                     ),
                   ),
                   child: (item['image'] == null || item['image'].isEmpty)
-                      ? Icon(
-                          Icons.image_not_supported,
-                          color: Colors.grey[400],
-                        )
+                      ? Icon(Icons.image_not_supported, color: Colors.grey[400])
                       : null,
                 ),
-       
+
                 Positioned(
                   top: 8,
                   right: 8,
@@ -336,7 +316,7 @@ class FavoritesView extends GetView<FavoritesController> {
                     ),
                   ),
                 ),
-             
+
                 if (item['originalPrice'] != null)
                   Positioned(
                     top: 8,
@@ -362,14 +342,13 @@ class FavoritesView extends GetView<FavoritesController> {
                   ),
               ],
             ),
-          
+
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(12),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                   
                     Text(
                       item['category'] ?? 'N/A',
                       style: TextStyle(
@@ -379,7 +358,7 @@ class FavoritesView extends GetView<FavoritesController> {
                       ),
                     ),
                     const SizedBox(height: 4),
-                  
+
                     Text(
                       item['title'] ?? 'Product',
                       maxLines: 2,
@@ -391,7 +370,7 @@ class FavoritesView extends GetView<FavoritesController> {
                       ),
                     ),
                     const Spacer(),
-               
+
                     Row(
                       children: [
                         const Icon(
@@ -410,7 +389,7 @@ class FavoritesView extends GetView<FavoritesController> {
                       ],
                     ),
                     const SizedBox(height: 8),
-              
+
                     Row(
                       children: [
                         Text(

@@ -3,17 +3,9 @@ class CategoryModel {
   final String name;
   final String icon;
 
-  CategoryModel({
-    required this.id,
-    required this.name,
-    required this.icon,
-  });
+  CategoryModel({required this.id, required this.name, required this.icon});
 
   factory CategoryModel.fromMap(String id, Map<String, dynamic> data) {
-    return CategoryModel(
-      id: id,
-      name: data['name'],
-      icon: data['icon'],
-    );
+    return CategoryModel(id: id, name: data['name'], icon: data['icon']);
   }
 }

@@ -9,9 +9,7 @@ import '../../settings/bindings/settings_binding.dart';
 class NavBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<NavController>(
-      () => NavController(),
-    );
+    Get.lazyPut<NavController>(() => NavController());
     HomeBinding().dependencies();
     MyadsBinding().dependencies();
     FavoritesBinding().dependencies();

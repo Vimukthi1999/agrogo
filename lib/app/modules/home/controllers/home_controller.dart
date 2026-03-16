@@ -31,46 +31,44 @@ class HomeController extends GetxController {
   // }
 
   Stream<List<CategoryModel>> getCategories() {
-    return FirebaseFirestore.instance
-        .collection('categories')
-        .snapshots()
-        .map((snapshot) {
-          log('Categories snapshot: ${snapshot.docs.length}');
-          
-          if (snapshot.docs.isEmpty) {
-            log('No categories documents found');
-            return [];
-          }
-          
-          try {
-            final categories = snapshot.docs
-                .map((doc) {
-                  try {
-                    final data = doc.data();
-                    log('Document ${doc.id} data: $data');
-                    
-                    
-                    if (!data.containsKey('name') || !data.containsKey('icon')) {
-                      log('Document ${doc.id} missing required fields');
-                      return null;
-                    }
-                    
-                    return CategoryModel.fromMap(doc.id, data);
-                  } catch (e) {
-                    log('Error mapping document ${doc.id}: $e');
-                    return null;
-                  }
-                })
-                .whereType<CategoryModel>() 
-                .toList();
-            
-            log('Successfully mapped ${categories.length} categories');
-            return categories;
-          } catch (e) {
-            log('Error in getCategories: $e');
-            return [];
-          }
-        });
+    return FirebaseFirestore.instance.collection('categories').snapshots().map((
+      snapshot,
+    ) {
+      log('Categories snapshot: ${snapshot.docs.length}');
+
+      if (snapshot.docs.isEmpty) {
+        log('No categories documents found');
+        return [];
+      }
+
+      try {
+        final categories = snapshot.docs
+            .map((doc) {
+              try {
+                final data = doc.data();
+                log('Document ${doc.id} data: $data');
+
+                if (!data.containsKey('name') || !data.containsKey('icon')) {
+                  log('Document ${doc.id} missing required fields');
+                  return null;
+                }
+
+                return CategoryModel.fromMap(doc.id, data);
+              } catch (e) {
+                log('Error mapping document ${doc.id}: $e');
+                return null;
+              }
+            })
+            .whereType<CategoryModel>()
+            .toList();
+
+        log('Successfully mapped ${categories.length} categories');
+        return categories;
+      } catch (e) {
+        log('Error in getCategories: $e');
+        return [];
+      }
+    });
   }
 
   @override

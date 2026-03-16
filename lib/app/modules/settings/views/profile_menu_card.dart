@@ -1,14 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ProfileMenuCard extends StatelessWidget {
-  const ProfileMenuCard({
-    super.key,
-    this.title,
-    this.subTitle,
-  
-    this.press,
-  });
-
+  const ProfileMenuCard({super.key, this.title, this.subTitle, this.press});
 
   final String? title, subTitle;
   final VoidCallback? press;
@@ -43,10 +36,7 @@ class ProfileMenuCard extends StatelessWidget {
                 ),
               ),
               SizedBox(width: 8),
-              Icon(
-                Icons.arrow_forward_ios_outlined,
-                size: 20,
-              )
+              Icon(Icons.arrow_forward_ios_outlined, size: 20),
             ],
           ),
         ),

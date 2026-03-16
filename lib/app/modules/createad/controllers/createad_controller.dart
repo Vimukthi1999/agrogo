@@ -9,25 +9,20 @@ import 'package:image_picker/image_picker.dart';
 import '../../../models/category_model.dart';
 
 class CreateadController extends GetxController {
-
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
   final quantityController = TextEditingController();
   final priceController = TextEditingController();
 
-
   final selectedImages = <XFile>[].obs;
   final selectedCategory = ''.obs;
-  final selectedDistrict = ''.obs;
-  final selectedTown = ''.obs;
-  final selectedProvince = ''.obs;
-  final userLocation = ''.obs;
+  final province = ''.obs;
+  final district = ''.obs;
   final latitude = 0.0.obs;
   final longitude = 0.0.obs;
   final isLoading = false.obs;
   final isGettingLocation = false.obs;
   final isDistrictAutoDetected = false.obs;
-
 
   final titleError = ''.obs;
   final descriptionError = ''.obs;
@@ -37,37 +32,130 @@ class CreateadController extends GetxController {
   final categoryError = ''.obs;
   final locationError = ''.obs;
 
+  final Map<String, String> districtToProvince = {
+    'Colombo': 'Western',
+    'Gampaha': 'Western',
+    'Kalutara': 'Western',
+    'Matara': 'Southern',
+    'Galle': 'Southern',
+    'Hambantota': 'Southern',
+    'Kandy': 'Central',
+    'Matale': 'Central',
+    'Nuwara Eliya': 'Central',
+    'Jaffna': 'Northern',
+    'Mullaitivu': 'Northern',
+    'Batticaloa': 'Eastern',
+    'Ampara': 'Eastern',
+    'Trincomalee': 'Eastern',
+    'Kurunegala': 'North Western',
+    'Puttalam': 'North Western',
+    'Anuradhapura': 'North Central',
+    'Polonnaruwa': 'North Central',
+    'Badulla': 'Uva',
+    'Monaragala': 'Uva',
+    'Ratnapura': 'Sabaragamuwa',
+    'Kegalle': 'Sabaragamuwa',
+  };
 
-  final districts = <String>[
-    'Bangalore',
-    'Mangalore',
-    'Mysore',
-    'Udupi',
-    'Dakshina Kannada',
-    'Other',
-  ].obs;
-
-
-  final townsByDistrict = <String, List<String>>{
-    'Bangalore': ['Bangalore City', 'Whitefield', 'Indiranagar', 'Koramangala'],
-    'Mangalore': ['Mangalore City', 'Surathkal', 'Bajpe', 'Mulki'],
-    'Mysore': ['Mysore City', 'Hebbal', 'Yelahanka', 'Jayalakshmipuram'],
-  }.obs;
+  final List<String> allDistricts = [
+    'Colombo',
+    'Gampaha',
+    'Kalutara',
+    'Matara',
+    'Galle',
+    'Hambantota',
+    'Kandy',
+    'Matale',
+    'Nuwara Eliya',
+    'Jaffna',
+    'Mullaitivu',
+    'Batticaloa',
+    'Ampara',
+    'Trincomalee',
+    'Kurunegala',
+    'Puttalam',
+    'Anuradhapura',
+    'Polonnaruwa',
+    'Badulla',
+    'Monaragala',
+    'Ratnapura',
+    'Kegalle',
+  ];
 
   final Map<String, Map<String, double>> districtBounds = {
-    'Bangalore': {'minLat': 12.8, 'maxLat': 13.2, 'minLng': 77.3, 'maxLng': 77.8},
-    'Mangalore': {'minLat': 12.8, 'maxLat': 13.0, 'minLng': 74.8, 'maxLng': 75.0},
-    'Mysore': {'minLat': 11.9, 'maxLat': 12.4, 'minLng': 75.5, 'maxLng': 76.2},
-    'Udupi': {'minLat': 13.3, 'maxLat': 13.5, 'minLng': 74.7, 'maxLng': 75.0},
-    'Dakshina Kannada': {'minLat': 12.6, 'maxLat': 13.2, 'minLng': 74.6, 'maxLng': 75.4},
-    'Other': {'minLat': 8.0, 'maxLat': 16.0, 'minLng': 74.0, 'maxLng': 78.0},
+    'Colombo': {'minLat': 6.7, 'maxLat': 7.0, 'minLng': 79.8, 'maxLng': 80.2},
+    'Gampaha': {'minLat': 6.9, 'maxLat': 7.3, 'minLng': 80.0, 'maxLng': 80.4},
+    'Kalutara': {'minLat': 6.4, 'maxLat': 6.8, 'minLng': 80.1, 'maxLng': 80.5},
+    'Matara': {'minLat': 5.8, 'maxLat': 6.3, 'minLng': 80.5, 'maxLng': 81.0},
+    'Galle': {'minLat': 6.0, 'maxLat': 6.5, 'minLng': 80.1, 'maxLng': 80.6},
+    'Hambantota': {
+      'minLat': 6.0,
+      'maxLat': 6.5,
+      'minLng': 80.7,
+      'maxLng': 81.5,
+    },
+    'Kandy': {'minLat': 6.8, 'maxLat': 7.3, 'minLng': 80.4, 'maxLng': 81.0},
+    'Matale': {'minLat': 7.3, 'maxLat': 7.7, 'minLng': 80.6, 'maxLng': 81.2},
+    'Nuwara Eliya': {
+      'minLat': 6.8,
+      'maxLat': 7.2,
+      'minLng': 80.8,
+      'maxLng': 81.3,
+    },
+    'Jaffna': {'minLat': 9.5, 'maxLat': 9.8, 'minLng': 80.0, 'maxLng': 80.4},
+    'Mullaitivu': {
+      'minLat': 8.5,
+      'maxLat': 9.0,
+      'minLng': 81.3,
+      'maxLng': 81.9,
+    },
+    'Batticaloa': {
+      'minLat': 7.5,
+      'maxLat': 8.2,
+      'minLng': 81.5,
+      'maxLng': 81.9,
+    },
+    'Ampara': {'minLat': 7.0, 'maxLat': 7.8, 'minLng': 81.5, 'maxLng': 82.0},
+    'Trincomalee': {
+      'minLat': 8.3,
+      'maxLat': 9.0,
+      'minLng': 81.1,
+      'maxLng': 81.7,
+    },
+    'Kurunegala': {
+      'minLat': 6.8,
+      'maxLat': 7.5,
+      'minLng': 80.2,
+      'maxLng': 80.7,
+    },
+    'Puttalam': {'minLat': 7.6, 'maxLat': 8.3, 'minLng': 79.7, 'maxLng': 80.2},
+    'Anuradhapura': {
+      'minLat': 7.9,
+      'maxLat': 8.7,
+      'minLng': 80.3,
+      'maxLng': 80.9,
+    },
+    'Polonnaruwa': {
+      'minLat': 7.9,
+      'maxLat': 8.4,
+      'minLng': 81.0,
+      'maxLng': 81.6,
+    },
+    'Badulla': {'minLat': 6.9, 'maxLat': 7.4, 'minLng': 81.0, 'maxLng': 81.6},
+    'Monaragala': {
+      'minLat': 6.6,
+      'maxLat': 7.2,
+      'minLng': 81.2,
+      'maxLng': 81.8,
+    },
+    'Ratnapura': {'minLat': 6.6, 'maxLat': 7.1, 'minLng': 80.4, 'maxLng': 80.9},
+    'Kegalle': {'minLat': 7.1, 'maxLat': 7.6, 'minLng': 80.4, 'maxLng': 80.9},
   };
 
   Stream<List<CategoryModel>> getCategories() {
-    return FirebaseFirestore.instance
-        .collection('categories')
-        .snapshots()
-        .map((snapshot) {
+    return FirebaseFirestore.instance.collection('categories').snapshots().map((
+      snapshot,
+    ) {
       log('Categories snapshot: ${snapshot.docs.length}');
 
       if (snapshot.docs.isEmpty) {
@@ -136,8 +224,11 @@ class CreateadController extends GetxController {
       _mapLocationToDistrict(position.latitude, position.longitude);
       isDistrictAutoDetected.value = true;
 
-      Get.snackbar('Success', 'Location detected successfully',
-          snackPosition: SnackPosition.BOTTOM);
+      Get.snackbar(
+        'Success',
+        'Location detected successfully',
+        snackPosition: SnackPosition.BOTTOM,
+      );
     } catch (e) {
       locationError.value = 'Failed to get location';
       log('Location error: $e');
@@ -147,6 +238,7 @@ class CreateadController extends GetxController {
   }
 
   void _mapLocationToDistrict(double lat, double lng) {
+    // Search through all districts to find matching boundaries
     for (var entry in districtBounds.entries) {
       String districtName = entry.key;
       Map<String, double> bounds = entry.value;
@@ -155,43 +247,85 @@ class CreateadController extends GetxController {
           lat <= bounds['maxLat']! &&
           lng >= bounds['minLng']! &&
           lng <= bounds['maxLng']!) {
-        selectedDistrict.value = districtName;
-        updateTowns(districtName);
+        district.value = districtName;
+        province.value = districtToProvince[districtName] ?? '';
         return;
       }
     }
 
-    selectedDistrict.value = 'Other';
-    updateTowns('Other');
+    // Default to Colombo if no district is found
+    district.value = 'Colombo';
+    province.value = 'Western';
   }
 
-  Future<void> pickImages() async {
+  Future<void> pickImages(ImageSource source) async {
     try {
       final ImagePicker picker = ImagePicker();
-      final List<XFile> images = await picker.pickMultiImage(
+
+      if (source == ImageSource.gallery) {
+        final List<XFile> images = await picker.pickMultiImage(
+          maxWidth: 1920,
+          maxHeight: 1080,
+          imageQuality: 80,
+        );
+
+        if (images.isNotEmpty) {
+          if (selectedImages.length + images.length <= 5) {
+            selectedImages.addAll(images);
+            imageError.value = '';
+          } else {
+            imageError.value = 'Maximum 5 images allowed';
+          }
+        }
+      } else {
+        // Camera source
+        if (selectedImages.length >= 5) {
+          imageError.value = 'Maximum 5 images allowed';
+          return;
+        }
+
+        final XFile? image = await picker.pickImage(
+          source: ImageSource.camera,
+          maxWidth: 1920,
+          maxHeight: 1080,
+          imageQuality: 80,
+        );
+
+        if (image != null) {
+          selectedImages.add(image);
+          imageError.value = '';
+        }
+      }
+    } catch (e) {
+      imageError.value = 'Failed to pick images';
+      log('Error picking images: $e');
+    }
+  }
+
+  Future<void> retakeImage(int index, ImageSource source) async {
+    try {
+      final ImagePicker picker = ImagePicker();
+      final XFile? image = await picker.pickImage(
+        source: source,
         maxWidth: 1920,
         maxHeight: 1080,
         imageQuality: 80,
       );
 
-      if (images.isNotEmpty) {
-        if (selectedImages.length + images.length <= 5) {
-          selectedImages.addAll(images);
-          imageError.value = '';
-        } else {
-          imageError.value = 'Maximum 5 images allowed';
-        }
+      if (image != null) {
+        selectedImages[index] = image;
       }
     } catch (e) {
-      imageError.value = 'Failed to pick images';
+      log('Error retaking image: $e');
     }
   }
 
-
   void removeImage(int index) {
     selectedImages.removeAt(index);
+    if (selectedImages.isEmpty) {
+      imageError.value = 'At least one image is required';
+    }
   }
-
 
   void clearForm() {
     titleController.clear();
@@ -200,10 +334,9 @@ class CreateadController extends GetxController {
     priceController.clear();
     selectedImages.clear();
     selectedCategory.value = '';
-    selectedDistrict.value = '';
-    selectedTown.value = '';
+    district.value = '';
+    province.value = '';
   }
-
 
   bool validateForm() {
     clearErrors();
@@ -251,9 +384,13 @@ class CreateadController extends GetxController {
       isValid = false;
     }
 
+    if (province.isEmpty || district.isEmpty) {
+      locationError.value = 'Please detect your location';
+      isValid = false;
+    }
+
     return isValid;
   }
-
 
   void clearErrors() {
     titleError.value = '';
@@ -265,7 +402,6 @@ class CreateadController extends GetxController {
     locationError.value = '';
   }
 
-
   Future<void> createAd() async {
     if (!validateForm()) {
       return;
@@ -273,7 +409,6 @@ class CreateadController extends GetxController {
 
     try {
       isLoading.value = true;
-
 
       Get.snackbar('Success', 'Ad created successfully');
       clearForm();
@@ -285,16 +420,10 @@ class CreateadController extends GetxController {
     }
   }
 
-
-  void updateTowns(String district) {
-    selectedDistrict.value = district;
-    selectedTown.value = '';
-  }
-
   void updateDistrict(String newDistrict) {
     if (!isDistrictAutoDetected.value) {
-      selectedDistrict.value = newDistrict;
-      updateTowns(newDistrict);
+      district.value = newDistrict;
+      province.value = districtToProvince[newDistrict] ?? '';
     }
   }
 

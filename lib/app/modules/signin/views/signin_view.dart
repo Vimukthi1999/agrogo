@@ -87,7 +87,6 @@ class SigninView extends GetView<SigninController> {
                       ),
                       const SizedBox(height: 20),
 
-                     
                       Text(
                         "Email Address".tr,
                         style: const TextStyle(
@@ -152,7 +151,6 @@ class SigninView extends GetView<SigninController> {
                       ),
                       const SizedBox(height: 10),
 
-                     
                       Text(
                         "Password".tr,
                         style: const TextStyle(
@@ -230,13 +228,10 @@ class SigninView extends GetView<SigninController> {
                       ),
                       const SizedBox(height: 10),
 
-                     
                       Align(
                         alignment: Alignment.centerRight,
                         child: TextButton(
-                          onPressed: () {
-                            
-                          },
+                          onPressed: () {},
                           child: Text(
                             "Forgot Password?".tr,
                             style: const TextStyle(
@@ -249,7 +244,6 @@ class SigninView extends GetView<SigninController> {
                       ),
                       const SizedBox(height: 15),
 
-                     
                       Obx(
                         () => SizedBox(
                           width: double.infinity,
@@ -295,7 +289,6 @@ class SigninView extends GetView<SigninController> {
                       ),
                       const SizedBox(height: 16),
 
-                     
                       Row(
                         children: [
                           Expanded(
@@ -324,7 +317,6 @@ class SigninView extends GetView<SigninController> {
                       ),
                       const SizedBox(height: 16),
 
-                     
                       SizedBox(
                         width: double.infinity,
                         height: 50,

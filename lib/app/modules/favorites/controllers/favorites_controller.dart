@@ -23,12 +23,10 @@ class FavoritesController extends GetxController {
     fetchFavorites();
   }
 
-
   void fetchFavorites() {
     isLoading.value = true;
     try {
       favoriteItems.value = [];
-      
     } finally {
       isLoading.value = false;
     }
@@ -36,11 +34,11 @@ class FavoritesController extends GetxController {
 
   List<Map<String, dynamic>> getFilteredItems() {
     return favoriteItems.where((item) {
-      final matchesSearch = item['title']
-          .toString()
-          .toLowerCase()
-          .contains(searchQuery.value.toLowerCase());
-      final matchesCategory = filterCategory.value.isEmpty ||
+      final matchesSearch = item['title'].toString().toLowerCase().contains(
+        searchQuery.value.toLowerCase(),
+      );
+      final matchesCategory =
+          filterCategory.value.isEmpty ||
           filterCategory.value == 'All' ||
           item['category'] == filterCategory.value;
       return matchesSearch && matchesCategory;
@@ -52,10 +50,7 @@ class FavoritesController extends GetxController {
       title: 'Remove Favorite',
       middleText: 'Remove this item from your favorites?',
       actions: [
-        TextButton(
-          onPressed: () => Get.back(),
-          child: const Text('Cancel'),
-        ),
+        TextButton(onPressed: () => Get.back(), child: const Text('Cancel')),
         TextButton(
           onPressed: () {
             favoriteItems.removeWhere((item) => item['id'] == itemId);
@@ -68,18 +63,14 @@ class FavoritesController extends GetxController {
     );
   }
 
-
   void shareItem(String title) {
     Get.snackbar('Share', 'Sharing "$title"');
-
   }
-
 
   void clearSearch() {
     searchQuery.value = '';
   }
 
- 
   void setCategory(String category) {
     filterCategory.value = category;
   }

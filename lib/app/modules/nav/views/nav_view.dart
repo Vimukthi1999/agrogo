@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/nav_controller.dart';
 import '../../home/views/home_view.dart';
+import '../../chat/views/chat_view.dart';
 
 class NavView extends GetView<NavController> {
   const NavView({super.key});
@@ -45,12 +46,19 @@ class NavView extends GetView<NavController> {
         body: Obx(
           () => IndexedStack(
             index: controller.selectedIndex.value,
-            children: const [
-              HomeView(),
-              MyadsView(),
-              FavoritesView(),
-              SettingsView(),
-            ],
+            children: controller.isFarmerMode.value 
+              ? const [
+                  HomeView(),
+                  MyadsView(),
+                  ChatView(),
+                  SettingsView(),
+                ]
+              : const [
+                  HomeView(),
+                  FavoritesView(),
+                  ChatView(),
+                  SettingsView(),
+                ],
           ),
         ),
         bottomNavigationBar: Obx(
@@ -84,15 +92,21 @@ class NavView extends GetView<NavController> {
                       activeIcon: const Icon(Icons.home),
                       label: 'Home'.tr,
                     ),
+                    controller.isFarmerMode.value 
+                      ? BottomNavigationBarItem(
+                          icon: const Icon(Icons.inventory_2_outlined),
+                          activeIcon: const Icon(Icons.inventory_2),
+                          label: 'My Ads'.tr,
+                        )
+                      : BottomNavigationBarItem(
+                          icon: const Icon(Icons.favorite_outline),
+                          activeIcon: const Icon(Icons.favorite),
+                          label: 'Favorites'.tr,
+                        ),
                     BottomNavigationBarItem(
-                      icon: const Icon(Icons.post_add_outlined),
-                      activeIcon: const Icon(Icons.post_add),
-                      label: 'My Ads'.tr,
-                    ),
-                    BottomNavigationBarItem(
-                      icon: const Icon(Icons.favorite_outline),
-                      activeIcon: const Icon(Icons.favorite),
-                      label: 'Favorites'.tr,
+                      icon: const Icon(Icons.chat_outlined),
+                      activeIcon: const Icon(Icons.chat),
+                      label: 'Chats'.tr,
                     ),
                     BottomNavigationBarItem(
                       icon: const Icon(Icons.person_outline),

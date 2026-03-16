@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 
+import '../modules/chat/bindings/chat_binding.dart';
+import '../modules/chat/views/chat_view.dart';
 import '../modules/createad/bindings/createad_binding.dart';
 import '../modules/createad/views/createad_view.dart';
 import '../modules/nav/bindings/nav_binding.dart';
@@ -50,6 +52,11 @@ class AppPages {
       name: _Paths.CREATEAD,
       page: () => const CreateadView(),
       binding: CreateadBinding(),
+    ),
+    GetPage(
+      name: _Paths.CHAT,
+      page: () => const ChatView(),
+      binding: ChatBinding(),
     ),
   ];
 }

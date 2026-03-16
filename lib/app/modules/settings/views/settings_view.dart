@@ -2,14 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../common/app_dialogBox.dart';
 import '../controllers/settings_controller.dart';
+import '../../nav/controllers/nav_controller.dart';
 import 'change_pw.dart';
 import 'edit_profile.dart';
 import 'profile_menu_card.dart';
 
 class SettingsView extends GetView<SettingsController> {
   const SettingsView({super.key});
+  
   @override
   Widget build(BuildContext context) {
+    final navController = Get.find<NavController>();
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -122,6 +125,40 @@ class SettingsView extends GetView<SettingsController> {
                             subTitle: "Selected Language: ".tr,
                             press: () {},
                           ),
+                          const Divider(),
+                          Obx(() => ListTile(
+                            contentPadding: EdgeInsets.zero,
+                            leading: Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFF1E7044).withOpacity(0.1),
+                                shape: BoxShape.circle,
+                              ),
+                              child: Icon(
+                                navController.isFarmerMode.value 
+                                  ? Icons.agriculture 
+                                  : Icons.shopping_cart,
+                                color: const Color(0xFF1E7044),
+                              ),
+                            ),
+                            title: Text(
+                              navController.isFarmerMode.value 
+                                ? "Farmer Mode".tr 
+                                : "Buyer Mode".tr,
+                              style: Theme.of(context).textTheme.titleSmall,
+                            ),
+                            subtitle: Text(
+                              navController.isFarmerMode.value 
+                                ? "Switch to Buyer mode to browse and buy".tr 
+                                : "Switch to Farmer mode to list and sell".tr,
+                              style: const TextStyle(fontSize: 11),
+                            ),
+                            trailing: Switch(
+                              value: navController.isFarmerMode.value,
+                              activeColor: const Color(0xFF1E7044),
+                              onChanged: (value) => navController.toggleRole(),
+                            ),
+                          )),
                         ],
                       ),
                     ),

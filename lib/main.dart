@@ -14,17 +14,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return 
-    // Obx(
-    //   () => 
-      GetMaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(        
+    return GetMaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(        
         colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 9, 212, 134)),
       ),
-        initialRoute: AppPages.INITIAL,
-        getPages: AppPages.routes,
-      );
-    // );
+      initialRoute: AppPages.INITIAL,
+      getPages: AppPages.routes,
+      navigatorKey: Get.key,
+    );
   }
 }

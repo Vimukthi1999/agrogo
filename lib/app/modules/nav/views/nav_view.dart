@@ -1,10 +1,14 @@
+import 'package:agrogo/app/modules/favorites/views/favorites_view.dart';
+import 'package:agrogo/app/modules/myads/views/myads_view.dart';
+import 'package:agrogo/app/modules/settings/views/settings_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../routes/app_pages.dart';
 import '../controllers/nav_controller.dart';
+import '../../home/views/home_view.dart';
 
 class NavView extends GetView<NavController> {
   const NavView({super.key});
+  
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -38,10 +42,16 @@ class NavView extends GetView<NavController> {
       child: Scaffold(
         // backgroundColor: Colors.transparent,
         resizeToAvoidBottomInset: false,
-        body: Navigator(
-          key: Get.nestedKey(1),
-          initialRoute: Routes.HOME,
-          onGenerateRoute: controller.onGenerateRoute,
+        body: Obx(
+          () => IndexedStack(
+            index: controller.selectedIndex.value,
+            children: const [
+              HomeView(),
+              MyadsView(),
+              FavoritesView(),
+              SettingsView(),
+            ],
+          ),
         ),
         bottomNavigationBar: Obx(
           () => Container(

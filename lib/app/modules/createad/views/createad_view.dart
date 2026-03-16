@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../models/category_model.dart';
 import '../controllers/createad_controller.dart';
 
 class CreateadView extends GetView<CreateadController> {
@@ -82,7 +83,7 @@ class CreateadView extends GetView<CreateadController> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildSectionTitle('Price per kg (₹)'.tr),
+                        _buildSectionTitle('Price per kg (Rs)'.tr),
                         const SizedBox(height: 10),
                         Obx(
                           () => _buildTextField(
@@ -106,84 +107,136 @@ class CreateadView extends GetView<CreateadController> {
 
               _buildSectionTitle('Category'.tr),
               const SizedBox(height: 10),
-              Obx(
-                () => Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: 110,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: controller.categories.length,
-                        itemBuilder: (context, index) {
-                          final category = controller.categories[index];
-                          final isSelected =
-                              controller.selectedCategory.value == category['id'];
+              StreamBuilder<List<CategoryModel>>(
+                stream: controller.getCategories(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
 
-                          return GestureDetector(
-                            onTap: () {
-                              controller.selectedCategory.value = category['id'];
-                              controller.categoryError.value = '';
-                            },
-                            child: Container(
-                              width: 90,
-                              margin: const EdgeInsets.only(right: 12),
-                              decoration: BoxDecoration(
-                                color: isSelected
-                                    ? const Color(0xFF1E7044)
-                                    : Colors.white,
-                                border: Border.all(
-                                  color: isSelected
-                                      ? const Color(0xFF1E7044)
-                                      : Colors.grey[300]!,
-                                  width: 2,
-                                ),
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    height: 40,
-                                    width: 40,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: isSelected
-                                          ? Colors.white.withOpacity(0.2)
-                                          : const Color(0xFF1E7044)
-                                              .withOpacity(0.1),
-                                    ),
-                                    child: Icon(
-                                      Icons.category,
-                                      color: isSelected
-                                          ? Colors.white
-                                          : const Color(0xFF1E7044),
-                                      size: 20,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 6),
-                                  Text(
-                                    category['name'],
-                                    textAlign: TextAlign.center,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      fontSize: 11,
-                                      fontWeight: FontWeight.w600,
-                                      color: isSelected
-                                          ? Colors.white
-                                          : const Color(0xFF1E7044),
-                                    ),
-                                  ),
-                                ],
-                              ),
+                  if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  }
+
+                  if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.category_outlined,
+                            size: 48,
+                            color: Colors.grey[400],
+                          ),
+                          const SizedBox(height: 12),
+                          Text(
+                            'No categories found'.tr,
+                            style: TextStyle(
+                              color: Colors.grey[600],
+                              fontSize: 14,
                             ),
-                          );
-                        },
+                          ),
+                        ],
                       ),
+                    );
+                  }
+
+                  final categories = snapshot.data!;
+
+                  return SizedBox(
+                    height: 140,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: categories.length,
+                      itemBuilder: (context, index) {
+                        final category = categories[index];
+
+                        return Obx(
+                          () {
+                            final isSelected =
+                                controller.selectedCategory.value == category.id;
+
+                            return GestureDetector(
+                              onTap: () {
+                                controller.selectedCategory.value = category.id;
+                                controller.categoryError.value = '';
+                              },
+                              child: Container(
+                                width: 110,
+                                margin: const EdgeInsets.only(right: 12),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(18),
+                                  border: isSelected
+                                      ? Border.all(
+                                          color: const Color(0xFF1E7044),
+                                          width: 2.5,
+                                        )
+                                      : null,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: isSelected
+                                          ? const Color(0xFF1E7044)
+                                              .withOpacity(0.3)
+                                          : Colors.black.withOpacity(0.08),
+                                      blurRadius: isSelected ? 12 : 8,
+                                      offset: const Offset(0, 3),
+                                    ),
+                                  ],
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      height: 70,
+                                      width: 70,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: const Color(0xFF1E7044)
+                                            .withOpacity(0.1),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8),
+                                        child: Image.network(
+                                          category.icon,
+                                          fit: BoxFit.contain,
+                                          errorBuilder:
+                                              (context, error, stackTrace) {
+                                            return Icon(
+                                              Icons.image_not_supported,
+                                              color:
+                                                  const Color(0xFF1E7044),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Text(
+                                      category.name,
+                                      textAlign: TextAlign.center,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w600,
+                                        color: Color(0xFF1E7044),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
                     ),
-                    if (controller.categoryError.isNotEmpty)
-                      Padding(
+                  );
+                },
+              ),
+              Obx(
+                () => controller.categoryError.isNotEmpty
+                    ? Padding(
                         padding: const EdgeInsets.only(top: 8),
                         child: Text(
                           controller.categoryError.value,
@@ -192,9 +245,8 @@ class CreateadView extends GetView<CreateadController> {
                             fontSize: 12,
                           ),
                         ),
-                      ),
-                  ],
-                ),
+                      )
+                    : const SizedBox.shrink(),
               ),
               const SizedBox(height: 20),
 
@@ -202,36 +254,162 @@ class CreateadView extends GetView<CreateadController> {
               _buildSectionTitle('Location'.tr),
               const SizedBox(height: 10),
               Obx(
-                () => DropdownButtonFormField<String>(
-                  value: controller.selectedDistrict.isEmpty
-                      ? null
-                      : controller.selectedDistrict.value,
-                  decoration: InputDecoration(
-                    labelText: 'District'.tr,
-                    prefixIcon: const Icon(
-                      Icons.location_on_outlined,
-                      color: Color(0xFF1E7044),
+                () => Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (!controller.isDistrictAutoDetected.value)
+                      ElevatedButton.icon(
+                        onPressed: controller.isGettingLocation.value
+                            ? null
+                            : controller.getCurrentLocation,
+                        icon: controller.isGettingLocation.value
+                            ? const SizedBox(
+                                height: 20,
+                                width: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                    Colors.white,
+                                  ),
+                                ),
+                              )
+                            : const Icon(Icons.location_on_outlined),
+                        label: Text(
+                          controller.isGettingLocation.value
+                              ? 'Detecting Location...'.tr
+                              : 'Auto Detect Location'.tr,
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF1E7044),
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 12,
+                          ),
+                        ),
+                      )
+                    else
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: Colors.green[50],
+                          border: Border.all(
+                            color: Colors.green[400]!,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.check_circle_outline,
+                              color: Colors.green[700],
+                              size: 20,
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Location Detected'.tr,
+                                    style: TextStyle(
+                                      color: Colors.green[700],
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    '${controller.selectedDistrict.value} (Lat: ${controller.latitude.value.toStringAsFixed(4)}, Lng: ${controller.longitude.value.toStringAsFixed(4)})',
+                                    style: TextStyle(
+                                      color: Colors.green[600],
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                controller.isDistrictAutoDetected.value = false;
+                                controller.selectedDistrict.value = '';
+                                controller.selectedTown.value = '';
+                              },
+                              child: Icon(
+                                Icons.close,
+                                color: Colors.green[700],
+                                size: 20,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    if (controller.locationError.value.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8),
+                        child: Text(
+                          controller.locationError.value,
+                          style: const TextStyle(
+                            color: Colors.red,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                    const SizedBox(height: 12),
+                    Text(
+                      'District'.tr,
+                      style: const TextStyle(
+                        color: Color(0xFF1E7044),
+                        fontWeight: FontWeight.w600,
+                        fontSize: 13,
+                      ),
                     ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
+                    const SizedBox(height: 8),
+                    DropdownButtonFormField<String>(
+                      value: controller.selectedDistrict.isEmpty
+                          ? null
+                          : controller.selectedDistrict.value,
+                      decoration: InputDecoration(
+                        labelText: 'District'.tr,
+                        prefixIcon: const Icon(
+                          Icons.location_on_outlined,
+                          color: Color(0xFF1E7044),
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        filled: true,
+                        fillColor: Colors.grey[50],
+                        enabled: !controller.isDistrictAutoDetected.value,
+                      ),
+                      items: controller.districts
+                          .map((district) => DropdownMenuItem(
+                                value: district,
+                                child: Text(district),
+                              ))
+                          .toList(),
+                      onChanged: (value) {
+                        if (value != null) {
+                          controller.updateDistrict(value);
+                        }
+                      },
                     ),
-                    filled: true,
-                    fillColor: Colors.grey[50],
-                  ),
-                  items: controller.districts
-                      .map((district) => DropdownMenuItem(
-                            value: district,
-                            child: Text(district),
-                          ))
-                      .toList(),
-                  onChanged: (value) {
-                    if (value != null) {
-                      controller.updateTowns(value);
-                    }
-                  },
+                  ],
                 ),
               ),
               const SizedBox(height: 12),
+              Text(
+                'Town'.tr,
+                style: const TextStyle(
+                  color: Color(0xFF1E7044),
+                  fontWeight: FontWeight.w600,
+                  fontSize: 13,
+                ),
+              ),
+              const SizedBox(height: 8),
               Obx(
                 () => DropdownButtonFormField<String>(
                   value: controller.selectedTown.isEmpty

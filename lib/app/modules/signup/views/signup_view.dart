@@ -95,12 +95,25 @@ class SignupView extends GetView<SignupController> {
                       const SizedBox(height: 30),
 
                      
-                      Text(
-                        "Full Name".tr,
-                        style: const TextStyle(
-                          color: Color(0xFF173046),
-                          fontWeight: FontWeight.w600,
-                          fontSize: 13,
+                      RichText(
+                        text: const TextSpan(
+                          style: TextStyle(
+                            color: Color(0xFF173046),
+                            fontWeight: FontWeight.w600,
+                            fontSize: 13,
+                          ),
+                          children: [
+                            TextSpan(text: 'Full Name'),
+                            TextSpan(text: ' ', style: TextStyle(fontSize: 13)),
+                            TextSpan(
+                              text: '*',
+                              style: TextStyle(
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       const SizedBox(height: 10),
@@ -160,12 +173,25 @@ class SignupView extends GetView<SignupController> {
                       const SizedBox(height: 20),
 
                      
-                      Text(
-                        "Email Address".tr,
-                        style: const TextStyle(
-                          color: Color(0xFF173046),
-                          fontWeight: FontWeight.w600,
-                          fontSize: 13,
+                      RichText(
+                        text: const TextSpan(
+                          style: TextStyle(
+                            color: Color(0xFF173046),
+                            fontWeight: FontWeight.w600,
+                            fontSize: 13,
+                          ),
+                          children: [
+                            TextSpan(text: 'Email Address'),
+                            TextSpan(text: ' ', style: TextStyle(fontSize: 13)),
+                            TextSpan(
+                              text: '*',
+                              style: TextStyle(
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       const SizedBox(height: 10),
@@ -186,12 +212,25 @@ class SignupView extends GetView<SignupController> {
                       const SizedBox(height: 20),
 
                      
-                      Text(
-                        "Phone Number".tr,
-                        style: const TextStyle(
-                          color: Color(0xFF173046),
-                          fontWeight: FontWeight.w600,
-                          fontSize: 13,
+                      RichText(
+                        text: const TextSpan(
+                          style: TextStyle(
+                            color: Color(0xFF173046),
+                            fontWeight: FontWeight.w600,
+                            fontSize: 13,
+                          ),
+                          children: [
+                            TextSpan(text: 'Phone Number'),
+                            TextSpan(text: ' ', style: TextStyle(fontSize: 13)),
+                            TextSpan(
+                              text: '*',
+                              style: TextStyle(
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       const SizedBox(height: 10),
@@ -215,12 +254,26 @@ class SignupView extends GetView<SignupController> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            "Location".tr,
-                            style: const TextStyle(
-                              color: Color(0xFF173046),
-                              fontWeight: FontWeight.w600,
-                              fontSize: 13,
+                          RichText(
+                            text: const TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: 'Location',
+                                  style: TextStyle(
+                                    color: Color(0xFF173046),
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 13,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: ' *',
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                           Obx(
@@ -297,7 +350,10 @@ class SignupView extends GetView<SignupController> {
                                     decoration: BoxDecoration(
                                       color: Colors.grey[50],
                                       border: Border.all(
-                                        color: Colors.grey[300]!,
+                                        color: controller.locationError.value.isNotEmpty
+                                            ? Colors.red
+                                            : Colors.grey[300]!,
+                                        width: controller.locationError.value.isNotEmpty ? 1.5 : 1,
                                       ),
                                       borderRadius: BorderRadius.circular(10),
                                     ),
@@ -331,41 +387,33 @@ class SignupView extends GetView<SignupController> {
                                     ),
                                   ),
                                   const SizedBox(height: 6),
-                                  DropdownButtonFormField<String>(
-                                    value: controller.district.isEmpty
-                                        ? null
-                                        : controller.district.value,
-                                    isExpanded: true,
-                                    isDense: true,
-                                    decoration: InputDecoration(
-                                      filled: true,
-                                      fillColor: Colors.grey[50],
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(10),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 12,
+                                      vertical: 12,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey[50],
+                                      border: Border.all(
+                                        color: controller.locationError.value.isNotEmpty
+                                            ? Colors.red
+                                            : Colors.grey[300]!,
+                                        width: controller.locationError.value.isNotEmpty ? 1.5 : 1,
                                       ),
-                                      contentPadding:
-                                          const EdgeInsets.symmetric(
-                                        horizontal: 10,
-                                        vertical: 6,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Text(
+                                      controller.district.isEmpty
+                                          ? "Not detected".tr
+                                          : controller.district.value,
+                                      style: TextStyle(
+                                        color: controller.district.isEmpty
+                                            ? Colors.grey[600]
+                                            : const Color(0xFF173046),
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w500,
                                       ),
                                     ),
-                                    items: controller.allDistricts
-                                        .map((dist) => DropdownMenuItem(
-                                              value: dist,
-                                              child: Text(
-                                                dist,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: const TextStyle(
-                                                  fontSize: 12,
-                                                ),
-                                              ),
-                                            ))
-                                        .toList(),
-                                    onChanged: (value) {
-                                      if (value != null) {
-                                        controller.updateDistrict(value);
-                                      }
-                                    },
                                   ),
                                 ],
                               ),
@@ -373,15 +421,40 @@ class SignupView extends GetView<SignupController> {
                           ],
                         ),
                       ),
+                      if (controller.locationError.value.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8),
+                          child: Text(
+                            controller.locationError.value,
+                            style: const TextStyle(
+                              color: Colors.red,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
                       const SizedBox(height: 20),
 
                       
-                      Text(
-                        "Password".tr,
-                        style: const TextStyle(
-                          color: Color(0xFF173046),
-                          fontWeight: FontWeight.w600,
-                          fontSize: 13,
+                      RichText(
+                        text: const TextSpan(
+                          style: TextStyle(
+                            color: Color(0xFF173046),
+                            fontWeight: FontWeight.w600,
+                            fontSize: 13,
+                          ),
+                          children: [
+                            TextSpan(text: 'Password'),
+                            TextSpan(text: ' ', style: TextStyle(fontSize: 13)),
+                            TextSpan(
+                              text: '*',
+                              style: TextStyle(
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       const SizedBox(height: 10),
@@ -403,12 +476,25 @@ class SignupView extends GetView<SignupController> {
                       const SizedBox(height: 20),
 
                       
-                      Text(
-                        "Confirm Password".tr,
-                        style: const TextStyle(
-                          color: Color(0xFF173046),
-                          fontWeight: FontWeight.w600,
-                          fontSize: 13,
+                      RichText(
+                        text: const TextSpan(
+                          style: TextStyle(
+                            color: Color(0xFF173046),
+                            fontWeight: FontWeight.w600,
+                            fontSize: 13,
+                          ),
+                          children: [
+                            TextSpan(text: 'Confirm Password'),
+                            TextSpan(text: ' ', style: TextStyle(fontSize: 13)),
+                            TextSpan(
+                              text: '*',
+                              style: TextStyle(
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       const SizedBox(height: 10),

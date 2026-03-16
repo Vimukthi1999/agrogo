@@ -31,6 +31,7 @@ class SignupController extends GetxController {
   RxString district = ''.obs;
   RxDouble latitude = 0.0.obs;
   RxDouble longitude = 0.0.obs;
+  RxBool isDistrictAutoDetected = false.obs;
 
 
   RxString nameError = ''.obs;
@@ -72,6 +73,31 @@ class SignupController extends GetxController {
     'Batticaloa', 'Ampara', 'Trincomalee', 'Kurunegala', 'Puttalam',
     'Anuradhapura', 'Polonnaruwa', 'Badulla', 'Monaragala', 'Ratnapura', 'Kegalle',
   ];
+
+  final Map<String, Map<String, double>> districtBounds = {
+    'Colombo': {'minLat': 6.7, 'maxLat': 7.0, 'minLng': 79.8, 'maxLng': 80.2},
+    'Gampaha': {'minLat': 6.9, 'maxLat': 7.3, 'minLng': 80.0, 'maxLng': 80.4},
+    'Kalutara': {'minLat': 6.4, 'maxLat': 6.8, 'minLng': 80.1, 'maxLng': 80.5},
+    'Matara': {'minLat': 5.8, 'maxLat': 6.3, 'minLng': 80.5, 'maxLng': 81.0},
+    'Galle': {'minLat': 6.0, 'maxLat': 6.5, 'minLng': 80.1, 'maxLng': 80.6},
+    'Hambantota': {'minLat': 6.0, 'maxLat': 6.5, 'minLng': 80.7, 'maxLng': 81.5},
+    'Kandy': {'minLat': 6.8, 'maxLat': 7.3, 'minLng': 80.4, 'maxLng': 81.0},
+    'Matale': {'minLat': 7.3, 'maxLat': 7.7, 'minLng': 80.6, 'maxLng': 81.2},
+    'Nuwara Eliya': {'minLat': 6.8, 'maxLat': 7.2, 'minLng': 80.8, 'maxLng': 81.3},
+    'Jaffna': {'minLat': 9.5, 'maxLat': 9.8, 'minLng': 80.0, 'maxLng': 80.4},
+    'Mullaitivu': {'minLat': 8.5, 'maxLat': 9.0, 'minLng': 81.3, 'maxLng': 81.9},
+    'Batticaloa': {'minLat': 7.5, 'maxLat': 8.2, 'minLng': 81.5, 'maxLng': 81.9},
+    'Ampara': {'minLat': 7.0, 'maxLat': 7.8, 'minLng': 81.5, 'maxLng': 82.0},
+    'Trincomalee': {'minLat': 8.3, 'maxLat': 9.0, 'minLng': 81.1, 'maxLng': 81.7},
+    'Kurunegala': {'minLat': 6.8, 'maxLat': 7.5, 'minLng': 80.2, 'maxLng': 80.7},
+    'Puttalam': {'minLat': 7.6, 'maxLat': 8.3, 'minLng': 79.7, 'maxLng': 80.2},
+    'Anuradhapura': {'minLat': 7.9, 'maxLat': 8.7, 'minLng': 80.3, 'maxLng': 80.9},
+    'Polonnaruwa': {'minLat': 7.9, 'maxLat': 8.4, 'minLng': 81.0, 'maxLng': 81.6},
+    'Badulla': {'minLat': 6.9, 'maxLat': 7.4, 'minLng': 81.0, 'maxLng': 81.6},
+    'Monaragala': {'minLat': 6.6, 'maxLat': 7.2, 'minLng': 81.2, 'maxLng': 81.8},
+    'Ratnapura': {'minLat': 6.6, 'maxLat': 7.1, 'minLng': 80.4, 'maxLng': 80.9},
+    'Kegalle': {'minLat': 7.1, 'maxLat': 7.6, 'minLng': 80.4, 'maxLng': 80.9},
+  };
 
   @override
   void onInit() {
@@ -144,6 +170,11 @@ class SignupController extends GetxController {
       isValid = false;
     }
 
+    if (province.isEmpty || district.isEmpty) {
+      locationError.value = 'Please detect your location';
+      isValid = false;
+    }
+
     if (password.isEmpty) {
       passwordError.value = 'Password is required';
       isValid = false;
@@ -187,6 +218,7 @@ class SignupController extends GetxController {
       longitude.value = position.longitude;
 
       _mapLocationToDistrict(position.latitude, position.longitude);
+      isDistrictAutoDetected.value = true;
 
       Get.snackbar('Success', 'Location detected successfully',
           snackPosition: SnackPosition.BOTTOM);
@@ -199,24 +231,31 @@ class SignupController extends GetxController {
   }
 
   void _mapLocationToDistrict(double lat, double lng) {
-    if (lat >= 5.8 && lat <= 6.8 && lng >= 80.2 && lng <= 80.8) {
-      district.value = 'Matara';
-      province.value = districtToProvince['Matara'] ?? '';
-    } else if (lat >= 6.7 && lat <= 7.1 && lng >= 79.7 && lng <= 80.0) {
-      district.value = 'Colombo';
-      province.value = districtToProvince['Colombo'] ?? '';
-    } else if (lat >= 6.8 && lat <= 7.4 && lng >= 80.4 && lng <= 81.0) {
-      district.value = 'Kandy';
-      province.value = districtToProvince['Kandy'] ?? '';
-    } else {
-      district.value = 'Colombo';
-      province.value = 'Western';
+    // Search through all districts to find matching boundaries
+    for (var entry in districtBounds.entries) {
+      String districtName = entry.key;
+      Map<String, double> bounds = entry.value;
+
+      if (lat >= bounds['minLat']! &&
+          lat <= bounds['maxLat']! &&
+          lng >= bounds['minLng']! &&
+          lng <= bounds['maxLng']!) {
+        district.value = districtName;
+        province.value = districtToProvince[districtName] ?? '';
+        return;
+      }
     }
+
+    // Default to Colombo if no district is found
+    district.value = 'Colombo';
+    province.value = 'Western';
   }
 
   void updateDistrict(String newDistrict) {
-    district.value = newDistrict;
-    province.value = districtToProvince[newDistrict] ?? '';
+    if (!isDistrictAutoDetected.value) {
+      district.value = newDistrict;
+      province.value = districtToProvince[newDistrict] ?? '';
+    }
   }
 
 

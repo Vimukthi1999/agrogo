@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import '../controllers/settings_controller.dart';
+import '../../createad/views/location_picker_view.dart';
 
 class EditProfile extends GetView<SettingsController> {
   const EditProfile({super.key});
@@ -154,7 +155,7 @@ class EditProfile extends GetView<SettingsController> {
                       Obx(() => GestureDetector(
                             onTap: controller.isGettingLocation.value
                                 ? null
-                                : () => controller.getCurrentLocation(),
+                                : () => _showLocationOptionsDialog(context),
                             child: Container(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 12, vertical: 6),
@@ -334,6 +335,114 @@ class EditProfile extends GetView<SettingsController> {
               },
             ),
             const SizedBox(height: 10),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showLocationOptionsDialog(BuildContext context) {
+    Get.bottomSheet(
+      Container(
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          ),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 8, bottom: 20),
+              child: Text(
+                "Select Location Method".tr,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF1E7044),
+                ),
+              ),
+            ),
+            _buildLocationOption(
+              icon: Icons.my_location,
+              title: "Detect Current Location".tr,
+              subtitle: "Get your current GPS position".tr,
+              onTap: () async {
+                Get.back();
+                await controller.getCurrentLocation();
+              },
+            ),
+            const SizedBox(height: 12),
+            _buildLocationOption(
+              icon: Icons.map_outlined,
+              title: "Select from Map".tr,
+              subtitle: "Pick a location manually on map".tr,
+              onTap: () {
+                Get.back();
+                Get.to(() => const LocationPickerView(isFromSettings: true));
+              },
+            ),
+            const SizedBox(height: 20),
+          ],
+        ),
+      ),
+      isScrollControlled: true,
+    );
+  }
+
+  Widget _buildLocationOption({
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey[200]!),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: const Color(0xFF1E7044).withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon, color: const Color(0xFF1E7044)),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    subtitle,
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Icon(Icons.chevron_right, color: Colors.grey[400]),
           ],
         ),
       ),

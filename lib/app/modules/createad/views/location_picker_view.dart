@@ -3,22 +3,31 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:get/get.dart';
 import 'package:latlong2/latlong.dart';
 import '../controllers/createad_controller.dart';
+import '../../settings/controllers/settings_controller.dart';
 
 class LocationPickerView extends StatefulWidget {
-  const LocationPickerView({super.key});
+  final bool isFromSettings;
+  const LocationPickerView({super.key, this.isFromSettings = false});
 
   @override
   State<LocationPickerView> createState() => _LocationPickerViewState();
 }
 
 class _LocationPickerViewState extends State<LocationPickerView> {
-  final controller = Get.find<CreateadController>();
+  late dynamic controller;
   LatLng? _pickedLocation;
   final MapController _mapController = MapController();
   
   @override
   void initState() {
     super.initState();
+    
+    if (widget.isFromSettings) {
+      controller = Get.find<SettingsController>();
+    } else {
+      controller = Get.find<CreateadController>();
+    }
+
     // Default to Colombo or current detected location
     if (controller.latitude.value != 0.0 && controller.longitude.value != 0.0) {
       _pickedLocation = LatLng(controller.latitude.value, controller.longitude.value);

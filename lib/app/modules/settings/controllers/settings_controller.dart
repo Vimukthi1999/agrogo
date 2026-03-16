@@ -163,6 +163,19 @@ class SettingsController extends GetxController {
     }
   }
 
+  bool updateFromMap(LatLng pickedLocation) {
+    try {
+      log('Updating from map: ${pickedLocation.latitude}, ${pickedLocation.longitude}');
+      latitude.value = pickedLocation.latitude;
+      longitude.value = pickedLocation.longitude;
+      _mapLocationToDistrict(latitude.value, longitude.value);
+      return true;
+    } catch (e) {
+      log('Error updating from map: $e');
+      return false;
+    }
+  }
+
   void _mapLocationToDistrict(double lat, double lng) {
     String closestDistrict = 'Colombo';
     double minDistance = double.infinity;

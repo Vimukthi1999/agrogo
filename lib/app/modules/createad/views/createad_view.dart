@@ -859,8 +859,10 @@ class CreateadView extends GetView<CreateadController> {
               title: "Select from Map".tr,
               subtitle: "Pick a location manually on map".tr,
               onTap: () {
-                Get.back();
-                Get.to(() => const LocationPickerView());
+                Get.back(); // Closes the bottom sheet first
+                Future.delayed(const Duration(milliseconds: 100), () {
+                  Get.to(() => const LocationPickerView(), transition: Transition.rightToLeft);
+                });
               },
             ),
             const SizedBox(height: 20),

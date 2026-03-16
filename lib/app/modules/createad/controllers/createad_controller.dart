@@ -278,7 +278,6 @@ class CreateadController extends GetxController {
       longitude.value = pickedLocation.longitude;
       _mapLocationToDistrict(latitude.value, longitude.value);
       isDistrictAutoDetected.value = true;
-      Get.snackbar('Success', 'Location selected from map');
       return true;
     } catch (e) {
       log('Error updating from map: $e');

@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:get/get.dart';
@@ -39,13 +38,9 @@ class _LocationPickerViewState extends State<LocationPickerView> {
             IconButton(
               icon: const Icon(Icons.check),
               onPressed: () {
-                if (_pickedLocation != null) {
-                  log('Confirming location from AppBar: ${_pickedLocation!.latitude}, ${_pickedLocation!.longitude}');
-                  final success = controller.updateFromMap(_pickedLocation!);
-                  if (success) {
-                    Get.back(); // Returns to Create Ad screen
-                  }
-                }
+                print('DEBUG: Top icon confirmation pressed');
+                controller.updateFromMap(_pickedLocation!);
+                Get.back(); // Returns to Create Ad screen
               },
             ),
         ],
@@ -89,11 +84,9 @@ class _LocationPickerViewState extends State<LocationPickerView> {
         onPressed: _pickedLocation == null
             ? null
             : () {
-                log('Confirming location from FAB: ${_pickedLocation!.latitude}, ${_pickedLocation!.longitude}');
-                final success = controller.updateFromMap(_pickedLocation!);
-                if (success) {
-                  Get.back(); // Returns to Create Ad screen
-                }
+                print('DEBUG: FAB confirmation pressed');
+                controller.updateFromMap(_pickedLocation!);
+                Get.back(); // Returns to Create Ad screen
               },
         label: Text('Confirm Location'.tr),
         icon: const Icon(Icons.location_on),

@@ -36,11 +36,12 @@ dependencies:
   cupertino_icons: ^1.0.8
   get: ^4.7.2
   lottie: ^3.1.0
-  firebase_core: ^2.28.0
-  firebase_auth: ^4.20.0
-  cloud_firestore: ^4.15.3
+  firebase_core: ^3.10.0
+  firebase_auth: ^5.4.4
+  cloud_firestore: ^5.6.2
   image_picker: ^1.0.0
-  geolocator: ^10.0.0
+  geolocator: ^11.0.0
+  google_maps_flutter: ^2.14.2
 
 dev_dependencies:
   flutter_test:

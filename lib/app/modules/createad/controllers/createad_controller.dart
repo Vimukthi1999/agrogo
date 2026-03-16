@@ -1,9 +1,11 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../models/category_model.dart';
@@ -98,45 +100,25 @@ class CreateadController extends GetxController {
     'Matale': {'minLat': 7.3, 'maxLat': 7.7, 'minLng': 80.6, 'maxLng': 81.2},
     'Nuwara Eliya': {
       'minLat': 6.8,
-      'maxLat': 7.2,
-      'minLng': 80.8,
-      'maxLng': 81.3,
+      'maxLat': 7.3,
+      'minLng': 80.5,
+      'maxLng': 81.1,
     },
-    'Jaffna': {'minLat': 9.5, 'maxLat': 9.8, 'minLng': 80.0, 'maxLng': 80.4},
-    'Mullaitivu': {
-      'minLat': 8.5,
-      'maxLat': 9.0,
-      'minLng': 81.3,
-      'maxLng': 81.9,
-    },
-    'Batticaloa': {
-      'minLat': 7.5,
-      'maxLat': 8.2,
-      'minLng': 81.5,
-      'maxLng': 81.9,
-    },
-    'Ampara': {'minLat': 7.0, 'maxLat': 7.8, 'minLng': 81.5, 'maxLng': 82.0},
-    'Trincomalee': {
-      'minLat': 8.3,
-      'maxLat': 9.0,
-      'minLng': 81.1,
-      'maxLng': 81.7,
-    },
-    'Kurunegala': {
-      'minLat': 6.8,
-      'maxLat': 7.5,
-      'minLng': 80.2,
-      'maxLng': 80.7,
-    },
-    'Puttalam': {'minLat': 7.6, 'maxLat': 8.3, 'minLng': 79.7, 'maxLng': 80.2},
+    'Jaffna': {'minLat': 9.5, 'maxLat': 9.8, 'minLng': 79.8, 'maxLng': 80.5},
+    'Mullaitivu': {'minLat': 9.0, 'maxLat': 9.5, 'minLng': 80.3, 'maxLng': 81.0},
+    'Batticaloa': {'minLat': 7.4, 'maxLat': 8.0, 'minLng': 81.4, 'maxLng': 81.8},
+    'Ampara': {'minLat': 6.8, 'maxLat': 7.6, 'minLng': 81.4, 'maxLng': 81.9},
+    'Trincomalee': {'minLat': 8.3, 'maxLat': 8.9, 'minLng': 80.9, 'maxLng': 81.4},
+    'Kurunegala': {'minLat': 7.2, 'maxLat': 8.1, 'minLng': 79.8, 'maxLng': 80.6},
+    'Puttalam': {'minLat': 7.5, 'maxLat': 8.5, 'minLng': 79.7, 'maxLng': 80.1},
     'Anuradhapura': {
-      'minLat': 7.9,
+      'minLat': 8.0,
       'maxLat': 8.7,
-      'minLng': 80.3,
-      'maxLng': 80.9,
+      'minLng': 80.0,
+      'maxLng': 80.8,
     },
     'Polonnaruwa': {
-      'minLat': 7.9,
+      'minLat': 7.7,
       'maxLat': 8.4,
       'minLng': 81.0,
       'maxLng': 81.6,
@@ -198,6 +180,49 @@ class CreateadController extends GetxController {
     super.onInit();
   }
 
+  Future<void> useSavedLocation() async {
+    try {
+      isGettingLocation.value = true;
+      locationError.value = '';
+
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        locationError.value = 'User not logged in';
+        return;
+      }
+
+      final doc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .get();
+
+      if (doc.exists) {
+        final data = doc.data();
+        if (data != null && data.containsKey('location')) {
+          final loc = data['location'];
+          latitude.value = loc['latitude'];
+          longitude.value = loc['longitude'];
+          district.value = data['district'] ?? '';
+          province.value = data['province'] ?? '';
+
+          if (district.isEmpty) {
+            _mapLocationToDistrict(latitude.value, longitude.value);
+          }
+
+          isDistrictAutoDetected.value = true;
+          Get.snackbar('Success', 'Saved location used');
+        } else {
+          locationError.value = 'No saved location found';
+        }
+      }
+    } catch (e) {
+      locationError.value = 'Failed to fetch saved location';
+      log('Saved location error: $e');
+    } finally {
+      isGettingLocation.value = false;
+    }
+  }
+
   Future<void> getCurrentLocation() async {
     try {
       isGettingLocation.value = true;
@@ -226,7 +251,7 @@ class CreateadController extends GetxController {
 
       Get.snackbar(
         'Success',
-        'Location detected successfully',
+        'Current location detected',
         snackPosition: SnackPosition.BOTTOM,
       );
     } catch (e) {
@@ -235,6 +260,14 @@ class CreateadController extends GetxController {
     } finally {
       isGettingLocation.value = false;
     }
+  }
+
+  void updateFromMap(LatLng pickedLocation) {
+    latitude.value = pickedLocation.latitude;
+    longitude.value = pickedLocation.longitude;
+    _mapLocationToDistrict(latitude.value, longitude.value);
+    isDistrictAutoDetected.value = true;
+    Get.snackbar('Success', 'Location selected from map');
   }
 
   void _mapLocationToDistrict(double lat, double lng) {

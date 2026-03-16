@@ -2,7 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:supabase_flutter/supabase_flutter.dart' as sb;
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -234,15 +234,19 @@ class SettingsController extends GetxController {
       if (user != null) {
         String? downloadUrl;
         
-        // Upload image if selected
+        // Upload image to Supabase if selected
         if (selectedProfileImage.value != null) {
-          final storageRef = FirebaseStorage.instance
-              .ref()
-              .child('profile_pictures')
-              .child('${user.uid}.jpg');
+          final fileName = '${user.uid}_${DateTime.now().millisecondsSinceEpoch}.jpg';
+          final path = 'profile_pictures/$fileName';
+          
+          await sb.Supabase.instance.client.storage
+              .from('images')
+              .upload(path, selectedProfileImage.value!);
 
-          await storageRef.putFile(selectedProfileImage.value!);
-          downloadUrl = await storageRef.getDownloadURL();
+          downloadUrl = sb.Supabase.instance.client.storage
+              .from('images')
+              .getPublicUrl(path);
+          
           profileImage.value = downloadUrl;
         }
 

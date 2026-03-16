@@ -1,7 +1,9 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:supabase_flutter/supabase_flutter.dart' as sb;
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -427,6 +429,48 @@ class CreateadController extends GetxController {
 
     try {
       isLoading.value = true;
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) return;
+
+      final List<String> imageUrls = [];
+
+      // Upload all selected images to Supabase
+      for (var xFile in selectedImages) {
+        final fileName = '${user.uid}_${DateTime.now().millisecondsSinceEpoch}_${selectedImages.indexOf(xFile)}.jpg';
+        final path = 'product_images/$fileName';
+        final file = File(xFile.path);
+
+        await sb.Supabase.instance.client.storage
+            .from('images')
+            .upload(path, file);
+
+        final downloadUrl = sb.Supabase.instance.client.storage
+            .from('images')
+            .getPublicUrl(path);
+        
+        imageUrls.add(downloadUrl);
+      }
+
+      log('Uploaded images: $imageUrls');
+
+      // Add to Firestore
+      await FirebaseFirestore.instance.collection('ads').add({
+        'userId': user.uid,
+        'title': titleController.text.trim(),
+        'description': descriptionController.text.trim(),
+        'quantity': double.parse(quantityController.text),
+        'price': double.parse(priceController.text),
+        'category': selectedCategory.value,
+        'images': imageUrls,
+        'location': {
+          'latitude': latitude.value,
+          'longitude': longitude.value,
+        },
+        'district': district.value,
+        'province': province.value,
+        'createdAt': FieldValue.serverTimestamp(),
+        'status': 'pending',
+      });
 
       Get.snackbar('Success', 'Ad created successfully');
       clearForm();

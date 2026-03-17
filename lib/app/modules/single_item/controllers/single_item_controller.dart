@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../views/item_location_view.dart';
 
 class SingleItemController extends GetxController {
   late Map<String, dynamic> ad;
@@ -70,22 +71,32 @@ class SingleItemController extends GetxController {
     }
   }
 
-  Future<void> openLocationInMap() async {
-    final location = ad['location'] as Map<String, dynamic>?;
-    final double? lat = location?['latitude'] as double?;
-    final double? lng = location?['longitude'] as double?;
+  void openLocationInMap() {
+    debugPrint("DEBUG: Opening map for item: ${ad['title']}");
+    final location = ad['location'];
+    
+    double? lat;
+    double? lng;
+
+    if (location is Map) {
+      lat = (location['latitude'] as num?)?.toDouble();
+      lng = (location['longitude'] as num?)?.toDouble();
+    } else if (location is GeoPoint) {
+      lat = location.latitude;
+      lng = location.longitude;
+    }
+
+    debugPrint("DEBUG: Coordinates: $lat, $lng");
 
     if (lat != null && lng != null) {
-      final String googleMapsUrl = "https://www.google.com/maps/search/?api=1&query=$lat,$lng";
-      final Uri uri = Uri.parse(googleMapsUrl);
-      
-      if (await canLaunchUrl(uri)) {
-        await launchUrl(uri, mode: LaunchMode.externalApplication);
-      } else {
-        Get.snackbar("Error", "Could not open map.");
-      }
+      Get.to(() => ItemLocationView(ad: ad));
     } else {
-      Get.snackbar("Notice", "No location data available for this listing.");
+      debugPrint("DEBUG: Missing location data");
+      Get.snackbar(
+        "Notice", 
+        "No location data available for this listing.",
+        snackPosition: SnackPosition.BOTTOM,
+      );
     }
   }
 

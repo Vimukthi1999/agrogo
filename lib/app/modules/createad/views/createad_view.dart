@@ -443,7 +443,7 @@ class CreateadView extends GetView<CreateadController> {
                 () => Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (controller.selectedImages.isEmpty)
+                    if (controller.selectedImages.isEmpty && controller.existingImageUrls.isEmpty)
                       GestureDetector(
                         onTap: () => _showImageSourceDialog(context),
                         child: Container(

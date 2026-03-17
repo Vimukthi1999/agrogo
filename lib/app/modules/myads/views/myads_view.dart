@@ -252,13 +252,26 @@ class MyadsView extends GetView<MyadsController> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        "Rs. ${ad['price']}",
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF1E7044),
-                        ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Rs. ${ad['price']} / kg",
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF1E7044),
+                            ),
+                          ),
+                          Text(
+                            "Qty: ${ad['quantity']} kg",
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey[600],
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
                       ),
                       Container(
                         padding: const EdgeInsets.symmetric(
@@ -290,6 +303,8 @@ class MyadsView extends GetView<MyadsController> {
                 controller.editAd(doc);
               } else if (value == 'delete') {
                 controller.deleteAd(adId);
+              } else if (value == 'status') {
+                controller.toggleAdStatus(adId, ad['status'] ?? 'Active');
               }
             },
             itemBuilder: (context) => [
@@ -300,6 +315,25 @@ class MyadsView extends GetView<MyadsController> {
                     Icon(Icons.edit, size: 18),
                     SizedBox(width: 8),
                     Text('Edit'),
+                  ],
+                ),
+              ),
+              PopupMenuItem(
+                value: 'status',
+                child: Row(
+                  children: [
+                    Icon(
+                      (ad['status'] ?? 'Active').toString().toLowerCase() == 'active'
+                          ? Icons.visibility_off
+                          : Icons.visibility,
+                      size: 18,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      (ad['status'] ?? 'Active').toString().toLowerCase() == 'active'
+                          ? 'Make Inactive'
+                          : 'Make Active',
+                    ),
                   ],
                 ),
               ),
@@ -326,6 +360,8 @@ class MyadsView extends GetView<MyadsController> {
     switch (status?.toLowerCase()) {
       case 'active':
         return const Color(0xFF1E7044);
+      case 'inactive':
+        return Colors.grey[600]!;
       case 'pending':
         return Colors.orange;
       case 'sold':

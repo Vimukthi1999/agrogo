@@ -66,6 +66,19 @@ class MyadsController extends GetxController {
     );
   }
 
+  Future<void> toggleAdStatus(String adId, String currentStatus) async {
+    final newStatus = currentStatus.toLowerCase() == 'active' ? 'inactive' : 'active';
+    try {
+      await _firestore.collection('listings').doc(adId).update({
+        'status': newStatus,
+        'updatedAt': FieldValue.serverTimestamp(),
+      });
+      Get.snackbar('Success', 'Ad status updated to ${newStatus.toUpperCase()}');
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to update status: $e');
+    }
+  }
+
   @override
   void onReady() {
     super.onReady();

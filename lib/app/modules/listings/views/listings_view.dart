@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../routes/app_pages.dart';
 import '../controllers/listings_controller.dart';
 import '../../common/item_card.dart';
 
@@ -57,8 +58,9 @@ class ListingsView extends GetView<ListingsController> {
                 imageUrl: imageUrl,
                 rating: 4.5, // Mock for now
                 reviewCount: 0, // Mock for now
+                data: ad,
                 onTap: () {
-                  // TODO: Navigate to Ad Details
+                  Get.toNamed(Routes.SINGLE_ITEM, arguments: ad);
                 },
               );
             },

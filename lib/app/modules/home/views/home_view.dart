@@ -397,8 +397,9 @@ class HomeView extends GetView<HomeController> {
                             imageUrl: imageUrl,
                             rating: 4.5, // Default for now
                             reviewCount: 0, // Default for now
+                            data: ad,
                             onTap: () {
-                              // TODO: Navigate to Ad Details
+                              Get.toNamed(Routes.SINGLE_ITEM, arguments: ad);
                             },
                           );
                         },

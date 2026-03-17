@@ -7,6 +7,7 @@ class ProductCard extends StatelessWidget {
   final String imageUrl;
   final double rating;
   final int reviewCount;
+  final Map<String, dynamic>? data;
   final VoidCallback? onTap;
 
   const ProductCard({
@@ -17,6 +18,7 @@ class ProductCard extends StatelessWidget {
     required this.imageUrl,
     required this.rating,
     required this.reviewCount,
+    this.data,
     this.onTap,
   }) : super(key: key);
 

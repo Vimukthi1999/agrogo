@@ -1,23 +1,16 @@
 import 'package:get/get.dart';
 
 class SingleItemController extends GetxController {
-  //TODO: Implement SingleItemController
+  late Map<String, dynamic> ad;
+  final currentImageIndex = 0.obs;
 
-  final count = 0.obs;
   @override
   void onInit() {
     super.onInit();
+    ad = Get.arguments as Map<String, dynamic>? ?? {};
   }
 
-  @override
-  void onReady() {
-    super.onReady();
+  void updateImageIndex(int index) {
+    currentImageIndex.value = index;
   }
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
-
-  void increment() => count.value++;
 }

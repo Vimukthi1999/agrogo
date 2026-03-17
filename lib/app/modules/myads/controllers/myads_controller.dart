@@ -8,6 +8,19 @@ import '../../../routes/app_pages.dart';
 class MyadsController extends GetxController {
   final userAds = <DocumentSnapshot>[].obs;
   final isLoading = false.obs;
+  final selectedStatus = 'All'.obs;
+
+  List<DocumentSnapshot> get filteredAds {
+    if (selectedStatus.value == 'All') {
+      return userAds;
+    }
+    return userAds.where((doc) {
+      final data = doc.data() as Map<String, dynamic>?;
+      final status = data?['status'] ?? 'active';
+      return status.toString().toLowerCase() == selectedStatus.value.toLowerCase();
+    }).toList();
+  }
+
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   StreamSubscription? _adsSubscription;

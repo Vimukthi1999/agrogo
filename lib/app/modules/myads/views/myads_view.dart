@@ -94,32 +94,41 @@ class MyadsView extends GetView<MyadsController> {
                           color: Color(0xFF1E7044),
                         ),
                       ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 6,
-                        ),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey[300]!),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.filter_list,
-                              size: 18,
-                              color: Colors.grey[600],
-                            ),
-                            const SizedBox(width: 6),
-                            Text(
-                              "Filter".tr,
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.grey[600],
-                                fontWeight: FontWeight.w600,
+                      PopupMenuButton<String>(
+                        onSelected: (value) => controller.selectedStatus.value = value,
+                        itemBuilder: (context) => [
+                          const PopupMenuItem(value: 'All', child: Text('All Listings')),
+                          const PopupMenuItem(value: 'Active', child: Text('Active Only')),
+                          const PopupMenuItem(value: 'Inactive', child: Text('Inactive Only')),
+                        ],
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 6,
+                          ),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: const Color(0xFF1E7044).withOpacity(0.3)),
+                            borderRadius: BorderRadius.circular(8),
+                            color: const Color(0xFF1E7044).withOpacity(0.05),
+                          ),
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.filter_list,
+                                size: 18,
+                                color: Color(0xFF1E7044),
                               ),
-                            ),
-                          ],
+                              const SizedBox(width: 6),
+                              Obx(() => Text(
+                                controller.selectedStatus.value.tr,
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  color: Color(0xFF1E7044),
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              )),
+                            ],
+                          ),
                         ),
                       ),
                     ],
@@ -127,14 +136,16 @@ class MyadsView extends GetView<MyadsController> {
                   const SizedBox(height: 20),
 
                   Obx(
-                    () => controller.userAds.isEmpty
-                        ? _buildEmptyState()
+                    () => controller.filteredAds.isEmpty
+                        ? _buildEmptyState(
+                            isFilter: controller.selectedStatus.value != 'All',
+                          )
                         : ListView.builder(
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
-                            itemCount: controller.userAds.length,
+                            itemCount: controller.filteredAds.length,
                             itemBuilder: (context, index) {
-                              final ad = controller.userAds[index];
+                              final ad = controller.filteredAds[index];
                               return _buildAdCard(ad);
                             },
                           ),
@@ -148,7 +159,7 @@ class MyadsView extends GetView<MyadsController> {
     );
   }
 
-  Widget _buildEmptyState() {
+  Widget _buildEmptyState({bool isFilter = false}) {
     return Center(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 60),
@@ -162,14 +173,14 @@ class MyadsView extends GetView<MyadsController> {
                 shape: BoxShape.circle,
               ),
               child: Icon(
-                Icons.post_add_outlined,
+                isFilter ? Icons.search_off : Icons.post_add_outlined,
                 size: 64,
                 color: const Color(0xFF1E7044).withOpacity(0.5),
               ),
             ),
             const SizedBox(height: 20),
             Text(
-              "No Ads Yet".tr,
+              isFilter ? "No Matches Found".tr : "No Ads Yet".tr,
               style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
@@ -178,7 +189,9 @@ class MyadsView extends GetView<MyadsController> {
             ),
             const SizedBox(height: 10),
             Text(
-              "Create your first ad to get started".tr,
+              isFilter 
+                  ? "Try changing your filter settings".tr 
+                  : "Create your first ad to get started".tr,
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 14, color: Colors.grey[600]),
             ),

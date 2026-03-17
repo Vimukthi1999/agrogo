@@ -204,27 +204,6 @@ class SingleItemView extends GetView<SingleItemController> {
                         ],
                       ),
                       
-                      const SizedBox(height: 24),
-                      
-                      // Map Location Button
-                      TextButton.icon(
-                        onPressed: () => controller.openLocationInMap(),
-                        icon: const Icon(Icons.location_on_outlined, color: Color(0xFF1E7044)),
-                        label: const Text(
-                          "Check Item Location on Map",
-                          style: TextStyle(
-                            color: Color(0xFF1E7044),
-                            fontWeight: FontWeight.bold,
-                            decoration: TextDecoration.underline,
-                          ),
-                        ),
-                        style: TextButton.styleFrom(
-                          backgroundColor: const Color(0xFF1E7044).withOpacity(0.05),
-                          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                        ),
-                      ),
-
                       const Padding(
                         padding: EdgeInsets.symmetric(vertical: 24),
                         child: Divider(height: 1),
@@ -296,7 +275,7 @@ class SingleItemView extends GetView<SingleItemController> {
                         ),
                       ),
                       
-                      const SizedBox(height: 100), // Space for bottom bar
+                      const SizedBox(height: 120), // Extra space for bottom bar
                     ],
                   ),
                 ),
@@ -310,7 +289,7 @@ class SingleItemView extends GetView<SingleItemController> {
             left: 0,
             right: 0,
             child: Container(
-              padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
+              padding: const EdgeInsets.fromLTRB(24, 16, 24, 16), // Adjusted bottom padding
               decoration: BoxDecoration(
                 color: Colors.white,
                 boxShadow: [
@@ -323,6 +302,7 @@ class SingleItemView extends GetView<SingleItemController> {
               ),
               child: Row(
                 children: [
+                   // Chat Button
                   Container(
                     decoration: BoxDecoration(
                       color: const Color(0xFF1E7044).withOpacity(0.1),
@@ -330,13 +310,35 @@ class SingleItemView extends GetView<SingleItemController> {
                     ),
                     child: IconButton(
                       icon: const Icon(Icons.chat_bubble_outline_rounded, color: Color(0xFF1E7044)),
-                      onPressed: () {},
+                      onPressed: () {
+                        // TODO: Navigate to Chat
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  
+                  // Location Button
+                  Container(
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF1E7044).withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: IconButton(
+                      icon: const Icon(Icons.location_on_outlined, color: Color(0xFF1E7044)),
+                      onPressed: () => controller.openLocationInMap(),
                     ),
                   ),
                   const SizedBox(width: 16),
+                  
+                  // Call Button
                   Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {},
+                    child: ElevatedButton.icon(
+                      onPressed: () => controller.makePhoneCall(),
+                      icon: const Icon(Icons.phone_in_talk_rounded, size: 20),
+                      label: const Text(
+                        "Call Seller",
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                      ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF1E7044),
                         foregroundColor: Colors.white,
@@ -345,10 +347,6 @@ class SingleItemView extends GetView<SingleItemController> {
                           borderRadius: BorderRadius.circular(15),
                         ),
                         elevation: 0,
-                      ),
-                      child: const Text(
-                        "Contact Seller Now",
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                       ),
                     ),
                   ),

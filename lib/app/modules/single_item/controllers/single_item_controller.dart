@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -6,6 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 class SingleItemController extends GetxController {
   late Map<String, dynamic> ad;
   final currentImageIndex = 0.obs;
+  final sellerPhone = "".obs;
   late PageController pageController;
   Timer? _timer;
 
@@ -15,6 +17,21 @@ class SingleItemController extends GetxController {
     ad = Get.arguments as Map<String, dynamic>? ?? {};
     pageController = PageController();
     _startImageSlider();
+    _fetchSellerPhone();
+  }
+
+  Future<void> _fetchSellerPhone() async {
+    final sellerId = ad['sellerId'];
+    if (sellerId != null) {
+      try {
+        final doc = await FirebaseFirestore.instance.collection('users').doc(sellerId).get();
+        if (doc.exists) {
+          sellerPhone.value = doc.data()?['phone'] ?? "";
+        }
+      } catch (e) {
+        debugPrint("Error fetching seller phone: $e");
+      }
+    }
   }
 
   void _startImageSlider() {
@@ -35,6 +52,22 @@ class SingleItemController extends GetxController {
 
   void updateImageIndex(int index) {
     currentImageIndex.value = index;
+  }
+
+  Future<void> makePhoneCall() async {
+    if (sellerPhone.value.isNotEmpty) {
+      final Uri launchUri = Uri(
+        scheme: 'tel',
+        path: sellerPhone.value,
+      );
+      if (await canLaunchUrl(launchUri)) {
+        await launchUrl(launchUri);
+      } else {
+        Get.snackbar("Error", "Could not initiate phone call.");
+      }
+    } else {
+      Get.snackbar("Notice", "Seller phone number not available.");
+    }
   }
 
   Future<void> openLocationInMap() async {

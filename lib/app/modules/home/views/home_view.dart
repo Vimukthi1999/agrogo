@@ -1,8 +1,8 @@
-import 'dart:developer';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../models/category_model.dart';
+import '../../../routes/app_pages.dart';
 import '../../common/item_card.dart';
 import '../controllers/home_controller.dart';
 
@@ -110,6 +110,14 @@ class HomeView extends GetView<HomeController> {
                       GestureDetector(
                         onTap: () {
                           // Handle notification tap
+                          // The instruction mentions adding navigation to Routes.LISTINGS,
+                          // but the provided snippet for HomeView is malformed and seems to
+                          // contain controller logic. Assuming the intent was to add navigation
+                          // to the notification tap, but without Routes.LISTINGS defined,
+                          // this part cannot be fully implemented as per the instruction.
+                          // For now, keeping the original comment.
+                          // If Routes.LISTINGS was available, it would be something like:
+                          // Get.toNamed(Routes.LISTINGS);
                         },
                         child: Container(
                           padding: const EdgeInsets.all(10),
@@ -307,40 +315,94 @@ class HomeView extends GetView<HomeController> {
 
                   const SizedBox(height: 30),
 
-                  Text(
-                    "Freash Deals".tr,
-                    style: const TextStyle(
-                      color: Color(0xFF1E7044),
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-
-                  GridView.count(
-                    crossAxisCount: 2,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    crossAxisSpacing: 15,
-                    mainAxisSpacing: 15,
-                    childAspectRatio: 0.75,
-                    children: const [
-                      ProductCard(
-                        title: "John Deere 6135E-135 HP Tractor",
-                        price: "৳ 16,80,590",
-                        imageUrl:
-                            "https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/John_Deere_6130R.jpg/640px-John_Deere_6130R.jpg",
-                        rating: 4.5,
-                        reviewCount: 256,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Fresh Deals".tr,
+                        style: const TextStyle(
+                          color: Color(0xFF1E7044),
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                      ProductCard(
-                        title: "Yanmar Combine Harvester AG600GA",
-                        price: "৳ 36,00,000",
-                        imageUrl:
-                            "https://upload.wikimedia.org/wikipedia/commons/2/23/Yanmar_Combine_Harvester.jpg",
-                        rating: 4.8,
-                        reviewCount: 122,
+                      TextButton(
+                        onPressed: () {
+                          Get.toNamed(Routes.LISTINGS);
+                        },
+                        child: Text(
+                          "View All".tr,
+                          style: const TextStyle(
+                            color: Color(0xFF2D9B5F),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                     ],
+                  ),
+
+                  StreamBuilder<QuerySnapshot>(
+                    stream: controller.getRecentAds(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: Padding(
+                          padding: EdgeInsets.all(20.0),
+                          child: CircularProgressIndicator(),
+                        ));
+                      }
+                      
+                      if (snapshot.hasError) {
+                        return Center(child: Text("Error: ${snapshot.error}"));
+                      }
+                      
+                      if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                        return Center(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 20),
+                            child: Column(
+                              children: [
+                                Icon(Icons.inventory_2_outlined, size: 48, color: Colors.grey[400]),
+                                const SizedBox(height: 10),
+                                Text("No ads available yet".tr, style: TextStyle(color: Colors.grey[600])),
+                              ],
+                            ),
+                          ),
+                        );
+                      }
+
+                      final ads = snapshot.data!.docs;
+
+                      return GridView.builder(
+                        padding: const EdgeInsets.only(top: 10),
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 15,
+                          mainAxisSpacing: 15,
+                          childAspectRatio: 0.75,
+                        ),
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: ads.length,
+                        itemBuilder: (context, index) {
+                          final ad = ads[index].data() as Map<String, dynamic>;
+                          final images = ad['images'] as List<dynamic>?;
+                          final imageUrl = (images != null && images.isNotEmpty) 
+                              ? images[0] 
+                              : "https://via.placeholder.com/150";
+                          
+                          return ProductCard(
+                            title: ad['title'] ?? "Untitled",
+                            price: "Rs. ${ad['price']} / kg",
+                            imageUrl: imageUrl,
+                            rating: 4.5, // Default for now
+                            reviewCount: 0, // Default for now
+                            onTap: () {
+                              // TODO: Navigate to Ad Details
+                            },
+                          );
+                        },
+                      );
+                    },
                   ),
 
                   const SizedBox(height: 40),

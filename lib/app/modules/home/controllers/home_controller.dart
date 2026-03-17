@@ -95,6 +95,15 @@ class HomeController extends GetxController {
     });
   }
 
+  Stream<QuerySnapshot> getRecentAds() {
+    return FirebaseFirestore.instance
+        .collection('listings')
+        .where('status', isEqualTo: 'active')
+        .orderBy('createdAt', descending: true)
+        .limit(10)
+        .snapshots();
+  }
+
   @override
   void onReady() {
     super.onReady();

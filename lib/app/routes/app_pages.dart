@@ -15,6 +15,9 @@ import '../modules/signup/views/signup_view.dart';
 import '../modules/splash/bindings/splash_binding.dart';
 import '../modules/splash/views/splash_view.dart';
 
+import '../modules/listings/bindings/listings_binding.dart';
+import '../modules/listings/views/listings_view.dart';
+
 part 'app_routes.dart';
 
 class AppPages {
@@ -57,6 +60,11 @@ class AppPages {
       name: _Paths.CHAT,
       page: () => const ChatView(),
       binding: ChatBinding(),
+    ),
+    GetPage(
+      name: _Paths.LISTINGS,
+      page: () => const ListingsView(),
+      binding: ListingsBinding(),
     ),
   ];
 }

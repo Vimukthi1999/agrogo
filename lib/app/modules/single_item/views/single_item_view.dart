@@ -41,6 +41,7 @@ class SingleItemView extends GetView<SingleItemController> {
                     children: [
                       if (images.isNotEmpty)
                         PageView.builder(
+                          controller: controller.pageController,
                           onPageChanged: controller.updateImageIndex,
                           itemCount: images.length,
                           itemBuilder: (context, index) {
@@ -203,6 +204,27 @@ class SingleItemView extends GetView<SingleItemController> {
                         ],
                       ),
                       
+                      const SizedBox(height: 24),
+                      
+                      // Map Location Button
+                      TextButton.icon(
+                        onPressed: () => controller.openLocationInMap(),
+                        icon: const Icon(Icons.location_on_outlined, color: Color(0xFF1E7044)),
+                        label: const Text(
+                          "Check Item Location on Map",
+                          style: TextStyle(
+                            color: Color(0xFF1E7044),
+                            fontWeight: FontWeight.bold,
+                            decoration: TextDecoration.underline,
+                          ),
+                        ),
+                        style: TextButton.styleFrom(
+                          backgroundColor: const Color(0xFF1E7044).withOpacity(0.05),
+                          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        ),
+                      ),
+
                       const Padding(
                         padding: EdgeInsets.symmetric(vertical: 24),
                         child: Divider(height: 1),
@@ -249,15 +271,15 @@ class SingleItemView extends GetView<SingleItemController> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Text(
-                                    "Vimukthi Ranasinghe", // Mock for now, should use sellerId
-                                    style: TextStyle(
+                                  Text(
+                                    ad['sellerName'] ?? "AgroGo Verified Seller",
+                                    style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 16,
                                     ),
                                   ),
                                   Text(
-                                    "Verified Seller • 4.9 Rating",
+                                    "${ad['district'] ?? 'General'} • Verified Seller",
                                     style: TextStyle(
                                       color: Colors.grey[600],
                                       fontSize: 12,

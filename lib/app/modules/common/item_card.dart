@@ -62,22 +62,6 @@ class ProductCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Positioned(
-                    top: 12,
-                    right: 12,
-                    child: Container(
-                      padding: const EdgeInsets.all(6),
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(
-                        Icons.favorite_border_rounded,
-                        color: Color(0xFF1E7044),
-                        size: 18,
-                      ),
-                    ),
-                  ),
                 ],
               ),
             ),
@@ -153,7 +137,7 @@ class ProductCard extends StatelessWidget {
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: const Icon(
-                            Icons.add_shopping_cart_rounded,
+                            Icons.favorite_border_rounded,
                             color: Colors.white,
                             size: 16,
                           ),

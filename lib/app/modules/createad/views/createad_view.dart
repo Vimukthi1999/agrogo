@@ -14,7 +14,9 @@ class CreateadView extends GetView<CreateadController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Create Ad'.tr),
+        title: Obx(() => Text(
+          controller.isEditing.value ? 'Edit Ad'.tr : 'Create Ad'.tr,
+        )),
         centerTitle: true,
         backgroundColor: const Color(0xFF1E7044),
         elevation: 0,
@@ -490,44 +492,73 @@ class CreateadView extends GetView<CreateadController> {
                                   mainAxisSpacing: 12,
                                   childAspectRatio: 1,
                                 ),
-                            itemCount: controller.selectedImages.length,
+                            itemCount: controller.existingImageUrls.length + controller.selectedImages.length,
                             itemBuilder: (context, index) {
-                              final image = controller.selectedImages[index];
-                              return Stack(
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(12),
-                                      image: DecorationImage(
-                                        image: FileImage(File(image.path)),
-                                        fit: BoxFit.cover,
+                              if (index < controller.existingImageUrls.length) {
+                                // Existing images
+                                final imageUrl = controller.existingImageUrls[index];
+                                return Stack(
+                                  children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(12),
+                                        image: DecorationImage(
+                                          image: NetworkImage(imageUrl),
+                                          fit: BoxFit.cover,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  Positioned(
-                                    top: 6,
-                                    right: 6,
-                                    child: Row(
-                                      children: [
-                                        _buildImageAction(
-                                          icon: Icons.refresh,
-                                          color: Colors.blue,
-                                          onTap: () => _showImageSourceDialog(
-                                              context,
-                                              index: index),
-                                        ),
-                                        const SizedBox(width: 6),
-                                        _buildImageAction(
-                                          icon: Icons.close,
-                                          color: Colors.red,
-                                          onTap: () =>
-                                              controller.removeImage(index),
-                                        ),
-                                      ],
+                                    Positioned(
+                                      top: 6,
+                                      right: 6,
+                                      child: _buildImageAction(
+                                        icon: Icons.close,
+                                        color: Colors.red,
+                                        onTap: () => controller.existingImageUrls.removeAt(index),
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              );
+                                  ],
+                                );
+                              } else {
+                                // New selected images
+                                final localIndex = index - controller.existingImageUrls.length;
+                                final image = controller.selectedImages[localIndex];
+                                return Stack(
+                                  children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(12),
+                                        image: DecorationImage(
+                                          image: FileImage(File(image.path)),
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
+                                    Positioned(
+                                      top: 6,
+                                      right: 6,
+                                      child: Row(
+                                        children: [
+                                          _buildImageAction(
+                                            icon: Icons.refresh,
+                                            color: Colors.blue,
+                                            onTap: () => _showImageSourceDialog(
+                                                context,
+                                                index: localIndex),
+                                          ),
+                                          const SizedBox(width: 6),
+                                          _buildImageAction(
+                                            icon: Icons.close,
+                                            color: Colors.red,
+                                            onTap: () =>
+                                                controller.removeImage(localIndex),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              }
                             },
                           ),
                           const SizedBox(height: 12),
@@ -582,7 +613,7 @@ class CreateadView extends GetView<CreateadController> {
                   child: ElevatedButton(
                     onPressed: controller.isLoading.value
                         ? null
-                        : () => controller.createAd(),
+                        : () => controller.submitAd(),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF1E7044),
                       disabledBackgroundColor: Colors.grey[400],
@@ -603,7 +634,7 @@ class CreateadView extends GetView<CreateadController> {
                             ),
                           )
                         : Text(
-                            "Create Ad".tr,
+                            controller.isEditing.value ? "Update Ad".tr : "Create Ad".tr,
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 16,

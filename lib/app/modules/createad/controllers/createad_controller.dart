@@ -28,6 +28,11 @@ class CreateadController extends GetxController {
   final isLoading = false.obs;
   final isGettingLocation = false.obs;
   final isDistrictAutoDetected = false.obs;
+  
+  // Edit mode state
+  final isEditing = false.obs;
+  final editingAdId = ''.obs;
+  final existingImageUrls = <String>[].obs;
 
   final titleError = ''.obs;
   final descriptionError = ''.obs;
@@ -148,6 +153,26 @@ class CreateadController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    // Check if we are in edit mode
+    final args = Get.arguments;
+    if (args != null && args is Map<String, dynamic> && args['isEditing'] == true) {
+      isEditing.value = true;
+      editingAdId.value = args['adId'];
+      _loadAdData(args['adData'] as Map<String, dynamic>);
+    }
+  }
+
+  void _loadAdData(Map<String, dynamic> data) {
+    titleController.text = data['title'] ?? '';
+    descriptionController.text = data['description'] ?? '';
+    quantityController.text = (data['quantity'] ?? 0).toString();
+    priceController.text = (data['price'] ?? 0).toString();
+    selectedCategory.value = data['category'] ?? '';
+    district.value = data['district'] ?? '';
+    province.value = data['province'] ?? '';
+    latitude.value = data['location']['latitude'] ?? 0.0;
+    longitude.value = data['location']['longitude'] ?? 0.0;
+    existingImageUrls.value = List<String>.from(data['images'] ?? []);
   }
 
   Future<bool> useSavedLocation() async {
@@ -354,9 +379,12 @@ class CreateadController extends GetxController {
     quantityController.clear();
     priceController.clear();
     selectedImages.clear();
+    existingImageUrls.clear();
     selectedCategory.value = '';
     district.value = '';
     province.value = '';
+    isEditing.value = false;
+    editingAdId.value = '';
   }
 
   bool validateForm() {
@@ -395,7 +423,7 @@ class CreateadController extends GetxController {
       isValid = false;
     }
 
-    if (selectedImages.isEmpty) {
+    if (selectedImages.isEmpty && existingImageUrls.isEmpty) {
       imageError.value = 'At least one image is required';
       isValid = false;
     }
@@ -423,7 +451,7 @@ class CreateadController extends GetxController {
     locationError.value = '';
   }
 
-  Future<void> createAd() async {
+  Future<void> submitAd() async {
     if (!validateForm()) {
       return;
     }
@@ -433,7 +461,7 @@ class CreateadController extends GetxController {
       final user = FirebaseAuth.instance.currentUser;
       if (user == null) return;
 
-      final List<String> imageUrls = [];
+      final List<String> imageUrls = [...existingImageUrls];
 
       // Upload all selected images to Supabase
       for (var xFile in selectedImages) {
@@ -458,12 +486,11 @@ class CreateadController extends GetxController {
       final userDoc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
       final sellerName = userDoc.data()?['name'] ?? 'Unknown Seller';
 
-      // Add to Firestore collection 'listings'
-      await FirebaseFirestore.instance.collection('listings').add({
+      final adData = {
         'sellerId': user.uid,
         'sellerName': sellerName,
         'title': titleController.text.trim(),
-        'titleLower': titleController.text.trim().toLowerCase(), // For search filtering
+        'titleLower': titleController.text.trim().toLowerCase(),
         'description': descriptionController.text.trim(),
         'quantity': double.parse(quantityController.text),
         'price': double.parse(priceController.text),
@@ -475,9 +502,16 @@ class CreateadController extends GetxController {
         },
         'district': district.value,
         'province': province.value,
-        'createdAt': FieldValue.serverTimestamp(),
-        'status': 'active', // Set to active for immediate visibility
-      });
+        'updatedAt': FieldValue.serverTimestamp(),
+        'status': 'active',
+      };
+
+      if (isEditing.value) {
+        await FirebaseFirestore.instance.collection('listings').doc(editingAdId.value).update(adData);
+      } else {
+        adData['createdAt'] = FieldValue.serverTimestamp();
+        await FirebaseFirestore.instance.collection('listings').add(adData);
+      }
 
       // 1. First, go back to the previous screen (My Ads)
       Get.back();
@@ -490,7 +524,7 @@ class CreateadController extends GetxController {
       // 3. Finally, show the success message on the landing screen
       Get.snackbar(
         'Success',
-        'Ad created successfully',
+        isEditing.value ? 'Ad updated successfully' : 'Ad created successfully',
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Colors.green,
         colorText: Colors.white,

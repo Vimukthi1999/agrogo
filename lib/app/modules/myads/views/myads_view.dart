@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../routes/app_pages.dart';
@@ -187,142 +188,136 @@ class MyadsView extends GetView<MyadsController> {
     );
   }
 
-  Widget _buildAdCard(dynamic ad) {
-    return GestureDetector(
-      onTap: () {},
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.08),
-              blurRadius: 12,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: 120,
-              height: 120,
-              margin: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                color: Colors.grey[200],
-                image: DecorationImage(
-                  image: NetworkImage(ad['image'] ?? ''),
-                  fit: BoxFit.cover,
-                  onError: (exception, stackTrace) {},
-                ),
-              ),
-              child: (ad['image'] == null || ad['image'].isEmpty)
-                  ? Icon(Icons.image_not_supported, color: Colors.grey[400])
+  Widget _buildAdCard(DocumentSnapshot doc) {
+    final ad = doc.data() as Map<String, dynamic>;
+    final adId = doc.id;
+    final images = ad['images'] as List<dynamic>?;
+    final imageUrl = (images != null && images.isNotEmpty) ? images[0] : '';
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.08),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 110,
+            height: 110,
+            margin: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: Colors.grey[200],
+              image: imageUrl.isNotEmpty
+                  ? DecorationImage(
+                      image: NetworkImage(imageUrl),
+                      fit: BoxFit.cover,
+                    )
                   : null,
             ),
-
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      ad['title'] ?? 'Untitled',
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF1E7044),
+            child: imageUrl.isEmpty
+                ? Icon(Icons.image_not_supported, color: Colors.grey[400])
+                : null,
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    ad['title'] ?? 'Untitled',
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF1E7044),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    ad['category'] ?? 'N/A',
+                    style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Rs. ${ad['price']}",
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF1E7044),
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 6),
-
-                    Text(
-                      ad['category'] ?? 'N/A',
-                      style: TextStyle(fontSize: 12, color: Colors.grey[600]),
-                    ),
-                    const SizedBox(height: 8),
-
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          ad['price'] ?? '₹0',
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: _getStatusColor(ad['status']),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Text(
+                          (ad['status'] ?? 'Active').toString().toUpperCase(),
                           style: const TextStyle(
-                            fontSize: 16,
+                            fontSize: 10,
                             fontWeight: FontWeight.bold,
-                            color: Color(0xFF1E7044),
+                            color: Colors.white,
                           ),
                         ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            color: _getStatusColor(ad['status']),
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          child: Text(
-                            ad['status'] ?? 'Active',
-                            style: const TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+          PopupMenuButton<String>(
+            onSelected: (value) {
+              if (value == 'edit') {
+                controller.editAd(doc);
+              } else if (value == 'delete') {
+                controller.deleteAd(adId);
+              }
+            },
+            itemBuilder: (context) => [
+              const PopupMenuItem(
+                value: 'edit',
+                child: Row(
+                  children: [
+                    Icon(Icons.edit, size: 18),
+                    SizedBox(width: 8),
+                    Text('Edit'),
                   ],
                 ),
               ),
-            ),
-
-            Padding(
-              padding: const EdgeInsets.only(right: 12),
-              child: PopupMenuButton(
-                itemBuilder: (context) => [
-                  PopupMenuItem(
-                    child: Row(
-                      children: const [
-                        Icon(Icons.edit, size: 18),
-                        SizedBox(width: 8),
-                        Text('Edit'),
-                      ],
-                    ),
-                    onTap: () {},
-                  ),
-                  PopupMenuItem(
-                    child: Row(
-                      children: const [
-                        Icon(Icons.remove_red_eye, size: 18),
-                        SizedBox(width: 8),
-                        Text('View'),
-                      ],
-                    ),
-                    onTap: () {},
-                  ),
-                  PopupMenuItem(
-                    child: Row(
-                      children: const [
-                        Icon(Icons.delete, size: 18, color: Colors.red),
-                        SizedBox(width: 8),
-                        Text('Delete', style: TextStyle(color: Colors.red)),
-                      ],
-                    ),
-                    onTap: () {},
-                  ),
-                ],
-                icon: const Icon(Icons.more_vert, color: Color(0xFF1E7044)),
+              const PopupMenuItem(
+                value: 'delete',
+                child: Row(
+                  children: [
+                    Icon(Icons.delete, size: 18, color: Colors.red),
+                    SizedBox(width: 8),
+                    Text('Delete', style: TextStyle(color: Colors.red)),
+                  ],
+                ),
               ),
-            ),
-          ],
-        ),
+            ],
+            icon: const Icon(Icons.more_vert, color: Color(0xFF1E7044)),
+          ),
+          const SizedBox(width: 8),
+        ],
       ),
     );
   }
@@ -334,7 +329,7 @@ class MyadsView extends GetView<MyadsController> {
       case 'pending':
         return Colors.orange;
       case 'sold':
-        return Colors.grey;
+        return Colors.blueGrey;
       case 'expired':
         return Colors.red;
       default:

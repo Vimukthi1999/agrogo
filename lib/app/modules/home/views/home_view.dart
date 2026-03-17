@@ -373,12 +373,12 @@ class HomeView extends GetView<HomeController> {
                       final ads = snapshot.data!.docs;
 
                       return GridView.builder(
-                        padding: const EdgeInsets.only(top: 10),
+                        padding: const EdgeInsets.only(top: 15),
                         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
                           crossAxisSpacing: 15,
                           mainAxisSpacing: 15,
-                          childAspectRatio: 0.75,
+                          childAspectRatio: 0.7,
                         ),
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
@@ -393,6 +393,7 @@ class HomeView extends GetView<HomeController> {
                           return ProductCard(
                             title: ad['title'] ?? "Untitled",
                             price: "Rs. ${ad['price']} / kg",
+                            quantity: ad['quantity']?.toString(),
                             imageUrl: imageUrl,
                             rating: 4.5, // Default for now
                             reviewCount: 0, // Default for now

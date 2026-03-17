@@ -40,7 +40,7 @@ class ListingsView extends GetView<ListingsController> {
               crossAxisCount: 2,
               crossAxisSpacing: 15,
               mainAxisSpacing: 15,
-              childAspectRatio: 0.75,
+              childAspectRatio: 0.7,
             ),
             itemCount: controller.listings.length,
             itemBuilder: (context, index) {
@@ -53,6 +53,7 @@ class ListingsView extends GetView<ListingsController> {
               return ProductCard(
                 title: ad['title'] ?? 'Untitled',
                 price: "Rs. ${ad['price']} / kg",
+                quantity: ad['quantity']?.toString(),
                 imageUrl: imageUrl,
                 rating: 4.5, // Mock for now
                 reviewCount: 0, // Mock for now

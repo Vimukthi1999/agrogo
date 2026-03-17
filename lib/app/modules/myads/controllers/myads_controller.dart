@@ -64,22 +64,104 @@ class MyadsController extends GetxController {
   }
 
   void deleteAd(String adId) {
-    Get.defaultDialog(
-      title: 'Delete Ad',
-      middleText: 'Are you sure you want to delete this ad?',
-      textConfirm: 'Delete',
-      textCancel: 'Cancel',
-      confirmTextColor: Colors.white,
-      buttonColor: Colors.red,
-      onConfirm: () async {
-        try {
-          Get.back(); // Close dialog
-          await _firestore.collection('listings').doc(adId).delete();
-          Get.snackbar('Success', 'Ad deleted successfully');
-        } catch (e) {
-          Get.snackbar('Error', 'Failed to delete ad: $e');
-        }
-      },
+    Get.dialog(
+      Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.red[50],
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(Icons.delete_outline, color: Colors.red[400], size: 40),
+              ),
+              const SizedBox(height: 20),
+              const Text(
+                'Delete Listing?',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF1E7044),
+                ),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                'Are you sure you want to remove this ad? This action cannot be undone.',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.grey[600],
+                  height: 1.5,
+                ),
+              ),
+              const SizedBox(height: 32),
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () => Get.back(),
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        side: const BorderSide(color: Color(0xFF1E7044)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: const Text(
+                        'Cancel',
+                        style: TextStyle(
+                          color: Color(0xFF1E7044),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        try {
+                          Get.back(); // Close dialog
+                          await _firestore.collection('listings').doc(adId).delete();
+                          Get.snackbar(
+                            'Deleted',
+                            'Listing removed successfully',
+                            snackPosition: SnackPosition.TOP,
+                            backgroundColor: Colors.red[400],
+                            colorText: Colors.white,
+                          );
+                        } catch (e) {
+                          Get.snackbar('Error', 'Failed to delete ad: $e');
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        backgroundColor: Colors.red[400],
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: const Text(
+                        'Delete',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 

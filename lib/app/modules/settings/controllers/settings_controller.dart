@@ -278,7 +278,8 @@ class SettingsController extends GetxController {
         Get.back();
       }
     } catch (e) {
-      Get.snackbar('Error', 'Failed to update profile');
+      log('Update profile error: $e');
+      Get.snackbar('Error', 'Failed to update profile: $e');
     } finally {
       loadingUpdateMe.value = false;
     }

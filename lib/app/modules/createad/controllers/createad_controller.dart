@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' as sb;
+import '../../nav/controllers/nav_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -478,9 +479,24 @@ class CreateadController extends GetxController {
         'status': 'active', // Set to active for immediate visibility
       });
 
-      Get.snackbar('Success', 'Ad created successfully');
-      clearForm();
+      // 1. First, go back to the previous screen (My Ads)
       Get.back();
+
+      // 2. Then, switch the tab to My Ads (Index 1)
+      if (Get.isRegistered<NavController>()) {
+        Get.find<NavController>().changePage(1);
+      }
+
+      // 3. Finally, show the success message on the landing screen
+      Get.snackbar(
+        'Success',
+        'Ad created successfully',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+        margin: const EdgeInsets.all(15),
+        duration: const Duration(seconds: 3),
+      );
     } catch (e) {
       Get.snackbar('Error', 'Failed to create ad: $e');
     } finally {

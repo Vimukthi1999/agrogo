@@ -486,7 +486,7 @@ class CreateadController extends GetxController {
       final userDoc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
       final sellerName = userDoc.data()?['name'] ?? 'Unknown Seller';
 
-      final adData = {
+      final Map<String, dynamic> adData = {
         'sellerId': user.uid,
         'sellerName': sellerName,
         'title': titleController.text.trim(),
@@ -503,13 +503,13 @@ class CreateadController extends GetxController {
         'district': district.value,
         'province': province.value,
         'updatedAt': FieldValue.serverTimestamp(),
-        'status': 'active',
       };
 
       if (isEditing.value) {
         await FirebaseFirestore.instance.collection('listings').doc(editingAdId.value).update(adData);
       } else {
         adData['createdAt'] = FieldValue.serverTimestamp();
+        adData['status'] = 'active'; // Default for new ads
         await FirebaseFirestore.instance.collection('listings').add(adData);
       }
 

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ class MyadsController extends GetxController {
   final isLoading = false.obs;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  StreamSubscription? _adsSubscription;
 
   @override
   void onInit() {
@@ -21,16 +23,18 @@ class MyadsController extends GetxController {
     if (user == null) return;
 
     isLoading.value = true;
-    _firestore
+    _adsSubscription?.cancel();
+    
+    _adsSubscription = _firestore
         .collection('listings')
         .where('sellerId', isEqualTo: user.uid)
         .orderBy('createdAt', descending: true)
         .snapshots()
         .listen((snapshot) {
-      userAds.value = snapshot.docs;
+      userAds.assignAll(snapshot.docs);
       isLoading.value = false;
     }, onError: (error) {
-      print("Error fetching ads: $error");
+      debugPrint("Error fetching ads: $error");
       isLoading.value = false;
     });
   }
@@ -67,13 +71,30 @@ class MyadsController extends GetxController {
   }
 
   Future<void> toggleAdStatus(String adId, String currentStatus) async {
-    final newStatus = currentStatus.toLowerCase() == 'active' ? 'inactive' : 'active';
+    final status = currentStatus.toLowerCase();
+    final newStatus = status == 'active' ? 'inactive' : 'active';
+    
     try {
       await _firestore.collection('listings').doc(adId).update({
         'status': newStatus,
         'updatedAt': FieldValue.serverTimestamp(),
       });
-      Get.snackbar('Success', 'Ad status updated to ${newStatus.toUpperCase()}');
+      
+      // Use a slight delay to ensure snackbar shows up clearly
+      Future.delayed(const Duration(milliseconds: 300), () {
+        Get.snackbar(
+          'Success',
+          'Listing is now ${newStatus.toUpperCase()}',
+          snackPosition: SnackPosition.TOP, // Top is often safer than Bottom with NavBars
+          backgroundColor: newStatus == 'active' ? Colors.green : Colors.grey[700],
+          colorText: Colors.white,
+          icon: Icon(
+            newStatus == 'active' ? Icons.visibility : Icons.visibility_off,
+            color: Colors.white,
+          ),
+          duration: const Duration(seconds: 2),
+        );
+      });
     } catch (e) {
       Get.snackbar('Error', 'Failed to update status: $e');
     }
@@ -86,6 +107,7 @@ class MyadsController extends GetxController {
 
   @override
   void onClose() {
+    _adsSubscription?.cancel();
     super.onClose();
   }
 }

@@ -195,6 +195,7 @@ class MyadsView extends GetView<MyadsController> {
     final imageUrl = (images != null && images.isNotEmpty) ? images[0] : '';
 
     return Container(
+      key: ValueKey('${doc.id}_${ad['status']}_${ad['updatedAt']}'),
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -283,7 +284,7 @@ class MyadsView extends GetView<MyadsController> {
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: Text(
-                          (ad['status'] ?? 'Active').toString().toUpperCase(),
+                          (ad['status'] ?? 'active').toString().toUpperCase(),
                           style: const TextStyle(
                             fontSize: 10,
                             fontWeight: FontWeight.bold,
@@ -304,7 +305,7 @@ class MyadsView extends GetView<MyadsController> {
               } else if (value == 'delete') {
                 controller.deleteAd(adId);
               } else if (value == 'status') {
-                controller.toggleAdStatus(adId, ad['status'] ?? 'Active');
+                controller.toggleAdStatus(adId, ad['status'] ?? 'active');
               }
             },
             itemBuilder: (context) => [
@@ -323,14 +324,14 @@ class MyadsView extends GetView<MyadsController> {
                 child: Row(
                   children: [
                     Icon(
-                      (ad['status'] ?? 'Active').toString().toLowerCase() == 'active'
+                      (ad['status'] ?? 'active').toString().toLowerCase() == 'active'
                           ? Icons.visibility_off
                           : Icons.visibility,
                       size: 18,
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      (ad['status'] ?? 'Active').toString().toLowerCase() == 'active'
+                      (ad['status'] ?? 'active').toString().toLowerCase() == 'active'
                           ? 'Make Inactive'
                           : 'Make Active',
                     ),

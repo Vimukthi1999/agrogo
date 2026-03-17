@@ -453,10 +453,16 @@ class CreateadController extends GetxController {
 
       log('Uploaded images: $imageUrls');
 
-      // Add to Firestore
-      await FirebaseFirestore.instance.collection('ads').add({
-        'userId': user.uid,
+      // Fetch seller name for better display in listings
+      final userDoc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+      final sellerName = userDoc.data()?['name'] ?? 'Unknown Seller';
+
+      // Add to Firestore collection 'listings'
+      await FirebaseFirestore.instance.collection('listings').add({
+        'sellerId': user.uid,
+        'sellerName': sellerName,
         'title': titleController.text.trim(),
+        'titleLower': titleController.text.trim().toLowerCase(), // For search filtering
         'description': descriptionController.text.trim(),
         'quantity': double.parse(quantityController.text),
         'price': double.parse(priceController.text),
@@ -469,7 +475,7 @@ class CreateadController extends GetxController {
         'district': district.value,
         'province': province.value,
         'createdAt': FieldValue.serverTimestamp(),
-        'status': 'pending',
+        'status': 'active', // Set to active for immediate visibility
       });
 
       Get.snackbar('Success', 'Ad created successfully');

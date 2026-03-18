@@ -14,8 +14,129 @@ class HomeController extends GetxController {
   final profileImage = "".obs;
   final searchQuery = "".obs;
 
+  // Filter state
+  final filterCategory = ''.obs;
+  final filterProvince = ''.obs;
+  final filterDistrict = ''.obs;
+  final filterLocation = ''.obs;
+  final activeFilterCount = 0.obs;
+
+  // Sri Lanka provinces and districts
+  final Map<String, List<String>> provinceDistricts = {
+    'Western': ['Colombo', 'Gampaha', 'Kalutara'],
+    'Central': ['Kandy', 'Matale', 'Nuwara Eliya'],
+    'Southern': ['Galle', 'Matara', 'Hambantota'],
+    'Northern': ['Jaffna', 'Kilinochchi', 'Mannar', 'Vavuniya', 'Mullaitivu'],
+    'Eastern': ['Batticaloa', 'Ampara', 'Trincomalee'],
+    'North Western': ['Kurunegala', 'Puttalam'],
+    'North Central': ['Anuradhapura', 'Polonnaruwa'],
+    'Uva': ['Badulla', 'Monaragala'],
+    'Sabaragamuwa': ['Ratnapura', 'Kegalle'],
+  };
+
+  List<String> get provinces => ['All', ...provinceDistricts.keys];
+
+  List<String> get districts {
+    if (filterProvince.value.isEmpty || filterProvince.value == 'All') {
+      return [
+        'All',
+        ...provinceDistricts.values.expand((d) => d),
+      ];
+    }
+    return [
+      'All',
+      ...provinceDistricts[filterProvince.value] ?? [],
+    ];
+  }
+
+  List<String> get allDistrictsList => [
+    'All',
+    ...provinceDistricts.values.expand((d) => d).toList()..sort(),
+  ];
+
+  bool get hasActiveFilters => activeFilterCount.value > 0;
+
   void clearSearch() {
     searchQuery.value = "";
+  }
+
+  void setCategory(String category) {
+    filterCategory.value = category;
+    _updateActiveFilterCount();
+  }
+
+  void setProvince(String province) {
+    filterProvince.value = province;
+    // Reset district when province changes
+    filterDistrict.value = '';
+    _updateActiveFilterCount();
+  }
+
+  void setDistrict(String district) {
+    filterDistrict.value = district;
+    _updateActiveFilterCount();
+  }
+
+  void setLocation(String location) {
+    filterLocation.value = location;
+    _updateActiveFilterCount();
+  }
+
+  void clearAllFilters() {
+    filterCategory.value = '';
+    filterProvince.value = '';
+    filterDistrict.value = '';
+    filterLocation.value = '';
+    _updateActiveFilterCount();
+  }
+
+  void _updateActiveFilterCount() {
+    int count = 0;
+    if (filterCategory.value.isNotEmpty && filterCategory.value != 'All') count++;
+    if (filterProvince.value.isNotEmpty && filterProvince.value != 'All') count++;
+    if (filterDistrict.value.isNotEmpty && filterDistrict.value != 'All') count++;
+    if (filterLocation.value.isNotEmpty && filterLocation.value != 'All') count++;
+    activeFilterCount.value = count;
+  }
+
+  /// Apply all filters (search + location/province/district/category) to a list of ad docs
+  List<QueryDocumentSnapshot> applyFilters(List<QueryDocumentSnapshot> docs) {
+    final query = searchQuery.value.toLowerCase();
+
+    return docs.where((doc) {
+      final ad = doc.data() as Map<String, dynamic>;
+
+      // Search filter
+      if (query.isNotEmpty) {
+        final title = (ad['title'] ?? '').toString().toLowerCase();
+        final description = (ad['description'] ?? '').toString().toLowerCase();
+        if (!title.contains(query) && !description.contains(query)) {
+          return false;
+        }
+      }
+
+      // Category filter
+      if (filterCategory.value.isNotEmpty && filterCategory.value != 'All') {
+        if (ad['category'] != filterCategory.value) return false;
+      }
+
+      // Province filter
+      if (filterProvince.value.isNotEmpty && filterProvince.value != 'All') {
+        if (ad['province'] != filterProvince.value) return false;
+      }
+
+      // District filter
+      if (filterDistrict.value.isNotEmpty && filterDistrict.value != 'All') {
+        if (ad['district'] != filterDistrict.value) return false;
+      }
+
+      // Location filter
+      if (filterLocation.value.isNotEmpty && filterLocation.value != 'All') {
+        if (ad['district'] != filterLocation.value) return false;
+      }
+
+      return true;
+    }).toList();
   }
 
   @override
@@ -44,20 +165,6 @@ class HomeController extends GetxController {
       });
     }
   }
-
-  // void fetchCategories() async {
-  //   try {
-  //     final snapshot = await FirebaseFirestore.instance
-  //         .collection('categories')
-  //         .get();
-
-  //     categories.value = snapshot.docs
-  //         .map((doc) => CategoryModel.fromFirestore(doc.id, doc.data()))
-  //         .toList();
-  //   } finally {
-  //     isLoading.value = false;
-  //   }
-  // }
 
   Stream<List<CategoryModel>> getCategories() {
     return FirebaseFirestore.instance.collection('categories').snapshots().map((

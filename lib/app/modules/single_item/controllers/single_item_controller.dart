@@ -9,6 +9,8 @@ class SingleItemController extends GetxController {
   late Map<String, dynamic> ad;
   final currentImageIndex = 0.obs;
   final sellerPhone = "".obs;
+  final sellerData = Rx<Map<String, dynamic>?>(null);
+  final sellerListingsCount = 0.obs;
   late PageController pageController;
   Timer? _timer;
 
@@ -18,19 +20,33 @@ class SingleItemController extends GetxController {
     ad = Get.arguments as Map<String, dynamic>? ?? {};
     pageController = PageController();
     _startImageSlider();
-    _fetchSellerPhone();
+    _fetchSellerData();
   }
 
-  Future<void> _fetchSellerPhone() async {
+  Future<void> _fetchSellerData() async {
     final sellerId = ad['sellerId'];
     if (sellerId != null) {
       try {
-        final doc = await FirebaseFirestore.instance.collection('users').doc(sellerId).get();
+        final doc = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(sellerId)
+            .get();
         if (doc.exists) {
-          sellerPhone.value = doc.data()?['phone'] ?? "";
+          final data = doc.data() ?? {};
+          data['uid'] = sellerId;
+          sellerData.value = data;
+          sellerPhone.value = data['phone'] ?? "";
         }
+
+        // Fetch seller's active listings count
+        final listingsSnapshot = await FirebaseFirestore.instance
+            .collection('listings')
+            .where('sellerId', isEqualTo: sellerId)
+            .where('status', isEqualTo: 'active')
+            .get();
+        sellerListingsCount.value = listingsSnapshot.docs.length;
       } catch (e) {
-        debugPrint("Error fetching seller phone: $e");
+        debugPrint("Error fetching seller data: $e");
       }
     }
   }

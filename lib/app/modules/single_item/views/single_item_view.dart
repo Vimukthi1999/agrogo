@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import '../../chat/controllers/chat_controller.dart';
 import '../../chat/views/chat_room_view.dart';
 import '../controllers/single_item_controller.dart';
+import 'seller_profile_view.dart';
 
 class SingleItemView extends GetView<SingleItemController> {
   const SingleItemView({super.key});
@@ -235,49 +236,191 @@ class SingleItemView extends GetView<SingleItemController> {
                       const SizedBox(height: 32),
                       
                       // Seller Info Card
-                      Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF1E7044).withOpacity(0.03),
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: const Color(0xFF1E7044).withOpacity(0.1)),
-                        ),
-                        child: Row(
-                          children: [
-                            CircleAvatar(
-                              radius: 30,
-                              backgroundColor: const Color(0xFF1E7044).withOpacity(0.1),
-                              child: const Icon(Icons.person, color: Color(0xFF1E7044)),
+                      Obx(() {
+                        final seller = controller.sellerData.value;
+                        final profileImage = seller?['profileImage'] ?? '';
+                        final sellerName = seller?['name'] ?? ad['sellerName'] ?? 'AgroGo Seller';
+                        final sellerDistrict = seller?['district'] ?? ad['district'] ?? '';
+                        final accountType = seller?['accountType'] ?? seller?['role'] ?? '';
+                        final createdAt = seller?['createdAt'];
+                        final listingsCount = controller.sellerListingsCount.value;
+
+                        String memberSince = '';
+                        if (createdAt != null && createdAt is Timestamp) {
+                          final date = createdAt.toDate();
+                          final months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+                          memberSince = 'Since ${months[date.month - 1]} ${date.year}';
+                        }
+
+                        return GestureDetector(
+                          onTap: () {
+                            if (seller != null) {
+                              Get.to(() => SellerProfileView(
+                                sellerData: seller,
+                                listingsCount: listingsCount,
+                              ));
+                            }
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(color: const Color(0xFF1E7044).withOpacity(0.12)),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: const Color(0xFF1E7044).withOpacity(0.06),
+                                  blurRadius: 15,
+                                  offset: const Offset(0, 4),
+                                ),
+                              ],
                             ),
-                            const SizedBox(width: 16),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    ad['sellerName'] ?? "AgroGo Verified Seller",
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
+                            child: Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    // Profile Avatar
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                          color: const Color(0xFF1E7044).withOpacity(0.3),
+                                          width: 2,
+                                        ),
+                                      ),
+                                      child: CircleAvatar(
+                                        radius: 28,
+                                        backgroundColor: const Color(0xFF1E7044).withOpacity(0.1),
+                                        backgroundImage: profileImage.isNotEmpty
+                                            ? NetworkImage(profileImage)
+                                            : null,
+                                        child: profileImage.isEmpty
+                                            ? Text(
+                                                sellerName.isNotEmpty ? sellerName[0].toUpperCase() : 'S',
+                                                style: const TextStyle(
+                                                  fontSize: 22,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Color(0xFF1E7044),
+                                                ),
+                                              )
+                                            : null,
+                                      ),
                                     ),
-                                  ),
-                                  Text(
-                                    "${ad['district'] ?? 'General'} • Verified Seller",
-                                    style: TextStyle(
-                                      color: Colors.grey[600],
-                                      fontSize: 12,
+                                    const SizedBox(width: 14),
+                                    // Name and info
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Flexible(
+                                                child: Text(
+                                                  sellerName,
+                                                  maxLines: 1,
+                                                  overflow: TextOverflow.ellipsis,
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 16,
+                                                    color: Color(0xFF222222),
+                                                  ),
+                                                ),
+                                              ),
+                                              const SizedBox(width: 6),
+                                              const Icon(
+                                                Icons.verified_rounded,
+                                                color: Color(0xFF2D9B5F),
+                                                size: 18,
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 4),
+                                          Row(
+                                            children: [
+                                              if (accountType.isNotEmpty) ...[
+                                                Container(
+                                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                                  decoration: BoxDecoration(
+                                                    color: const Color(0xFF1E7044).withOpacity(0.08),
+                                                    borderRadius: BorderRadius.circular(8),
+                                                  ),
+                                                  child: Text(
+                                                    accountType[0].toUpperCase() + accountType.substring(1),
+                                                    style: const TextStyle(
+                                                      color: Color(0xFF1E7044),
+                                                      fontSize: 11,
+                                                      fontWeight: FontWeight.w600,
+                                                    ),
+                                                  ),
+                                                ),
+                                                const SizedBox(width: 8),
+                                              ],
+                                              if (sellerDistrict.isNotEmpty) ...[
+                                                Icon(Icons.location_on, size: 13, color: Colors.grey[500]),
+                                                const SizedBox(width: 2),
+                                                Text(
+                                                  sellerDistrict,
+                                                  style: TextStyle(
+                                                    color: Colors.grey[600],
+                                                    fontSize: 12,
+                                                  ),
+                                                ),
+                                              ],
+                                            ],
+                                          ),
+                                        ],
+                                      ),
                                     ),
+                                    // Arrow
+                                    Container(
+                                      padding: const EdgeInsets.all(8),
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xFF1E7044).withOpacity(0.08),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: const Icon(
+                                        Icons.arrow_forward_ios_rounded,
+                                        color: Color(0xFF1E7044),
+                                        size: 14,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                // Bottom stats row
+                                const SizedBox(height: 14),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey[50],
+                                    borderRadius: BorderRadius.circular(12),
                                   ),
-                                ],
-                              ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                    children: [
+                                      _buildMiniStat(
+                                        Icons.storefront_rounded,
+                                        '$listingsCount Listings',
+                                      ),
+                                      Container(height: 20, width: 1, color: Colors.grey[300]),
+                                      _buildMiniStat(
+                                        Icons.verified_user_outlined,
+                                        'Verified',
+                                      ),
+                                      if (memberSince.isNotEmpty) ...[
+                                        Container(height: 20, width: 1, color: Colors.grey[300]),
+                                        _buildMiniStat(
+                                          Icons.calendar_today_rounded,
+                                          memberSince,
+                                        ),
+                                      ],
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
-                            IconButton(
-                              onPressed: () {},
-                              icon: const Icon(Icons.chevron_right, color: Color(0xFF1E7044)),
-                            ),
-                          ],
-                        ),
-                      ),
+                          ),
+                        );
+                      }),
                       
                       const SizedBox(height: 120), // Extra space for bottom bar
                     ],
@@ -427,6 +570,24 @@ class SingleItemView extends GetView<SingleItemController> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildMiniStat(IconData icon, String label) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(icon, size: 14, color: const Color(0xFF1E7044)),
+        const SizedBox(width: 4),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 11,
+            color: Colors.grey[700],
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ],
     );
   }
 }

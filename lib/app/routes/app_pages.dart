@@ -18,6 +18,7 @@ import '../modules/single_item/bindings/single_item_binding.dart';
 import '../modules/single_item/views/single_item_view.dart';
 import '../modules/splash/bindings/splash_binding.dart';
 import '../modules/splash/views/splash_view.dart';
+import '../modules/home/views/filtered_map_view.dart';
 
 part 'app_routes.dart';
 
@@ -71,6 +72,10 @@ class AppPages {
       name: _Paths.SINGLE_ITEM,
       page: () => const SingleItemView(),
       binding: SingleItemBinding(),
+    ),
+    GetPage(
+      name: _Paths.FILTERED_MAP,
+      page: () => const FilteredMapView(),
     ),
   ];
 }

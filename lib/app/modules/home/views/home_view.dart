@@ -789,7 +789,7 @@ class _HomeFilterBottomSheet extends StatelessWidget {
               ),
             ),
           ),
-          // Apply Button
+          // Bottom Buttons
           Container(
             padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
             decoration: BoxDecoration(
@@ -802,29 +802,75 @@ class _HomeFilterBottomSheet extends StatelessWidget {
                 ),
               ],
             ),
-            child: SizedBox(
-              width: double.infinity,
-              height: 48,
-              child: ElevatedButton(
-                onPressed: () => Navigator.pop(context),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF1E7044),
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+            child: Row(
+              children: [
+                // View on Map Button
+                Expanded(
+                  child: SizedBox(
+                    height: 48,
+                    child: OutlinedButton.icon(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        Get.toNamed(
+                          Routes.FILTERED_MAP,
+                          arguments: {
+                            'filterCategory': controller.filterCategory.value,
+                            'filterProvince': controller.filterProvince.value,
+                            'filterDistrict': controller.filterDistrict.value,
+                            'filterLocation': controller.filterLocation.value,
+                            'searchQuery': controller.searchQuery.value,
+                          },
+                        );
+                      },
+                      icon: const Icon(Icons.map_outlined, size: 18),
+                      label: const Text(
+                        'View Map',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: const Color(0xFF1E7044),
+                        side: const BorderSide(
+                          color: Color(0xFF1E7044),
+                          width: 1.5,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                    ),
                   ),
-                  elevation: 0,
                 ),
-                child: Obx(() => Text(
-                  controller.hasActiveFilters
-                      ? 'Apply Filters (${controller.activeFilterCount.value})'
-                      : 'Apply Filters',
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                const SizedBox(width: 12),
+                // Apply Filters Button
+                Expanded(
+                  child: SizedBox(
+                    height: 48,
+                    child: ElevatedButton(
+                      onPressed: () => Navigator.pop(context),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF1E7044),
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        elevation: 0,
+                      ),
+                      child: Obx(() => Text(
+                        controller.hasActiveFilters
+                            ? 'Apply (${controller.activeFilterCount.value})'
+                            : 'Apply Filters',
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )),
+                    ),
                   ),
-                )),
-              ),
+                ),
+              ],
             ),
           ),
         ],

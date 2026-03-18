@@ -16,6 +16,7 @@ abstract class Routes {
   static const CHAT = _Paths.CHAT;
   static const LISTINGS = _Paths.LISTINGS;
   static const SINGLE_ITEM = _Paths.SINGLE_ITEM;
+  static const FILTERED_MAP = _Paths.FILTERED_MAP;
 }
 
 abstract class _Paths {
@@ -33,4 +34,5 @@ abstract class _Paths {
   static const CHAT = '/chat';
   static const LISTINGS = '/listings';
   static const SINGLE_ITEM = '/single-item';
+  static const FILTERED_MAP = '/filtered-map';
 }

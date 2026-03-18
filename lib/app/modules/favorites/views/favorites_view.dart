@@ -280,13 +280,15 @@ class FavoritesView extends GetView<FavoritesController> {
                       topRight: Radius.circular(16),
                     ),
                     color: Colors.grey[200],
-                    image: DecorationImage(
-                      image: NetworkImage(item['image'] ?? ''),
-                      fit: BoxFit.cover,
-                      onError: (exception, stackTrace) {},
-                    ),
+                    image: (item['images'] != null && (item['images'] as List).isNotEmpty)
+                        ? DecorationImage(
+                            image: NetworkImage((item['images'] as List)[0]),
+                            fit: BoxFit.cover,
+                            onError: (exception, stackTrace) {},
+                          )
+                        : null,
                   ),
-                  child: (item['image'] == null || item['image'].isEmpty)
+                  child: (item['images'] == null || (item['images'] as List).isEmpty)
                       ? Icon(Icons.image_not_supported, color: Colors.grey[400])
                       : null,
                 ),
@@ -380,7 +382,7 @@ class FavoritesView extends GetView<FavoritesController> {
                         ),
                         const SizedBox(width: 4),
                         Text(
-                          "${item['rating'] ?? '0'} (${item['reviews'] ?? '0'})",
+                          "${item['rating']?.toString() ?? '0'} (${item['reviewCount']?.toString() ?? '0'})",
                           style: TextStyle(
                             fontSize: 10,
                             color: Colors.grey[600],
@@ -393,7 +395,7 @@ class FavoritesView extends GetView<FavoritesController> {
                     Row(
                       children: [
                         Text(
-                          item['price'] ?? '₹0',
+                          "Rs. ${item['price']?.toString() ?? '0'}",
                           style: const TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,

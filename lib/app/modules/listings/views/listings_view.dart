@@ -49,7 +49,10 @@ class ListingsView extends GetView<ListingsController> {
             ),
             itemCount: controller.listings.length,
             itemBuilder: (context, index) {
-              final ad = controller.listings[index].data() as Map<String, dynamic>;
+              final doc = controller.listings[index];
+              final ad = doc.data() as Map<String, dynamic>;
+              final adWithId = {...ad, 'id': doc.id};
+
               final images = ad['images'] as List<dynamic>?;
               final imageUrl = (images != null && images.isNotEmpty) 
                   ? images[0] 
@@ -62,9 +65,9 @@ class ListingsView extends GetView<ListingsController> {
                 imageUrl: imageUrl,
                 rating: 4.5, // Mock for now
                 reviewCount: 0, // Mock for now
-                data: ad,
+                data: adWithId,
                 onTap: () {
-                  Get.toNamed(Routes.SINGLE_ITEM, arguments: ad);
+                  Get.toNamed(Routes.SINGLE_ITEM, arguments: adWithId);
                 },
               );
             },

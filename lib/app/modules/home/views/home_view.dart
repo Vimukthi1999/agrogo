@@ -388,7 +388,10 @@ class HomeView extends GetView<HomeController> {
                         physics: const NeverScrollableScrollPhysics(),
                         itemCount: ads.length,
                         itemBuilder: (context, index) {
-                          final ad = ads[index].data() as Map<String, dynamic>;
+                          final doc = ads[index];
+                          final ad = doc.data() as Map<String, dynamic>;
+                          final adWithId = {...ad, 'id': doc.id};
+                          
                           final images = ad['images'] as List<dynamic>?;
                           final imageUrl = (images != null && images.isNotEmpty) 
                               ? images[0] 
@@ -401,9 +404,9 @@ class HomeView extends GetView<HomeController> {
                             imageUrl: imageUrl,
                             rating: 4.5, // Default for now
                             reviewCount: 0, // Default for now
-                            data: ad,
+                            data: adWithId,
                             onTap: () {
-                              Get.toNamed(Routes.SINGLE_ITEM, arguments: ad);
+                              Get.toNamed(Routes.SINGLE_ITEM, arguments: adWithId);
                             },
                           );
                         },

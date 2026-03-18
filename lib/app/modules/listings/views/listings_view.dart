@@ -11,7 +11,11 @@ class ListingsView extends GetView<ListingsController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('All Ads'.tr),
+        title: Obx(() => Text(
+          controller.selectedCategoryName.value.isNotEmpty 
+              ? '${controller.selectedCategoryName.value} Ads'.tr 
+              : 'All Ads'.tr,
+        )),
         backgroundColor: const Color(0xFF1E7044),
         foregroundColor: Colors.white,
         elevation: 0,

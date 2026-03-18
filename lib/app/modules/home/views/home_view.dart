@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../models/category_model.dart';
 import '../../../routes/app_pages.dart';
 import '../../common/item_card.dart';
 import '../controllers/home_controller.dart';
+import 'notifications_view.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({super.key});
@@ -109,7 +111,7 @@ class HomeView extends GetView<HomeController> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          // Handle notification tap
+                          Get.to(() => const NotificationsView());
                         },
                         child: Container(
                           padding: const EdgeInsets.all(10),
@@ -117,26 +119,57 @@ class HomeView extends GetView<HomeController> {
                             shape: BoxShape.circle,
                             color: Colors.white.withOpacity(0.2),
                           ),
-                          child: Stack(
-                            children: [
-                              const Icon(
-                                Icons.notifications_outlined,
-                                color: Colors.white,
-                                size: 24,
-                              ),
-                              Positioned(
-                                top: 6,
-                                right: 6,
-                                child: Container(
-                                  width: 8,
-                                  height: 8,
-                                  decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Color(0xFFFF4444),
+                          child: StreamBuilder<QuerySnapshot>(
+                            stream: FirebaseFirestore.instance
+                                .collection('notifications')
+                                .where('userId',
+                                    isEqualTo: FirebaseAuth
+                                            .instance.currentUser?.uid ??
+                                        '')
+                                .where('read', isEqualTo: false)
+                                .snapshots(),
+                            builder: (context, snapshot) {
+                              final unreadCount =
+                                  snapshot.hasData ? snapshot.data!.docs.length : 0;
+                              return Stack(
+                                clipBehavior: Clip.none,
+                                children: [
+                                  const Icon(
+                                    Icons.notifications_outlined,
+                                    color: Colors.white,
+                                    size: 24,
                                   ),
-                                ),
-                              ),
-                            ],
+                                  if (unreadCount > 0)
+                                    Positioned(
+                                      top: -4,
+                                      right: -4,
+                                      child: Container(
+                                        padding: const EdgeInsets.all(4),
+                                        decoration: const BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Color(0xFFFF4444),
+                                        ),
+                                        constraints: const BoxConstraints(
+                                          minWidth: 18,
+                                          minHeight: 18,
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            unreadCount > 9
+                                                ? '9+'
+                                                : '$unreadCount',
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 10,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              );
+                            },
                           ),
                         ),
                       ),

@@ -6,12 +6,19 @@ import 'package:get/get.dart';
 import '../controllers/nav_controller.dart';
 import '../../home/views/home_view.dart';
 import '../../chat/views/chat_view.dart';
+import '../../chat/controllers/chat_controller.dart';
 
 class NavView extends GetView<NavController> {
   const NavView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // Ensure ChatController is registered for unread count listening
+    if (!Get.isRegistered<ChatController>()) {
+      Get.put(ChatController(), permanent: true);
+    }
+    final chatController = Get.find<ChatController>();
+
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (bool didPop, Object? result) async {
@@ -104,8 +111,76 @@ class NavView extends GetView<NavController> {
                           label: 'Favorites'.tr,
                         ),
                     BottomNavigationBarItem(
-                      icon: const Icon(Icons.chat_outlined),
-                      activeIcon: const Icon(Icons.chat),
+                      icon: Obx(() {
+                        final unread = chatController.unreadCount.value;
+                        return Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            const Icon(Icons.chat_outlined),
+                            if (unread > 0)
+                              Positioned(
+                                top: -4,
+                                right: -6,
+                                child: Container(
+                                  padding: const EdgeInsets.all(3),
+                                  decoration: const BoxDecoration(
+                                    color: Color(0xFFFF4444),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  constraints: const BoxConstraints(
+                                    minWidth: 16,
+                                    minHeight: 16,
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      unread > 9 ? '9+' : '$unread',
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 9,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                          ],
+                        );
+                      }),
+                      activeIcon: Obx(() {
+                        final unread = chatController.unreadCount.value;
+                        return Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            const Icon(Icons.chat),
+                            if (unread > 0)
+                              Positioned(
+                                top: -4,
+                                right: -6,
+                                child: Container(
+                                  padding: const EdgeInsets.all(3),
+                                  decoration: const BoxDecoration(
+                                    color: Color(0xFFFF4444),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  constraints: const BoxConstraints(
+                                    minWidth: 16,
+                                    minHeight: 16,
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      unread > 9 ? '9+' : '$unread',
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 9,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                          ],
+                        );
+                      }),
                       label: 'Chats'.tr,
                     ),
                     BottomNavigationBarItem(

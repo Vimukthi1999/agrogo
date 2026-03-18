@@ -1,7 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
+import '../../chat/controllers/chat_controller.dart';
+import '../../chat/views/chat_room_view.dart';
 import '../controllers/single_item_controller.dart';
 
 class SingleItemView extends GetView<SingleItemController> {
@@ -310,8 +314,75 @@ class SingleItemView extends GetView<SingleItemController> {
                     ),
                     child: IconButton(
                       icon: const Icon(Icons.chat_bubble_outline_rounded, color: Color(0xFF1E7044)),
-                      onPressed: () {
-                        // TODO: Navigate to Chat
+                      onPressed: () async {
+                        final sellerId = ad['sellerId'];
+                        final currentUser = FirebaseAuth.instance.currentUser;
+
+                        if (currentUser == null) {
+                          Get.snackbar('Error', 'Please sign in to chat.',
+                              snackPosition: SnackPosition.BOTTOM);
+                          return;
+                        }
+
+                        if (sellerId == null || sellerId == currentUser.uid) {
+                          Get.snackbar('Notice', 'You cannot chat with yourself.',
+                              snackPosition: SnackPosition.BOTTOM);
+                          return;
+                        }
+
+                        // Show loading indicator
+                        Get.dialog(
+                          const Center(child: CircularProgressIndicator()),
+                          barrierDismissible: false,
+                        );
+
+                        try {
+                          // Fetch current user name
+                          final currentUserDoc = await FirebaseFirestore.instance
+                              .collection('users')
+                              .doc(currentUser.uid)
+                              .get();
+                          final currentUserName =
+                              currentUserDoc.data()?['name'] ?? 'User';
+
+                          // Fetch seller name
+                          final sellerName = ad['sellerName'] ?? 'Seller';
+
+                          // Get ad image for chat avatar
+                          final images = ad['images'] as List<dynamic>?;
+                          final adImage = (images != null && images.isNotEmpty)
+                              ? images[0].toString()
+                              : '';
+
+                          // Ensure ChatController is available
+                          if (!Get.isRegistered<ChatController>()) {
+                            Get.put(ChatController());
+                          }
+                          final chatController = Get.find<ChatController>();
+
+                          final chatId = await chatController.getOrCreateChatRoom(
+                            otherUserId: sellerId,
+                            otherUserName: sellerName,
+                            currentUserName: currentUserName,
+                            adId: ad['id'],
+                            adTitle: ad['title'],
+                            adImage: adImage,
+                          );
+
+                          Get.back(); // Close loading dialog
+
+                          Get.to(() => ChatRoomView(
+                                chatId: chatId,
+                                otherUserName: sellerName,
+                                otherUserId: sellerId,
+                                adTitle: ad['title'],
+                              ));
+                        } catch (e) {
+                          Get.back(); // Close loading dialog
+                          Get.snackbar('Error', 'Could not start chat. Try again.',
+                              snackPosition: SnackPosition.BOTTOM);
+                          debugPrint('Chat error: $e');
+                        }
                       },
                     ),
                   ),

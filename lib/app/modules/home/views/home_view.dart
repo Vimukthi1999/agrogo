@@ -166,11 +166,14 @@ class HomeView extends GetView<HomeController> {
                         ),
                       ],
                     ),
-                    child: TextField(
+                    child: Obx(() => TextField(
                       style: const TextStyle(
                         color: Color(0xFF1E7044),
                         fontSize: 14,
                       ),
+                      onChanged: (val) {
+                        controller.searchQuery.value = val;
+                      },
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: "Search products, categories...".tr,
@@ -183,16 +186,29 @@ class HomeView extends GetView<HomeController> {
                           color: Color(0xFF1E7044),
                           size: 22,
                         ),
-                        suffixIcon: const Icon(
-                          Icons.filter_list,
-                          color: Color(0xFF1E7044),
-                          size: 22,
-                        ),
+                        suffixIcon: controller.searchQuery.value.isNotEmpty
+                            ? GestureDetector(
+                                onTap: () {
+                                  // Clear the text field contextually when tapped, but we only have controller here.
+                                  // As a workaround for simple setup, just clearing the controller state works for UI changes
+                                  controller.clearSearch();
+                                },
+                                child: const Icon(
+                                  Icons.close,
+                                  color: Color(0xFF1E7044),
+                                  size: 22,
+                                ),
+                              )
+                            : const Icon(
+                                Icons.filter_list,
+                                color: Color(0xFF1E7044),
+                                size: 22,
+                              ),
                         contentPadding: const EdgeInsets.symmetric(
                           vertical: 14,
                         ),
                       ),
-                    ),
+                    )),
                   ),
 
                   const SizedBox(height: 30),
@@ -374,43 +390,67 @@ class HomeView extends GetView<HomeController> {
                         );
                       }
 
-                      final ads = snapshot.data!.docs;
-
-                      return GridView.builder(
-                        padding: const EdgeInsets.only(top: 15),
-                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 15,
-                          mainAxisSpacing: 15,
-                          childAspectRatio: 0.7,
-                        ),
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: ads.length,
-                        itemBuilder: (context, index) {
-                          final doc = ads[index];
+                      return Obx(() {
+                        final query = controller.searchQuery.value.toLowerCase();
+                        final filteredAds = snapshot.data!.docs.where((doc) {
+                          if (query.isEmpty) return true;
                           final ad = doc.data() as Map<String, dynamic>;
-                          final adWithId = {...ad, 'id': doc.id};
-                          
-                          final images = ad['images'] as List<dynamic>?;
-                          final imageUrl = (images != null && images.isNotEmpty) 
-                              ? images[0] 
-                              : "https://via.placeholder.com/150";
-                          
-                          return ProductCard(
-                            title: ad['title'] ?? "Untitled",
-                            price: "Rs. ${ad['price']} / kg",
-                            quantity: ad['quantity']?.toString(),
-                            imageUrl: imageUrl,
-                            rating: 4.5, // Default for now
-                            reviewCount: 0, // Default for now
-                            data: adWithId,
-                            onTap: () {
-                              Get.toNamed(Routes.SINGLE_ITEM, arguments: adWithId);
-                            },
+                          final title = (ad['title'] ?? '').toString().toLowerCase();
+                          final description = (ad['description'] ?? '').toString().toLowerCase();
+                          return title.contains(query) || description.contains(query);
+                        }).toList();
+
+                        if (filteredAds.isEmpty) {
+                          return Center(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 20),
+                              child: Column(
+                                children: [
+                                  Icon(Icons.search_off, size: 48, color: Colors.grey[400]),
+                                  const SizedBox(height: 10),
+                                  Text("No items found matching your search.".tr, style: TextStyle(color: Colors.grey[600])),
+                                ],
+                              ),
+                            ),
                           );
-                        },
-                      );
+                        }
+
+                        return GridView.builder(
+                          padding: const EdgeInsets.only(top: 15),
+                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 15,
+                            mainAxisSpacing: 15,
+                            childAspectRatio: 0.7,
+                          ),
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: filteredAds.length,
+                          itemBuilder: (context, index) {
+                            final doc = filteredAds[index];
+                            final ad = doc.data() as Map<String, dynamic>;
+                            final adWithId = {...ad, 'id': doc.id};
+                            
+                            final images = ad['images'] as List<dynamic>?;
+                            final imageUrl = (images != null && images.isNotEmpty) 
+                                ? images[0] 
+                                : "https://via.placeholder.com/150";
+                            
+                            return ProductCard(
+                              title: ad['title'] ?? "Untitled",
+                              price: "Rs. ${ad['price']} / kg",
+                              quantity: ad['quantity']?.toString(),
+                              imageUrl: imageUrl,
+                              rating: 4.5, // Default for now
+                              reviewCount: 0, // Default for now
+                              data: adWithId,
+                              onTap: () {
+                                Get.toNamed(Routes.SINGLE_ITEM, arguments: adWithId);
+                              },
+                            );
+                          },
+                        );
+                      });
                     },
                   ),
 

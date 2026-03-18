@@ -12,6 +12,11 @@ class HomeController extends GetxController {
   final isLoading = true.obs;
   final userName = "User".obs;
   final profileImage = "".obs;
+  final searchQuery = "".obs;
+
+  void clearSearch() {
+    searchQuery.value = "";
+  }
 
   @override
   void onInit() {

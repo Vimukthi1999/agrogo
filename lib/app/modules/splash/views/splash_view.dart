@@ -35,13 +35,16 @@ class SplashView extends GetView<SplashController> {
             RichText(
               text: TextSpan(
                 text: 'Agro',
-                style: TextStyle(fontSize: 42, color: Colors.black),
+                style: TextStyle(
+                  fontSize: 42,
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
                 children: [
                   TextSpan(
                     text: 'Go',
                     style: TextStyle(
                       fontSize: 42,
-                      color: Colors.green,
+                      color: Theme.of(context).colorScheme.primary,
                       fontWeight: FontWeight.bold,
                     ),
                   ),

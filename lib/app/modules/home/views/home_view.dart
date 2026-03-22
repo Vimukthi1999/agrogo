@@ -49,7 +49,7 @@ class HomeView extends GetView<HomeController> {
                                 border: Border.all(color: Colors.white, width: 2),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.black.withOpacity(0.2),
+                                    color: Colors.black.withValues(alpha: 0.2),
                                     blurRadius: 8,
                                     offset: const Offset(0, 4),
                                   ),
@@ -57,7 +57,7 @@ class HomeView extends GetView<HomeController> {
                               ),
                               child: CircleAvatar(
                                 radius: 25,
-                                backgroundColor: const Color(0xFF1E7044).withOpacity(0.8),
+                                backgroundColor: const Color(0xFF1E7044).withValues(alpha: 0.8),
                                 backgroundImage: controller.profileImage.value.isNotEmpty
                                     ? NetworkImage(controller.profileImage.value)
                                     : null,
@@ -119,7 +119,7 @@ class HomeView extends GetView<HomeController> {
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: Colors.white.withOpacity(0.2),
+                            color: Colors.white.withValues(alpha: 0.2),
                           ),
                           child: StreamBuilder<QuerySnapshot>(
                             stream: FirebaseFirestore.instance
@@ -191,7 +191,7 @@ class HomeView extends GetView<HomeController> {
                             borderRadius: BorderRadius.circular(15),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
+                                color: Colors.black.withValues(alpha: 0.1),
                                 blurRadius: 10,
                                 offset: const Offset(0, 5),
                               ),
@@ -247,7 +247,7 @@ class HomeView extends GetView<HomeController> {
                             decoration: BoxDecoration(
                               color: controller.hasActiveFilters
                                   ? Theme.of(context).colorScheme.surface
-                                  : Colors.white.withOpacity(0.2),
+                                  : Colors.white.withValues(alpha: 0.2),
                               borderRadius: BorderRadius.circular(12),
                               border: controller.hasActiveFilters
                                   ? Border.all(
@@ -257,7 +257,7 @@ class HomeView extends GetView<HomeController> {
                                   : null,
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.black.withOpacity(0.1),
+                                  color: Colors.black.withValues(alpha: 0.1),
                                   blurRadius: 8,
                                   offset: const Offset(0, 4),
                                 ),
@@ -315,14 +315,6 @@ class HomeView extends GetView<HomeController> {
                         spacing: 8,
                         runSpacing: 8,
                         children: [
-                          if (controller.filterLocation.value.isNotEmpty &&
-                              controller.filterLocation.value != 'All')
-                            _buildFilterChip(
-                              context,
-                              Icons.location_on_outlined,
-                              controller.filterLocation.value,
-                              () => controller.setLocation(''),
-                            ),
                           if (controller.filterProvince.value.isNotEmpty &&
                               controller.filterProvince.value != 'All')
                             _buildFilterChip(
@@ -437,7 +429,7 @@ class HomeView extends GetView<HomeController> {
                                       shape: BoxShape.circle,
                                       color: const Color(
                                         0xFF1E7044,
-                                      ).withOpacity(0.1),
+                                      ).withValues(alpha: 0.1),
                                     ),
                                     child: Padding(
                                       padding: const EdgeInsets.all(8),
@@ -636,10 +628,10 @@ class HomeView extends GetView<HomeController> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+        color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: Theme.of(context).colorScheme.primary.withOpacity(0.3),
+          color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.3),
         ),
       ),
       child: Row(
@@ -659,7 +651,7 @@ class HomeView extends GetView<HomeController> {
             child: Icon(
               Icons.close,
               size: 14,
-              color: Theme.of(context).colorScheme.primary.withOpacity(0.6),
+              color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.6),
             ),
           ),
         ],
@@ -756,20 +748,6 @@ class _HomeFilterBottomSheet extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Location Filter
-                  _buildFilterSection(
-                    context,
-                    icon: Icons.location_on_outlined,
-                    title: 'Location',
-                    subtitle: 'Filter by item location',
-                    child: Obx(() => _buildChipGroup(
-                      context,
-                      items: controller.allDistrictsList,
-                      selectedValue: controller.filterLocation.value,
-                      onSelected: (value) => controller.setLocation(value),
-                    )),
-                  ),
-                  const SizedBox(height: 24),
 
                   // Province Filter
                   _buildFilterSection(
@@ -837,7 +815,7 @@ class _HomeFilterBottomSheet extends StatelessWidget {
               color: Theme.of(context).cardTheme.color,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
+                  color: Colors.black.withValues(alpha: 0.05),
                   blurRadius: 10,
                   offset: const Offset(0, -4),
                 ),
@@ -858,7 +836,6 @@ class _HomeFilterBottomSheet extends StatelessWidget {
                             'filterCategory': controller.filterCategory.value,
                             'filterProvince': controller.filterProvince.value,
                             'filterDistrict': controller.filterDistrict.value,
-                            'filterLocation': controller.filterLocation.value,
                             'searchQuery': controller.searchQuery.value,
                           },
                         );
@@ -934,7 +911,7 @@ class _HomeFilterBottomSheet extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Icon(icon, size: 20, color: Theme.of(context).colorScheme.primary),
@@ -993,13 +970,13 @@ class _HomeFilterBottomSheet extends StatelessWidget {
               border: Border.all(
                 color: isSelected
                     ? Theme.of(context).colorScheme.primary
-                    : Theme.of(context).dividerColor.withOpacity(0.1),
+                    : Theme.of(context).dividerColor.withValues(alpha: 0.1),
                 width: 1,
               ),
                 boxShadow: isSelected
                     ? [
                         BoxShadow(
-                          color: Theme.of(context).colorScheme.primary.withOpacity(0.3),
+                          color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.3),
                           blurRadius: 8,
                           offset: const Offset(0, 2),
                         ),
@@ -1009,7 +986,7 @@ class _HomeFilterBottomSheet extends StatelessWidget {
               child: Text(
                 item,
                 style: TextStyle(
-                  color: isSelected ? Colors.white : Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+                  color: isSelected ? Colors.white : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
                   fontSize: 13,
                   fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
                 ),

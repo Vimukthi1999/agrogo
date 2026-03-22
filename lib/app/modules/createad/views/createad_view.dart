@@ -346,11 +346,11 @@ class CreateadView extends GetView<CreateadController> {
                               vertical: 12,
                             ),
                             decoration: BoxDecoration(
-                              color: Colors.grey[50],
+                              color: Theme.of(context).inputDecorationTheme.fillColor,
                               border: Border.all(
                                 color: controller.locationError.value.isNotEmpty
                                     ? Colors.red
-                                    : Colors.grey[300]!,
+                                    : Theme.of(context).dividerColor.withOpacity(0.1),
                                 width: controller.locationError.value.isNotEmpty
                                     ? 1.5
                                     : 1,
@@ -380,10 +380,10 @@ class CreateadView extends GetView<CreateadController> {
                         children: [
                           Text(
                             "District".tr,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
-                              color: Color(0xFF1E7044),
+                              color: Theme.of(context).colorScheme.primary,
                             ),
                           ),
                           const SizedBox(height: 6),
@@ -393,11 +393,11 @@ class CreateadView extends GetView<CreateadController> {
                               vertical: 12,
                             ),
                             decoration: BoxDecoration(
-                              color: Colors.grey[50],
+                              color: Theme.of(context).inputDecorationTheme.fillColor,
                               border: Border.all(
                                 color: controller.locationError.value.isNotEmpty
                                     ? Colors.red
-                                    : Colors.grey[300]!,
+                                    : Theme.of(context).dividerColor.withOpacity(0.1),
                                 width: controller.locationError.value.isNotEmpty
                                     ? 1.5
                                     : 1,

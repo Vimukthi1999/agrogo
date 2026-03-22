@@ -20,7 +20,6 @@ class HomeController extends GetxController {
   final filterCategory = ''.obs;
   final filterProvince = ''.obs;
   final filterDistrict = ''.obs;
-  final filterLocation = ''.obs;
   final activeFilterCount = 0.obs;
 
   // Sri Lanka provinces and districts
@@ -79,16 +78,11 @@ class HomeController extends GetxController {
     _updateActiveFilterCount();
   }
 
-  void setLocation(String location) {
-    filterLocation.value = location;
-    _updateActiveFilterCount();
-  }
 
   void clearAllFilters() {
     filterCategory.value = '';
     filterProvince.value = '';
     filterDistrict.value = '';
-    filterLocation.value = '';
     _updateActiveFilterCount();
   }
 
@@ -97,7 +91,6 @@ class HomeController extends GetxController {
     if (filterCategory.value.isNotEmpty && filterCategory.value != 'All') count++;
     if (filterProvince.value.isNotEmpty && filterProvince.value != 'All') count++;
     if (filterDistrict.value.isNotEmpty && filterDistrict.value != 'All') count++;
-    if (filterLocation.value.isNotEmpty && filterLocation.value != 'All') count++;
     activeFilterCount.value = count;
   }
 
@@ -132,10 +125,6 @@ class HomeController extends GetxController {
         if (ad['district'] != filterDistrict.value) return false;
       }
 
-      // Location filter
-      if (filterLocation.value.isNotEmpty && filterLocation.value != 'All') {
-        if (ad['district'] != filterLocation.value) return false;
-      }
 
       return true;
     }).toList();

@@ -43,7 +43,7 @@ class FavoritesView extends GetView<FavoritesController> {
                     () => Text(
                       "${controller.favoriteItems.length} items saved".tr,
                       style: TextStyle(
-                        color: Colors.white.withOpacity(0.7),
+                        color: Colors.white.withValues(alpha: 0.7),
                         fontSize: 14,
                       ),
                     ),
@@ -59,7 +59,7 @@ class FavoritesView extends GetView<FavoritesController> {
                             borderRadius: BorderRadius.circular(12),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
+                                color: Colors.black.withValues(alpha: 0.1),
                                 blurRadius: 8,
                                 offset: const Offset(0, 4),
                               ),
@@ -106,7 +106,7 @@ class FavoritesView extends GetView<FavoritesController> {
                             decoration: BoxDecoration(
                               color: controller.hasActiveFilters
                                   ? Theme.of(context).colorScheme.surface
-                                  : Colors.white.withOpacity(0.2),
+                                  : Colors.white.withValues(alpha: 0.2),
                               borderRadius: BorderRadius.circular(12),
                               border: controller.hasActiveFilters
                                   ? Border.all(
@@ -116,7 +116,7 @@ class FavoritesView extends GetView<FavoritesController> {
                                   : null,
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.black.withOpacity(0.1),
+                                  color: Colors.black.withValues(alpha: 0.1),
                                   blurRadius: 8,
                                   offset: const Offset(0, 4),
                                 ),
@@ -202,13 +202,13 @@ class FavoritesView extends GetView<FavoritesController> {
             Container(
               padding: const EdgeInsets.all(30),
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
               child: Icon(
                 Icons.favorite_border,
                 size: 64,
-                color: Theme.of(context).colorScheme.primary.withOpacity(0.5),
+                color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.5),
               ),
             ),
             const SizedBox(height: 20),
@@ -393,19 +393,6 @@ class _FilterBottomSheet extends StatelessWidget {
                 children: [
                   _buildFilterSection(
                     context,
-                    icon: Icons.location_on_outlined,
-                    title: 'Location',
-                    subtitle: 'Filter by item location',
-                    child: Obx(() => _buildChipGroup(
-                      context,
-                      items: controller.availableLocations,
-                      selectedValue: controller.filterLocation.value,
-                      onSelected: (value) => controller.setLocation(value),
-                    )),
-                  ),
-                  const SizedBox(height: 24),
-                  _buildFilterSection(
-                    context,
                     icon: Icons.map_outlined,
                     title: 'Province',
                     subtitle: 'Filter by province',
@@ -464,7 +451,7 @@ class _FilterBottomSheet extends StatelessWidget {
               color: Theme.of(context).cardTheme.color,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
+                  color: Colors.black.withValues(alpha: 0.05),
                   blurRadius: 10,
                   offset: const Offset(0, -4),
                 ),
@@ -515,7 +502,7 @@ class _FilterBottomSheet extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Icon(icon, size: 20, color: Theme.of(context).colorScheme.primary),
@@ -581,7 +568,7 @@ class _FilterBottomSheet extends StatelessWidget {
             child: Text(
               item,
               style: TextStyle(
-                color: isSelected ? Colors.white : Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+                color: isSelected ? Colors.white : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
                 fontSize: 13,
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
               ),

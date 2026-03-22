@@ -65,9 +65,9 @@ class _ChatRoomViewState extends State<ChatRoomView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F5),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF1E7044),
+        backgroundColor: Theme.of(context).colorScheme.primary,
         foregroundColor: Colors.white,
         elevation: 0,
         titleSpacing: 0,
@@ -136,7 +136,7 @@ class _ChatRoomViewState extends State<ChatRoomView> {
                         Icon(
                           Icons.waving_hand_rounded,
                           size: 48,
-                          color: const Color(0xFF1E7044).withOpacity(0.3),
+                          color: Theme.of(context).colorScheme.primary.withOpacity(0.3),
                         ),
                         const SizedBox(height: 12),
                         Text(
@@ -202,7 +202,7 @@ class _ChatRoomViewState extends State<ChatRoomView> {
               MediaQuery.of(context).padding.bottom + 12,
             ),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).cardTheme.color,
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.05),
@@ -217,7 +217,7 @@ class _ChatRoomViewState extends State<ChatRoomView> {
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFF5F5F5),
+                      color: Theme.of(context).inputDecorationTheme.fillColor,
                       borderRadius: BorderRadius.circular(24),
                     ),
                     child: TextField(
@@ -241,8 +241,8 @@ class _ChatRoomViewState extends State<ChatRoomView> {
                   child: Container(
                     width: 48,
                     height: 48,
-                    decoration: const BoxDecoration(
-                      color: Color(0xFF1E7044),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.primary,
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(
@@ -276,7 +276,7 @@ class _ChatRoomViewState extends State<ChatRoomView> {
         margin: const EdgeInsets.only(bottom: 6),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         decoration: BoxDecoration(
-          color: isMine ? const Color(0xFF1E7044) : Colors.white,
+          color: isMine ? Theme.of(context).colorScheme.primary : Theme.of(context).cardTheme.color,
           borderRadius: BorderRadius.only(
             topLeft: const Radius.circular(18),
             topRight: const Radius.circular(18),
@@ -302,7 +302,7 @@ class _ChatRoomViewState extends State<ChatRoomView> {
             Text(
               msg['message'] ?? '',
               style: TextStyle(
-                color: isMine ? Colors.white : const Color(0xFF212121),
+                color: isMine ? Colors.white : Theme.of(context).colorScheme.onSurface,
                 fontSize: 15,
                 height: 1.4,
               ),
@@ -384,7 +384,7 @@ class _ChatRoomViewState extends State<ChatRoomView> {
           padding:
               const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
           decoration: BoxDecoration(
-            color: Colors.grey[200],
+            color: Theme.of(context).inputDecorationTheme.fillColor,
             borderRadius: BorderRadius.circular(12),
           ),
           child: Text(

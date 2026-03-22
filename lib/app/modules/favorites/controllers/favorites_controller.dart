@@ -14,7 +14,6 @@ class FavoritesController extends GetxController {
   final filterCategory = ''.obs;
   final filterProvince = ''.obs;
   final filterDistrict = ''.obs;
-  final filterLocation = ''.obs;
 
   // Track active filter count for badge
   final activeFilterCount = 0.obs;
@@ -58,17 +57,6 @@ class FavoritesController extends GetxController {
     ];
   }
 
-  // Dynamically extract unique locations from favorite items
-  List<String> get availableLocations {
-    final locations = <String>{};
-    for (final item in favoriteItems) {
-      final district = item['district']?.toString() ?? '';
-      if (district.isNotEmpty) {
-        locations.add(district);
-      }
-    }
-    return ['All', ...locations.toList()..sort()];
-  }
 
   // Dynamically extract unique categories from favorite items
   List<String> get availableCategories {
@@ -162,17 +150,10 @@ class FavoritesController extends GetxController {
           filterDistrict.value == 'All' ||
           item['district'] == filterDistrict.value;
 
-      // Location filter (same as district effectively, for user-friendly naming)
-      final matchesLocation =
-          filterLocation.value.isEmpty ||
-          filterLocation.value == 'All' ||
-          item['district'] == filterLocation.value;
-
       return matchesSearch &&
           matchesCategory &&
           matchesProvince &&
-          matchesDistrict &&
-          matchesLocation;
+          matchesDistrict;
     }).toList();
   }
 
@@ -226,16 +207,11 @@ class FavoritesController extends GetxController {
     _updateActiveFilterCount();
   }
 
-  void setLocation(String location) {
-    filterLocation.value = location;
-    _updateActiveFilterCount();
-  }
 
   void clearAllFilters() {
     filterCategory.value = '';
     filterProvince.value = '';
     filterDistrict.value = '';
-    filterLocation.value = '';
     _updateActiveFilterCount();
   }
 
@@ -244,7 +220,6 @@ class FavoritesController extends GetxController {
     if (filterCategory.value.isNotEmpty && filterCategory.value != 'All') count++;
     if (filterProvince.value.isNotEmpty && filterProvince.value != 'All') count++;
     if (filterDistrict.value.isNotEmpty && filterDistrict.value != 'All') count++;
-    if (filterLocation.value.isNotEmpty && filterLocation.value != 'All') count++;
     activeFilterCount.value = count;
   }
 

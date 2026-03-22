@@ -22,7 +22,6 @@ class _FilteredMapViewState extends State<FilteredMapView> {
   late String filterCategory;
   late String filterProvince;
   late String filterDistrict;
-  late String filterLocation;
   late String searchQuery;
 
   @override
@@ -32,7 +31,6 @@ class _FilteredMapViewState extends State<FilteredMapView> {
     filterCategory = args['filterCategory'] ?? '';
     filterProvince = args['filterProvince'] ?? '';
     filterDistrict = args['filterDistrict'] ?? '';
-    filterLocation = args['filterLocation'] ?? '';
     searchQuery = args['searchQuery'] ?? '';
     _fetchFilteredListings();
   }
@@ -71,9 +69,6 @@ class _FilteredMapViewState extends State<FilteredMapView> {
           if (ad['district'] != filterDistrict) continue;
         }
 
-        if (filterLocation.isNotEmpty && filterLocation != 'All') {
-          if (ad['district'] != filterLocation) continue;
-        }
 
         // Must have valid location
         final location = ad['location'];
@@ -158,9 +153,6 @@ class _FilteredMapViewState extends State<FilteredMapView> {
 
   List<String> _getActiveFilterLabels() {
     final labels = <String>[];
-    if (filterLocation.isNotEmpty && filterLocation != 'All') {
-      labels.add(filterLocation);
-    }
     if (filterProvince.isNotEmpty && filterProvince != 'All') {
       labels.add(filterProvince);
     }
@@ -227,7 +219,7 @@ class _FilteredMapViewState extends State<FilteredMapView> {
                                 ),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.black.withOpacity(0.3),
+                                    color: Colors.black.withValues(alpha: 0.3),
                                     blurRadius: 6,
                                     offset: const Offset(0, 3),
                                   ),
@@ -265,7 +257,7 @@ class _FilteredMapViewState extends State<FilteredMapView> {
                       borderRadius: BorderRadius.circular(16),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.12),
+                          color: Colors.black.withValues(alpha: 0.12),
                           blurRadius: 12,
                           offset: const Offset(0, 4),
                         ),
@@ -295,7 +287,7 @@ class _FilteredMapViewState extends State<FilteredMapView> {
                           ),
                           decoration: BoxDecoration(
                             color:
-                                const Color(0xFF1E7044).withOpacity(0.1),
+                                const Color(0xFF1E7044).withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: Text(
@@ -330,11 +322,11 @@ class _FilteredMapViewState extends State<FilteredMapView> {
                                 borderRadius: BorderRadius.circular(20),
                                 border: Border.all(
                                   color: const Color(0xFF1E7044)
-                                      .withOpacity(0.3),
+                                      .withValues(alpha: 0.3),
                                 ),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.black.withOpacity(0.08),
+                                    color: Colors.black.withValues(alpha: 0.08),
                                     blurRadius: 4,
                                     offset: const Offset(0, 2),
                                   ),
@@ -389,7 +381,7 @@ class _FilteredMapViewState extends State<FilteredMapView> {
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
+                      color: Colors.black.withValues(alpha: 0.1),
                       blurRadius: 12,
                       offset: const Offset(0, 4),
                     ),
@@ -455,7 +447,7 @@ class _FilteredMapViewState extends State<FilteredMapView> {
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.15),
+              color: Colors.black.withValues(alpha: 0.15),
               blurRadius: 16,
               offset: const Offset(0, 6),
             ),

@@ -18,7 +18,7 @@ class CreateadView extends GetView<CreateadController> {
           controller.isEditing.value ? 'Edit Ad'.tr : 'Create Ad'.tr,
         )),
         centerTitle: true,
-        backgroundColor: const Color(0xFF1E7044),
+        backgroundColor: Theme.of(context).colorScheme.primary,
         elevation: 0,
       ),
       body: SingleChildScrollView(
@@ -27,10 +27,11 @@ class CreateadView extends GetView<CreateadController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildSectionTitle('Ad Title'.tr),
+              _buildSectionTitle(context, 'Ad Title'.tr),
               const SizedBox(height: 10),
               Obx(
                 () => _buildTextField(
+                  context,
                   controller: controller.titleController,
                   hintText: 'Enter ad title (e.g., Fresh Tomatoes)'.tr,
                   errorText: controller.titleError.value,
@@ -41,10 +42,11 @@ class CreateadView extends GetView<CreateadController> {
               ),
               const SizedBox(height: 20),
 
-              _buildSectionTitle('Description'.tr),
+              _buildSectionTitle(context, 'Description'.tr),
               const SizedBox(height: 10),
               Obx(
                 () => _buildTextField(
+                  context,
                   controller: controller.descriptionController,
                   hintText: 'Describe your product in detail'.tr,
                   errorText: controller.descriptionError.value,
@@ -63,10 +65,11 @@ class CreateadView extends GetView<CreateadController> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildSectionTitle('Quantity (kg)'.tr),
+                        _buildSectionTitle(context, 'Quantity (kg)'.tr),
                         const SizedBox(height: 10),
                         Obx(
                           () => _buildTextField(
+                            context,
                             controller: controller.quantityController,
                             hintText: '0',
                             errorText: controller.quantityError.value,
@@ -85,10 +88,11 @@ class CreateadView extends GetView<CreateadController> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildSectionTitle('Price per kg (Rs)'.tr),
+                        _buildSectionTitle(context, 'Price per kg (Rs)'.tr),
                         const SizedBox(height: 10),
                         Obx(
                           () => _buildTextField(
+                            context,
                             controller: controller.priceController,
                             hintText: '0',
                             errorText: controller.priceError.value,
@@ -106,7 +110,7 @@ class CreateadView extends GetView<CreateadController> {
               ),
               const SizedBox(height: 20),
 
-              _buildSectionTitle('Category'.tr),
+              _buildSectionTitle(context, 'Category'.tr),
               const SizedBox(height: 10),
               StreamBuilder<List<CategoryModel>>(
                 stream: controller.getCategories(),
@@ -165,20 +169,18 @@ class CreateadView extends GetView<CreateadController> {
                               width: 110,
                               margin: const EdgeInsets.only(right: 12),
                               decoration: BoxDecoration(
-                                color: Colors.white,
+                                color: Theme.of(context).cardTheme.color,
                                 borderRadius: BorderRadius.circular(18),
                                 border: isSelected
                                     ? Border.all(
-                                        color: const Color(0xFF1E7044),
+                                        color: Theme.of(context).colorScheme.primary,
                                         width: 2.5,
                                       )
                                     : null,
                                 boxShadow: [
                                   BoxShadow(
                                     color: isSelected
-                                        ? const Color(
-                                            0xFF1E7044,
-                                          ).withOpacity(0.3)
+                                        ? Theme.of(context).colorScheme.primary.withOpacity(0.3)
                                         : Colors.black.withOpacity(0.08),
                                     blurRadius: isSelected ? 12 : 8,
                                     offset: const Offset(0, 3),
@@ -193,9 +195,7 @@ class CreateadView extends GetView<CreateadController> {
                                     width: 70,
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
-                                      color: const Color(
-                                        0xFF1E7044,
-                                      ).withOpacity(0.1),
+                                      color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
                                     ),
                                     child: Padding(
                                       padding: const EdgeInsets.all(8),
@@ -206,7 +206,7 @@ class CreateadView extends GetView<CreateadController> {
                                             (context, error, stackTrace) {
                                               return Icon(
                                                 Icons.image_not_supported,
-                                                color: const Color(0xFF1E7044),
+                                                color: Theme.of(context).colorScheme.primary,
                                               );
                                             },
                                       ),
@@ -218,10 +218,10 @@ class CreateadView extends GetView<CreateadController> {
                                     textAlign: TextAlign.center,
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 12,
                                       fontWeight: FontWeight.w600,
-                                      color: Color(0xFF1E7044),
+                                      color: Theme.of(context).colorScheme.primary,
                                     ),
                                   ),
                                 ],
@@ -254,12 +254,12 @@ class CreateadView extends GetView<CreateadController> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   RichText(
-                    text: const TextSpan(
+                    text: TextSpan(
                       children: [
                         TextSpan(
                           text: 'Location',
                           style: TextStyle(
-                            color: Color(0xFF1E7044),
+                            color: Theme.of(context).colorScheme.primary,
                             fontWeight: FontWeight.w600,
                             fontSize: 13,
                           ),
@@ -286,7 +286,7 @@ class CreateadView extends GetView<CreateadController> {
                           vertical: 6,
                         ),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF1E7044).withOpacity(0.1),
+                          color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Row(
@@ -310,8 +310,8 @@ class CreateadView extends GetView<CreateadController> {
                               controller.isGettingLocation.value
                                   ? "Detecting...".tr
                                   : "Detect".tr,
-                              style: const TextStyle(
-                                color: Color(0xFF1E7044),
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.primary,
                                 fontSize: 12,
                                 fontWeight: FontWeight.w600,
                               ),
@@ -364,7 +364,7 @@ class CreateadView extends GetView<CreateadController> {
                               style: TextStyle(
                                 color: controller.province.isEmpty
                                     ? Colors.grey[600]
-                                    : const Color(0xFF1E7044),
+                                    : Theme.of(context).colorScheme.onSurface,
                                 fontSize: 13,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -411,7 +411,7 @@ class CreateadView extends GetView<CreateadController> {
                               style: TextStyle(
                                 color: controller.district.isEmpty
                                     ? Colors.grey[600]
-                                    : const Color(0xFF1E7044),
+                                    : Theme.of(context).colorScheme.onSurface,
                                 fontSize: 13,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -437,7 +437,7 @@ class CreateadView extends GetView<CreateadController> {
                 ),
               const SizedBox(height: 20),
 
-              _buildSectionTitle('Product Images'.tr),
+              _buildSectionTitle(context, 'Product Images'.tr),
               const SizedBox(height: 10),
               Obx(
                 () => Column(
@@ -451,12 +451,12 @@ class CreateadView extends GetView<CreateadController> {
                           height: 150,
                           decoration: BoxDecoration(
                             border: Border.all(
-                              color: Colors.grey[300]!,
+                              color: Theme.of(context).dividerColor,
                               width: 2,
                               style: BorderStyle.solid,
                             ),
                             borderRadius: BorderRadius.circular(12),
-                            color: Colors.grey[50],
+                            color: Theme.of(context).inputDecorationTheme.fillColor,
                           ),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -572,7 +572,7 @@ class CreateadView extends GetView<CreateadController> {
                                 ),
                                 decoration: BoxDecoration(
                                   border: Border.all(
-                                    color: const Color(0xFF1E7044),
+                                    color: Theme.of(context).colorScheme.primary,
                                     width: 1.5,
                                   ),
                                   borderRadius: BorderRadius.circular(12),
@@ -580,8 +580,8 @@ class CreateadView extends GetView<CreateadController> {
                                 child: Center(
                                   child: Text(
                                     'Add More Images'.tr,
-                                    style: const TextStyle(
-                                      color: Color(0xFF1E7044),
+                                    style: TextStyle(
+                                      color: Theme.of(context).colorScheme.primary,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
@@ -615,7 +615,7 @@ class CreateadView extends GetView<CreateadController> {
                         ? null
                         : () => controller.submitAd(),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF1E7044),
+                      backgroundColor: Theme.of(context).colorScheme.primary,
                       disabledBackgroundColor: Colors.grey[400],
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -669,10 +669,10 @@ class CreateadView extends GetView<CreateadController> {
           children: [
             Text(
               index == null ? 'Add Image'.tr : 'Retake Image'.tr,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF1E7044),
+                color: Theme.of(context).colorScheme.primary,
               ),
             ),
             const SizedBox(height: 20),
@@ -680,6 +680,7 @@ class CreateadView extends GetView<CreateadController> {
               children: [
                 Expanded(
                   child: _buildSourceOption(
+                    context,
                     icon: Icons.camera_alt_outlined,
                     label: 'Camera'.tr,
                     onTap: () {
@@ -695,6 +696,7 @@ class CreateadView extends GetView<CreateadController> {
                 const SizedBox(width: 20),
                 Expanded(
                   child: _buildSourceOption(
+                    context,
                     icon: Icons.photo_library_outlined,
                     label: 'Gallery'.tr,
                     onTap: () {
@@ -716,7 +718,8 @@ class CreateadView extends GetView<CreateadController> {
     );
   }
 
-  Widget _buildSourceOption({
+  Widget _buildSourceOption(
+    BuildContext context, {
     required IconData icon,
     required String label,
     required VoidCallback onTap,
@@ -726,18 +729,18 @@ class CreateadView extends GetView<CreateadController> {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 20),
         decoration: BoxDecoration(
-          color: Colors.grey[50],
+          color: Theme.of(context).inputDecorationTheme.fillColor,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.grey[200]!),
+          border: Border.all(color: Theme.of(context).dividerColor.withOpacity(0.5)),
         ),
         child: Column(
           children: [
-            Icon(icon, color: const Color(0xFF1E7044), size: 30),
+            Icon(icon, color: Theme.of(context).colorScheme.primary, size: 30),
             const SizedBox(height: 8),
             Text(
               label,
-              style: const TextStyle(
-                color: Color(0xFF1E7044),
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.primary,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -747,18 +750,19 @@ class CreateadView extends GetView<CreateadController> {
     );
   }
 
-  Widget _buildSectionTitle(String title) {
+  Widget _buildSectionTitle(BuildContext context, String title) {
     return Text(
       title,
-      style: const TextStyle(
+      style: TextStyle(
         fontSize: 14,
         fontWeight: FontWeight.bold,
-        color: Color(0xFF1E7044),
+        color: Theme.of(context).colorScheme.primary,
       ),
     );
   }
 
-  Widget _buildTextField({
+  Widget _buildTextField(
+    BuildContext context, {
     required TextEditingController controller,
     required String hintText,
     String errorText = '',
@@ -775,24 +779,30 @@ class CreateadView extends GetView<CreateadController> {
         hintText: hintText,
         errorText: errorText.isEmpty ? null : errorText,
         filled: true,
-        fillColor: Colors.grey[50],
+        fillColor: Theme.of(context).inputDecorationTheme.fillColor,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(
-            color: errorText.isEmpty ? Colors.grey[300]! : Colors.red,
+            color: errorText.isEmpty
+                ? Theme.of(context).dividerColor.withOpacity(0.2)
+                : Colors.red,
           ),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(
-            color: errorText.isEmpty ? Colors.grey[300]! : Colors.red,
+            color: errorText.isEmpty
+                ? Theme.of(context).dividerColor.withOpacity(0.2)
+                : Colors.red,
             width: 1.5,
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(
-            color: errorText.isEmpty ? const Color(0xFF1E7044) : Colors.red,
+            color: errorText.isEmpty
+                ? Theme.of(context).colorScheme.primary
+                : Colors.red,
             width: 2,
           ),
         ),
@@ -852,14 +862,15 @@ class CreateadView extends GetView<CreateadController> {
               padding: const EdgeInsets.only(left: 8, bottom: 20),
               child: Text(
                 "Select Location Method".tr,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF1E7044),
+                  color: Theme.of(context).colorScheme.primary,
                 ),
               ),
             ),
             _buildLocationOption(
+              context,
               icon: Icons.bookmark_outline,
               title: "Use Saved Location".tr,
               subtitle: "Fetch location from your profile".tr,
@@ -873,6 +884,7 @@ class CreateadView extends GetView<CreateadController> {
             ),
             const SizedBox(height: 12),
             _buildLocationOption(
+              context,
               icon: Icons.my_location,
               title: "Detect Current Location".tr,
               subtitle: "Get your current GPS position".tr,
@@ -886,6 +898,7 @@ class CreateadView extends GetView<CreateadController> {
             ),
             const SizedBox(height: 12),
             _buildLocationOption(
+              context,
               icon: Icons.map_outlined,
               title: "Select from Map".tr,
               subtitle: "Pick a location manually on map".tr,
@@ -904,7 +917,8 @@ class CreateadView extends GetView<CreateadController> {
     );
   }
 
-  Widget _buildLocationOption({
+  Widget _buildLocationOption(
+    BuildContext context, {
     required IconData icon,
     required String title,
     required String subtitle,
@@ -916,7 +930,7 @@ class CreateadView extends GetView<CreateadController> {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey[200]!),
+          border: Border.all(color: Theme.of(context).dividerColor.withOpacity(0.1)),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Row(
@@ -924,10 +938,10 @@ class CreateadView extends GetView<CreateadController> {
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: const Color(0xFF1E7044).withOpacity(0.1),
+                color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
                 shape: BoxShape.circle,
               ),
-              child: Icon(icon, color: const Color(0xFF1E7044)),
+              child: Icon(icon, color: Theme.of(context).colorScheme.primary),
             ),
             const SizedBox(width: 16),
             Expanded(

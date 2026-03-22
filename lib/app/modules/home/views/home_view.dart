@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import '../../../models/category_model.dart';
 import '../../../routes/app_pages.dart';
 import '../../common/item_card.dart';
@@ -188,7 +187,7 @@ class HomeView extends GetView<HomeController> {
                         child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: Theme.of(context).inputDecorationTheme.fillColor,
                             borderRadius: BorderRadius.circular(15),
                             boxShadow: [
                               BoxShadow(
@@ -199,8 +198,8 @@ class HomeView extends GetView<HomeController> {
                             ],
                           ),
                           child: Obx(() => TextField(
-                            style: const TextStyle(
-                              color: Color(0xFF1E7044),
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary,
                               fontSize: 14,
                             ),
                             onChanged: (val) {
@@ -213,9 +212,9 @@ class HomeView extends GetView<HomeController> {
                                 color: Colors.grey,
                                 fontSize: 14,
                               ),
-                              icon: const Icon(
+                              icon: Icon(
                                 Icons.search,
-                                color: Color(0xFF1E7044),
+                                color: Theme.of(context).colorScheme.primary,
                                 size: 22,
                               ),
                               suffixIcon: controller.searchQuery.value.isNotEmpty
@@ -223,9 +222,9 @@ class HomeView extends GetView<HomeController> {
                                       onTap: () {
                                         controller.clearSearch();
                                       },
-                                      child: const Icon(
+                                      child: Icon(
                                         Icons.close,
-                                        color: Color(0xFF1E7044),
+                                        color: Theme.of(context).colorScheme.primary,
                                         size: 22,
                                       ),
                                     )
@@ -247,7 +246,7 @@ class HomeView extends GetView<HomeController> {
                             height: 48,
                             decoration: BoxDecoration(
                               color: controller.hasActiveFilters
-                                  ? Colors.white
+                                  ? Theme.of(context).colorScheme.surface
                                   : Colors.white.withOpacity(0.2),
                               borderRadius: BorderRadius.circular(12),
                               border: controller.hasActiveFilters
@@ -270,7 +269,7 @@ class HomeView extends GetView<HomeController> {
                                 Icon(
                                   Icons.tune_rounded,
                                   color: controller.hasActiveFilters
-                                      ? const Color(0xFF1E7044)
+                                      ? Theme.of(context).colorScheme.primary
                                       : Colors.white,
                                   size: 22,
                                 ),
@@ -319,6 +318,7 @@ class HomeView extends GetView<HomeController> {
                           if (controller.filterLocation.value.isNotEmpty &&
                               controller.filterLocation.value != 'All')
                             _buildFilterChip(
+                              context,
                               Icons.location_on_outlined,
                               controller.filterLocation.value,
                               () => controller.setLocation(''),
@@ -326,6 +326,7 @@ class HomeView extends GetView<HomeController> {
                           if (controller.filterProvince.value.isNotEmpty &&
                               controller.filterProvince.value != 'All')
                             _buildFilterChip(
+                              context,
                               Icons.map_outlined,
                               controller.filterProvince.value,
                               () => controller.setProvince(''),
@@ -333,6 +334,7 @@ class HomeView extends GetView<HomeController> {
                           if (controller.filterDistrict.value.isNotEmpty &&
                               controller.filterDistrict.value != 'All')
                             _buildFilterChip(
+                              context,
                               Icons.place_outlined,
                               controller.filterDistrict.value,
                               () => controller.setDistrict(''),
@@ -340,6 +342,7 @@ class HomeView extends GetView<HomeController> {
                           if (controller.filterCategory.value.isNotEmpty &&
                               controller.filterCategory.value != 'All')
                             _buildFilterChip(
+                              context,
                               Icons.category_outlined,
                               controller.filterCategory.value,
                               () => controller.setCategory(''),
@@ -353,8 +356,8 @@ class HomeView extends GetView<HomeController> {
 
                   Text(
                     "Categories".tr,
-                    style: const TextStyle(
-                      color: Color(0xFF1E7044),
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.primary,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                       letterSpacing: 0.5,
@@ -414,7 +417,7 @@ class HomeView extends GetView<HomeController> {
                                 width: 100,
                                 margin: const EdgeInsets.only(right: 12),
                                 decoration: BoxDecoration(
-                                  color: Colors.white,
+                                  color: Theme.of(context).cardTheme.color,
                                   borderRadius: BorderRadius.circular(18),
                                   boxShadow: [
                                     BoxShadow(
@@ -456,10 +459,10 @@ class HomeView extends GetView<HomeController> {
                                     textAlign: TextAlign.center,
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 12,
                                       fontWeight: FontWeight.w600,
-                                      color: Color(0xFF1E7044),
+                                      color: Theme.of(context).colorScheme.primary,
                                     ),
                                   ),
                                  ],
@@ -478,8 +481,8 @@ class HomeView extends GetView<HomeController> {
                     children: [
                       Text(
                         "New Listings".tr,
-                        style: const TextStyle(
-                          color: Color(0xFF1E7044),
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.primary,
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
@@ -549,10 +552,10 @@ class HomeView extends GetView<HomeController> {
                                     const SizedBox(height: 8),
                                     TextButton.icon(
                                       onPressed: controller.clearAllFilters,
-                                      icon: const Icon(Icons.clear_all, color: Color(0xFF1E7044)),
+                                      icon: Icon(Icons.clear_all, color: Theme.of(context).colorScheme.primary),
                                       label: Text(
                                         "Clear all filters".tr,
-                                        style: const TextStyle(color: Color(0xFF1E7044)),
+                                        style: TextStyle(color: Theme.of(context).colorScheme.primary),
                                       ),
                                     ),
                                   ],
@@ -629,25 +632,23 @@ class HomeView extends GetView<HomeController> {
     );
   }
 
-  Widget _buildFilterChip(IconData icon, String label, VoidCallback onRemove) {
+  Widget _buildFilterChip(BuildContext context, IconData icon, String label, VoidCallback onRemove) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: const Color(0xFF1E7044).withOpacity(0.1),
+        color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: const Color(0xFF1E7044).withOpacity(0.3),
+          color: Theme.of(context).colorScheme.primary.withOpacity(0.3),
         ),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 14, color: const Color(0xFF1E7044)),
-          const SizedBox(width: 4),
           Text(
             label,
-            style: const TextStyle(
-              color: Color(0xFF1E7044),
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.primary,
               fontSize: 12,
               fontWeight: FontWeight.w500,
             ),
@@ -658,7 +659,7 @@ class HomeView extends GetView<HomeController> {
             child: Icon(
               Icons.close,
               size: 14,
-              color: const Color(0xFF1E7044).withOpacity(0.6),
+              color: Theme.of(context).colorScheme.primary.withOpacity(0.6),
             ),
           ),
         ],
@@ -688,9 +689,9 @@ class _HomeFilterBottomSheet extends StatelessWidget {
       constraints: BoxConstraints(
         maxHeight: MediaQuery.of(context).size.height * 0.75,
       ),
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardTheme.color,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -711,12 +712,12 @@ class _HomeFilterBottomSheet extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
+                Text(
                   'Filter Products',
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF1E7044),
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
                 Row(
@@ -762,6 +763,7 @@ class _HomeFilterBottomSheet extends StatelessWidget {
                     title: 'Location',
                     subtitle: 'Filter by item location',
                     child: Obx(() => _buildChipGroup(
+                      context,
                       items: controller.allDistrictsList,
                       selectedValue: controller.filterLocation.value,
                       onSelected: (value) => controller.setLocation(value),
@@ -776,6 +778,7 @@ class _HomeFilterBottomSheet extends StatelessWidget {
                     title: 'Province',
                     subtitle: 'Filter by province',
                     child: Obx(() => _buildChipGroup(
+                      context,
                       items: controller.provinces,
                       selectedValue: controller.filterProvince.value,
                       onSelected: (value) => controller.setProvince(value),
@@ -790,6 +793,7 @@ class _HomeFilterBottomSheet extends StatelessWidget {
                     title: 'District',
                     subtitle: 'Filter by district',
                     child: Obx(() => _buildChipGroup(
+                      context,
                       items: controller.districts,
                       selectedValue: controller.filterDistrict.value,
                       onSelected: (value) => controller.setDistrict(value),
@@ -813,6 +817,7 @@ class _HomeFilterBottomSheet extends StatelessWidget {
                           );
                         }
                         return Obx(() => _buildChipGroup(
+                          context,
                           items: categoryNames,
                           selectedValue: controller.filterCategory.value,
                           onSelected: (value) => controller.setCategory(value),
@@ -829,7 +834,7 @@ class _HomeFilterBottomSheet extends StatelessWidget {
           Container(
             padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).cardTheme.color,
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.05),
@@ -867,9 +872,9 @@ class _HomeFilterBottomSheet extends StatelessWidget {
                         ),
                       ),
                       style: OutlinedButton.styleFrom(
-                        foregroundColor: const Color(0xFF1E7044),
-                        side: const BorderSide(
-                          color: Color(0xFF1E7044),
+                        foregroundColor: Theme.of(context).colorScheme.primary,
+                        side: BorderSide(
+                          color: Theme.of(context).colorScheme.primary,
                           width: 1.5,
                         ),
                         shape: RoundedRectangleBorder(
@@ -887,7 +892,7 @@ class _HomeFilterBottomSheet extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: () => Navigator.pop(context),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF1E7044),
+                        backgroundColor: Theme.of(context).colorScheme.primary,
                         foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -929,10 +934,10 @@ class _HomeFilterBottomSheet extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: const Color(0xFF1E7044).withOpacity(0.1),
+                color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: Icon(icon, size: 20, color: const Color(0xFF1E7044)),
+              child: Icon(icon, size: 20, color: Theme.of(context).colorScheme.primary),
             ),
             const SizedBox(width: 12),
             Column(
@@ -940,10 +945,10 @@ class _HomeFilterBottomSheet extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF212121),
+                    color: Theme.of(context).colorScheme.onSurface,
                   ),
                 ),
                 Text(
@@ -963,7 +968,8 @@ class _HomeFilterBottomSheet extends StatelessWidget {
     );
   }
 
-  Widget _buildChipGroup({
+  Widget _buildChipGroup(
+    BuildContext context, {
     required List<String> items,
     required String selectedValue,
     required Function(String) onSelected,
@@ -981,33 +987,33 @@ class _HomeFilterBottomSheet extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
             decoration: BoxDecoration(
               color: isSelected
-                  ? const Color(0xFF1E7044)
-                  : const Color(0xFFF5F5F5),
+                  ? Theme.of(context).colorScheme.primary
+                  : Theme.of(context).inputDecorationTheme.fillColor,
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
                 color: isSelected
-                    ? const Color(0xFF1E7044)
-                    : Colors.grey.shade300,
+                    ? Theme.of(context).colorScheme.primary
+                    : Theme.of(context).dividerColor.withOpacity(0.1),
                 width: 1,
               ),
-              boxShadow: isSelected
-                  ? [
-                      BoxShadow(
-                        color: const Color(0xFF1E7044).withOpacity(0.3),
-                        blurRadius: 8,
-                        offset: const Offset(0, 2),
-                      ),
-                    ]
-                  : null,
+                boxShadow: isSelected
+                    ? [
+                        BoxShadow(
+                          color: Theme.of(context).colorScheme.primary.withOpacity(0.3),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ]
+                    : null,
             ),
-            child: Text(
-              item,
-              style: TextStyle(
-                color: isSelected ? Colors.white : Colors.grey[700],
-                fontSize: 13,
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+              child: Text(
+                item,
+                style: TextStyle(
+                  color: isSelected ? Colors.white : Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+                  fontSize: 13,
+                  fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                ),
               ),
-            ),
           ),
         );
       }).toList(),

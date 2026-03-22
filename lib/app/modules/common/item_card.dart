@@ -31,7 +31,7 @@ class ProductCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).cardTheme.color,
           borderRadius: BorderRadius.circular(24),
           boxShadow: [
             BoxShadow(
@@ -85,10 +85,10 @@ class ProductCard extends StatelessWidget {
                           title,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
-                            color: Color(0xFF1E7044),
+                            color: Theme.of(context).colorScheme.primary,
                           ),
                         ),
                         if (quantity != null) ...[

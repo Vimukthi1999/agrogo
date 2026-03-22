@@ -43,7 +43,7 @@ class FavoritesView extends GetView<FavoritesController> {
                     () => Text(
                       "${controller.favoriteItems.length} items saved".tr,
                       style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.7),
+                        color: Colors.white.withOpacity(0.7),
                         fontSize: 14,
                       ),
                     ),
@@ -55,11 +55,11 @@ class FavoritesView extends GetView<FavoritesController> {
                       Expanded(
                         child: Container(
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: Theme.of(context).inputDecorationTheme.fillColor,
                             borderRadius: BorderRadius.circular(12),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withValues(alpha: 0.1),
+                                color: Colors.black.withOpacity(0.1),
                                 blurRadius: 8,
                                 offset: const Offset(0, 4),
                               ),
@@ -72,16 +72,16 @@ class FavoritesView extends GetView<FavoritesController> {
                               },
                               decoration: InputDecoration(
                                 hintText: "Search favorites...".tr,
-                                prefixIcon: const Icon(
+                                prefixIcon: Icon(
                                   Icons.search,
-                                  color: Color(0xFF1E7044),
+                                  color: Theme.of(context).colorScheme.primary,
                                 ),
                                 suffixIcon: controller.searchQuery.isNotEmpty
                                     ? GestureDetector(
                                         onTap: controller.clearSearch,
-                                        child: const Icon(
+                                        child: Icon(
                                           Icons.close,
-                                          color: Color(0xFF1E7044),
+                                          color: Theme.of(context).colorScheme.primary,
                                         ),
                                       )
                                     : const SizedBox.shrink(),
@@ -105,8 +105,8 @@ class FavoritesView extends GetView<FavoritesController> {
                             height: 48,
                             decoration: BoxDecoration(
                               color: controller.hasActiveFilters
-                                  ? Colors.white
-                                  : Colors.white.withValues(alpha: 0.2),
+                                  ? Theme.of(context).colorScheme.surface
+                                  : Colors.white.withOpacity(0.2),
                               borderRadius: BorderRadius.circular(12),
                               border: controller.hasActiveFilters
                                   ? Border.all(
@@ -116,7 +116,7 @@ class FavoritesView extends GetView<FavoritesController> {
                                   : null,
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.black.withValues(alpha: 0.1),
+                                  color: Colors.black.withOpacity(0.1),
                                   blurRadius: 8,
                                   offset: const Offset(0, 4),
                                 ),
@@ -128,7 +128,7 @@ class FavoritesView extends GetView<FavoritesController> {
                                 Icon(
                                   Icons.tune_rounded,
                                   color: controller.hasActiveFilters
-                                      ? const Color(0xFF1E7044)
+                                      ? Theme.of(context).colorScheme.primary
                                       : Colors.white,
                                   size: 22,
                                 ),
@@ -162,49 +162,6 @@ class FavoritesView extends GetView<FavoritesController> {
                       ),
                     ],
                   ),
-                  // Active Filters Chips
-                  Obx(() {
-                    if (!controller.hasActiveFilters) {
-                      return const SizedBox.shrink();
-                    }
-                    return Padding(
-                      padding: const EdgeInsets.only(top: 16),
-                      child: Wrap(
-                        spacing: 8,
-                        runSpacing: 8,
-                        children: [
-                          if (controller.filterLocation.value.isNotEmpty &&
-                              controller.filterLocation.value != 'All')
-                            _buildFilterChip(
-                              Icons.location_on_outlined,
-                              controller.filterLocation.value,
-                              () => controller.setLocation(''),
-                            ),
-                          if (controller.filterProvince.value.isNotEmpty &&
-                              controller.filterProvince.value != 'All')
-                            _buildFilterChip(
-                              Icons.map_outlined,
-                              controller.filterProvince.value,
-                              () => controller.setProvince(''),
-                            ),
-                          if (controller.filterDistrict.value.isNotEmpty &&
-                              controller.filterDistrict.value != 'All')
-                            _buildFilterChip(
-                              Icons.place_outlined,
-                              controller.filterDistrict.value,
-                              () => controller.setDistrict(''),
-                            ),
-                          if (controller.filterCategory.value.isNotEmpty &&
-                              controller.filterCategory.value != 'All')
-                            _buildFilterChip(
-                              Icons.category_outlined,
-                              controller.filterCategory.value,
-                              () => controller.setCategory(''),
-                            ),
-                        ],
-                      ),
-                    );
-                  }),
                 ],
               ),
             ),
@@ -216,49 +173,12 @@ class FavoritesView extends GetView<FavoritesController> {
                 () => controller.isLoading.value
                     ? const Center(child: CircularProgressIndicator())
                     : controller.favoriteItems.isEmpty
-                    ? _buildEmptyState()
-                    : _buildFavoritesList(),
+                    ? _buildEmptyState(context)
+                    : _buildFavoritesList(context),
               ),
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildFilterChip(IconData icon, String label, VoidCallback onRemove) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.2),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: Colors.white.withValues(alpha: 0.4),
-        ),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: 14, color: Colors.white),
-          const SizedBox(width: 4),
-          Text(
-            label,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          const SizedBox(width: 4),
-          GestureDetector(
-            onTap: onRemove,
-            child: Icon(
-              Icons.close,
-              size: 14,
-              color: Colors.white.withValues(alpha: 0.7),
-            ),
-          ),
-        ],
       ),
     );
   }
@@ -272,7 +192,7 @@ class FavoritesView extends GetView<FavoritesController> {
     );
   }
 
-  Widget _buildEmptyState() {
+  Widget _buildEmptyState(BuildContext context) {
     return Center(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 60),
@@ -282,22 +202,22 @@ class FavoritesView extends GetView<FavoritesController> {
             Container(
               padding: const EdgeInsets.all(30),
               decoration: BoxDecoration(
-                color: const Color(0xFF1E7044).withValues(alpha: 0.1),
+                color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
                 shape: BoxShape.circle,
               ),
               child: Icon(
                 Icons.favorite_border,
                 size: 64,
-                color: const Color(0xFF1E7044).withValues(alpha: 0.5),
+                color: Theme.of(context).colorScheme.primary.withOpacity(0.5),
               ),
             ),
             const SizedBox(height: 20),
             Text(
               "No Favorites Yet".tr,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF1E7044),
+                color: Theme.of(context).colorScheme.primary,
               ),
             ),
             const SizedBox(height: 10),
@@ -312,7 +232,7 @@ class FavoritesView extends GetView<FavoritesController> {
     );
   }
 
-  Widget _buildFavoritesList() {
+  Widget _buildFavoritesList(BuildContext context) {
     final filteredItems = controller.getFilteredItems();
 
     if (filteredItems.isEmpty) {
@@ -331,10 +251,10 @@ class FavoritesView extends GetView<FavoritesController> {
               const SizedBox(height: 8),
               TextButton.icon(
                 onPressed: controller.clearAllFilters,
-                icon: const Icon(Icons.clear_all, color: Color(0xFF1E7044)),
+                icon: Icon(Icons.clear_all, color: Theme.of(context).colorScheme.primary),
                 label: Text(
                   "Clear all filters".tr,
-                  style: const TextStyle(color: Color(0xFF1E7044)),
+                  style: TextStyle(color: Theme.of(context).colorScheme.primary),
                 ),
               ),
             ],
@@ -346,7 +266,6 @@ class FavoritesView extends GetView<FavoritesController> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Show result count when filters are active
         Obx(() {
           if (!controller.hasActiveFilters) return const SizedBox.shrink();
           return Padding(
@@ -383,8 +302,8 @@ class FavoritesView extends GetView<FavoritesController> {
               price: "Rs. ${ad['price']} / kg",
               quantity: ad['quantity']?.toString(),
               imageUrl: imageUrl,
-              rating: 4.5, // Mock for now
-              reviewCount: 0, // Mock for now
+              rating: 4.5,
+              reviewCount: 0,
               data: ad,
               onTap: () {
                 Get.toNamed(Routes.SINGLE_ITEM, arguments: ad);
@@ -397,7 +316,6 @@ class FavoritesView extends GetView<FavoritesController> {
   }
 }
 
-// --- Filter Bottom Sheet Widget ---
 class _FilterBottomSheet extends StatelessWidget {
   final FavoritesController controller;
 
@@ -409,14 +327,13 @@ class _FilterBottomSheet extends StatelessWidget {
       constraints: BoxConstraints(
         maxHeight: MediaQuery.of(context).size.height * 0.75,
       ),
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardTheme.color,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Handle bar
           Container(
             margin: const EdgeInsets.only(top: 12),
             width: 40,
@@ -426,18 +343,17 @@ class _FilterBottomSheet extends StatelessWidget {
               borderRadius: BorderRadius.circular(2),
             ),
           ),
-          // Header
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
+                Text(
                   'Filter Favorites',
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF1E7044),
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
                 Row(
@@ -469,56 +385,51 @@ class _FilterBottomSheet extends StatelessWidget {
             ),
           ),
           const Divider(height: 1),
-          // Filter Options
           Flexible(
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Location Filter
                   _buildFilterSection(
                     context,
                     icon: Icons.location_on_outlined,
                     title: 'Location',
                     subtitle: 'Filter by item location',
                     child: Obx(() => _buildChipGroup(
+                      context,
                       items: controller.availableLocations,
                       selectedValue: controller.filterLocation.value,
                       onSelected: (value) => controller.setLocation(value),
                     )),
                   ),
                   const SizedBox(height: 24),
-
-                  // Province Filter
                   _buildFilterSection(
                     context,
                     icon: Icons.map_outlined,
                     title: 'Province',
                     subtitle: 'Filter by province',
                     child: Obx(() => _buildChipGroup(
+                      context,
                       items: controller.provinces,
                       selectedValue: controller.filterProvince.value,
                       onSelected: (value) => controller.setProvince(value),
                     )),
                   ),
                   const SizedBox(height: 24),
-
-                  // District Filter
                   _buildFilterSection(
                     context,
                     icon: Icons.place_outlined,
                     title: 'District',
                     subtitle: 'Filter by district',
                     child: Obx(() => _buildChipGroup(
+                      context,
                       items: controller.districts,
                       selectedValue: controller.filterDistrict.value,
                       onSelected: (value) => controller.setDistrict(value),
                     )),
                   ),
                   const SizedBox(height: 24),
-
-                  // Category Filter  
                   _buildFilterSection(
                     context,
                     icon: Icons.category_outlined,
@@ -534,6 +445,7 @@ class _FilterBottomSheet extends StatelessWidget {
                           );
                         }
                         return Obx(() => _buildChipGroup(
+                          context,
                           items: categoryNames,
                           selectedValue: controller.filterCategory.value,
                           onSelected: (value) => controller.setCategory(value),
@@ -546,14 +458,13 @@ class _FilterBottomSheet extends StatelessWidget {
               ),
             ),
           ),
-          // Apply Button
           Container(
             padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).cardTheme.color,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.05),
+                  color: Colors.black.withOpacity(0.05),
                   blurRadius: 10,
                   offset: const Offset(0, -4),
                 ),
@@ -565,7 +476,7 @@ class _FilterBottomSheet extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: () => Navigator.pop(context),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF1E7044),
+                  backgroundColor: Theme.of(context).colorScheme.primary,
                   foregroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -604,10 +515,10 @@ class _FilterBottomSheet extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: const Color(0xFF1E7044).withValues(alpha: 0.1),
+                color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: Icon(icon, size: 20, color: const Color(0xFF1E7044)),
+              child: Icon(icon, size: 20, color: Theme.of(context).colorScheme.primary),
             ),
             const SizedBox(width: 12),
             Column(
@@ -615,10 +526,10 @@ class _FilterBottomSheet extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF212121),
+                    color: Theme.of(context).colorScheme.onSurface,
                   ),
                 ),
                 Text(
@@ -638,7 +549,8 @@ class _FilterBottomSheet extends StatelessWidget {
     );
   }
 
-  Widget _buildChipGroup({
+  Widget _buildChipGroup(
+    BuildContext context, {
     required List<String> items,
     required String selectedValue,
     required Function(String) onSelected,
@@ -656,29 +568,20 @@ class _FilterBottomSheet extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
             decoration: BoxDecoration(
               color: isSelected
-                  ? const Color(0xFF1E7044)
-                  : const Color(0xFFF5F5F5),
+                  ? Theme.of(context).colorScheme.primary
+                  : Theme.of(context).inputDecorationTheme.fillColor,
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
                 color: isSelected
-                    ? const Color(0xFF1E7044)
+                    ? Theme.of(context).colorScheme.primary
                     : Colors.grey.shade300,
                 width: 1,
               ),
-              boxShadow: isSelected
-                  ? [
-                      BoxShadow(
-                        color: const Color(0xFF1E7044).withValues(alpha: 0.3),
-                        blurRadius: 8,
-                        offset: const Offset(0, 2),
-                      ),
-                    ]
-                  : null,
             ),
             child: Text(
               item,
               style: TextStyle(
-                color: isSelected ? Colors.white : Colors.grey[700],
+                color: isSelected ? Colors.white : Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
                 fontSize: 13,
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
               ),

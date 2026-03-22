@@ -53,21 +53,21 @@ class MyadsView extends GetView<MyadsController> {
                         Get.toNamed(Routes.CREATEAD);
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
+                        backgroundColor: Theme.of(context).cardTheme.color,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
                         elevation: 3,
                       ),
-                      icon: const Icon(
+                      icon: Icon(
                         Icons.add_circle_outline,
-                        color: Color(0xFF1E7044),
+                        color: Theme.of(context).colorScheme.primary,
                         size: 22,
                       ),
                       label: Text(
                         "Create New Ad".tr,
-                        style: const TextStyle(
-                          color: Color(0xFF1E7044),
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.primary,
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                         ),
@@ -88,10 +88,10 @@ class MyadsView extends GetView<MyadsController> {
                     children: [
                       Text(
                         "Your Listings".tr,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xFF1E7044),
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                       ),
                       PopupMenuButton<String>(
@@ -107,23 +107,23 @@ class MyadsView extends GetView<MyadsController> {
                             vertical: 6,
                           ),
                           decoration: BoxDecoration(
-                            border: Border.all(color: const Color(0xFF1E7044).withOpacity(0.3)),
+                            border: Border.all(color: Theme.of(context).colorScheme.primary.withOpacity(0.3)),
                             borderRadius: BorderRadius.circular(8),
-                            color: const Color(0xFF1E7044).withOpacity(0.05),
+                            color: Theme.of(context).colorScheme.primary.withOpacity(0.05),
                           ),
                           child: Row(
                             children: [
-                              const Icon(
+                              Icon(
                                 Icons.filter_list,
                                 size: 18,
-                                color: Color(0xFF1E7044),
+                                color: Theme.of(context).colorScheme.primary,
                               ),
                               const SizedBox(width: 6),
                               Obx(() => Text(
                                 controller.selectedStatus.value.tr,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 12,
-                                  color: Color(0xFF1E7044),
+                                  color: Theme.of(context).colorScheme.primary,
                                   fontWeight: FontWeight.w600,
                                 ),
                               )),
@@ -138,6 +138,7 @@ class MyadsView extends GetView<MyadsController> {
                   Obx(
                     () => controller.filteredAds.isEmpty
                         ? _buildEmptyState(
+                            context,
                             isFilter: controller.selectedStatus.value != 'All',
                           )
                         : ListView.builder(
@@ -146,7 +147,7 @@ class MyadsView extends GetView<MyadsController> {
                             itemCount: controller.filteredAds.length,
                             itemBuilder: (context, index) {
                               final ad = controller.filteredAds[index];
-                              return _buildAdCard(ad);
+                              return _buildAdCard(context, ad);
                             },
                           ),
                   ),
@@ -159,7 +160,7 @@ class MyadsView extends GetView<MyadsController> {
     );
   }
 
-  Widget _buildEmptyState({bool isFilter = false}) {
+  Widget _buildEmptyState(BuildContext context, {bool isFilter = false}) {
     return Center(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 60),
@@ -169,22 +170,22 @@ class MyadsView extends GetView<MyadsController> {
             Container(
               padding: const EdgeInsets.all(30),
               decoration: BoxDecoration(
-                color: const Color(0xFF1E7044).withOpacity(0.1),
+                color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
                 shape: BoxShape.circle,
               ),
               child: Icon(
                 isFilter ? Icons.search_off : Icons.post_add_outlined,
                 size: 64,
-                color: const Color(0xFF1E7044).withOpacity(0.5),
+                color: Theme.of(context).colorScheme.primary.withOpacity(0.5),
               ),
             ),
             const SizedBox(height: 20),
             Text(
               isFilter ? "No Matches Found".tr : "No Ads Yet".tr,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF1E7044),
+                color: Theme.of(context).colorScheme.primary,
               ),
             ),
             const SizedBox(height: 10),
@@ -201,7 +202,7 @@ class MyadsView extends GetView<MyadsController> {
     );
   }
 
-  Widget _buildAdCard(DocumentSnapshot doc) {
+  Widget _buildAdCard(BuildContext context, DocumentSnapshot doc) {
     final ad = doc.data() as Map<String, dynamic>;
     final adId = doc.id;
     final images = ad['images'] as List<dynamic>?;
@@ -211,7 +212,7 @@ class MyadsView extends GetView<MyadsController> {
       key: ValueKey('${doc.id}_${ad['status']}_${ad['updatedAt']}'),
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardTheme.color,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -247,14 +248,14 @@ class MyadsView extends GetView<MyadsController> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                   Text(
                     ad['title'] ?? 'Untitled',
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF1E7044),
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -271,10 +272,10 @@ class MyadsView extends GetView<MyadsController> {
                         children: [
                           Text(
                             "Rs. ${ad['price']} / kg",
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
-                              color: Color(0xFF1E7044),
+                              color: Theme.of(context).colorScheme.primary,
                             ),
                           ),
                           Text(
@@ -362,7 +363,7 @@ class MyadsView extends GetView<MyadsController> {
                 ),
               ),
             ],
-            icon: const Icon(Icons.more_vert, color: Color(0xFF1E7044)),
+            icon: Icon(Icons.more_vert, color: Theme.of(context).colorScheme.primary),
           ),
           const SizedBox(width: 8),
         ],

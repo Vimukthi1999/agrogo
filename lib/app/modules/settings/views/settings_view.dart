@@ -108,18 +108,37 @@ class SettingsView extends GetView<SettingsController> {
                             "Customize your app settings".tr,
                             style: Theme.of(context).textTheme.bodySmall,
                           ),
-                          ListTile(
+                          Obx(() => ListTile(
                             contentPadding: EdgeInsets.zero,
-                            title: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "Change App Theme".tr,
-                                  style: Theme.of(context).textTheme.titleSmall,
-                                ),
-                              ],
+                            leading: Container(
+                               padding: const EdgeInsets.all(8),
+                               decoration: BoxDecoration(
+                                 color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                                 shape: BoxShape.circle,
+                               ),
+                                 child: Icon(
+                                   controller.isDarkMode.value 
+                                     ? Icons.dark_mode 
+                                     : Icons.light_mode,
+                                   color: Theme.of(context).colorScheme.primary,
+                                 ),
+                             ),
+                            title: Text(
+                              "Dark Mode".tr,
+                              style: Theme.of(context).textTheme.titleSmall,
                             ),
-                          ),
+                            subtitle: Text(
+                              controller.isDarkMode.value 
+                                ? "Switch to light mode".tr 
+                                : "Switch to dark mode".tr,
+                              style: const TextStyle(fontSize: 11),
+                            ),
+                             trailing: Switch(
+                               value: controller.isDarkMode.value,
+                               activeColor: Theme.of(context).colorScheme.primary,
+                               onChanged: (value) => controller.switchTheme(),
+                             ),
+                          )),
                           ProfileMenuCard(
                             title: "Change Language".tr,
                             subTitle: "Selected Language: ".tr,
@@ -130,16 +149,16 @@ class SettingsView extends GetView<SettingsController> {
                             contentPadding: EdgeInsets.zero,
                             leading: Container(
                               padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                color: const Color(0xFF1E7044).withOpacity(0.1),
-                                shape: BoxShape.circle,
-                              ),
-                              child: Icon(
-                                navController.isFarmerMode.value 
-                                  ? Icons.agriculture 
-                                  : Icons.shopping_cart,
-                                color: const Color(0xFF1E7044),
-                              ),
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                                  shape: BoxShape.circle,
+                                ),
+                               child: Icon(
+                                 navController.isFarmerMode.value 
+                                   ? Icons.agriculture 
+                                   : Icons.shopping_cart,
+                                 color: Theme.of(context).colorScheme.primary,
+                               ),
                             ),
                             title: Text(
                               navController.isFarmerMode.value 
@@ -153,11 +172,11 @@ class SettingsView extends GetView<SettingsController> {
                                 : "Switch to Farmer mode to list and sell".tr,
                               style: const TextStyle(fontSize: 11),
                             ),
-                            trailing: Switch(
-                              value: navController.isFarmerMode.value,
-                              activeColor: const Color(0xFF1E7044),
-                              onChanged: (value) => navController.toggleRole(),
-                            ),
+                             trailing: Switch(
+                               value: navController.isFarmerMode.value,
+                               activeColor: Theme.of(context).colorScheme.primary,
+                               onChanged: (value) => navController.toggleRole(),
+                             ),
                           )),
                         ],
                       ),

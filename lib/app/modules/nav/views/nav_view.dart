@@ -48,7 +48,6 @@ class NavView extends GetView<NavController> {
         }
       },
       child: Scaffold(
-        // backgroundColor: Colors.transparent,
         resizeToAvoidBottomInset: false,
         body: Obx(
           () => IndexedStack(
@@ -71,125 +70,116 @@ class NavView extends GetView<NavController> {
         bottomNavigationBar: Obx(
           () => Container(
             margin: const EdgeInsets.only(bottom: 7, top: 7),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
             child: ClipRRect(
               borderRadius: const BorderRadius.all(Radius.circular(50)),
-              child: Container(
-                decoration: BoxDecoration(
-                  boxShadow: const [
-                    BoxShadow(color: Colors.black26, blurRadius: 20),
-                  ],
+              child: BottomNavigationBar(
+                currentIndex: controller.selectedIndex.value,
+                onTap: controller.changePage,
+                type: BottomNavigationBarType.fixed,
+                selectedLabelStyle: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12,
                 ),
-                child: BottomNavigationBar(
-                  currentIndex: controller.selectedIndex.value,
-                  onTap: controller.changePage,
-                  type: BottomNavigationBarType.fixed,
-                  backgroundColor: Colors.white,
-                  selectedItemColor: const Color(0xFF1E7044),
-                  unselectedItemColor: Colors.grey[400],
-                  selectedLabelStyle: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12,
+                unselectedLabelStyle: const TextStyle(fontSize: 11),
+                iconSize: 24,
+                elevation: 0,
+                items: [
+                  BottomNavigationBarItem(
+                    icon: const Icon(Icons.home_outlined),
+                    activeIcon: const Icon(Icons.home),
+                    label: 'Home'.tr,
                   ),
-                  unselectedLabelStyle: const TextStyle(fontSize: 11),
-                  iconSize: 24,
-                  elevation: 5,
-                  items: [
-                    BottomNavigationBarItem(
-                      icon: const Icon(Icons.home_outlined),
-                      activeIcon: const Icon(Icons.home),
-                      label: 'Home'.tr,
-                    ),
-                    controller.isFarmerMode.value 
-                      ? BottomNavigationBarItem(
-                          icon: const Icon(Icons.inventory_2_outlined),
-                          activeIcon: const Icon(Icons.inventory_2),
-                          label: 'My Ads'.tr,
-                        )
-                      : BottomNavigationBarItem(
-                          icon: const Icon(Icons.favorite_outline),
-                          activeIcon: const Icon(Icons.favorite),
-                          label: 'Favorites'.tr,
-                        ),
-                    BottomNavigationBarItem(
-                      icon: Obx(() {
-                        final unread = chatController.unreadCount.value;
-                        return Stack(
-                          clipBehavior: Clip.none,
-                          children: [
-                            const Icon(Icons.chat_outlined),
-                            if (unread > 0)
-                              Positioned(
-                                top: -4,
-                                right: -6,
-                                child: Container(
-                                  padding: const EdgeInsets.all(3),
-                                  decoration: const BoxDecoration(
-                                    color: Color(0xFFFF4444),
-                                    shape: BoxShape.circle,
-                                  ),
-                                  constraints: const BoxConstraints(
-                                    minWidth: 16,
-                                    minHeight: 16,
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      unread > 9 ? '9+' : '$unread',
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 9,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                  controller.isFarmerMode.value 
+                    ? BottomNavigationBarItem(
+                        icon: const Icon(Icons.inventory_2_outlined),
+                        activeIcon: const Icon(Icons.inventory_2),
+                        label: 'My Ads'.tr,
+                      )
+                    : BottomNavigationBarItem(
+                        icon: const Icon(Icons.favorite_outline),
+                        activeIcon: const Icon(Icons.favorite),
+                        label: 'Favorites'.tr,
+                      ),
+                  BottomNavigationBarItem(
+                    icon: Obx(() {
+                      final unread = chatController.unreadCount.value;
+                      return Stack(
+                        clipBehavior: Clip.none,
+                        children: [
+                          const Icon(Icons.chat_outlined),
+                          if (unread > 0)
+                            Positioned(
+                              top: -4,
+                              right: -6,
+                              child: Container(
+                                padding: const EdgeInsets.all(3),
+                                decoration: const BoxDecoration(
+                                  color: Color(0xFFFF4444),
+                                  shape: BoxShape.circle,
+                                ),
+                                constraints: const BoxConstraints(
+                                  minWidth: 16,
+                                  minHeight: 16,
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    unread > 9 ? '9+' : '$unread',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 9,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                 ),
                               ),
-                          ],
-                        );
-                      }),
-                      activeIcon: Obx(() {
-                        final unread = chatController.unreadCount.value;
-                        return Stack(
-                          clipBehavior: Clip.none,
-                          children: [
-                            const Icon(Icons.chat),
-                            if (unread > 0)
-                              Positioned(
-                                top: -4,
-                                right: -6,
-                                child: Container(
-                                  padding: const EdgeInsets.all(3),
-                                  decoration: const BoxDecoration(
-                                    color: Color(0xFFFF4444),
-                                    shape: BoxShape.circle,
-                                  ),
-                                  constraints: const BoxConstraints(
-                                    minWidth: 16,
-                                    minHeight: 16,
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      unread > 9 ? '9+' : '$unread',
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 9,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                            ),
+                        ],
+                      );
+                    }),
+                    activeIcon: Obx(() {
+                      final unread = chatController.unreadCount.value;
+                      return Stack(
+                        clipBehavior: Clip.none,
+                        children: [
+                          const Icon(Icons.chat),
+                          if (unread > 0)
+                            Positioned(
+                              top: -4,
+                              right: -6,
+                              child: Container(
+                                padding: const EdgeInsets.all(3),
+                                decoration: const BoxDecoration(
+                                  color: Color(0xFFFF4444),
+                                  shape: BoxShape.circle,
+                                ),
+                                constraints: const BoxConstraints(
+                                  minWidth: 16,
+                                  minHeight: 16,
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    unread > 9 ? '9+' : '$unread',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 9,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                 ),
                               ),
-                          ],
-                        );
-                      }),
-                      label: 'Chats'.tr,
-                    ),
-                    BottomNavigationBarItem(
-                      icon: const Icon(Icons.person_outline),
-                      activeIcon: const Icon(Icons.person),
-                      label: 'Profile'.tr,
-                    ),
-                  ],
-                ),
+                            ),
+                        ],
+                      );
+                    }),
+                    label: 'Chats'.tr,
+                  ),
+                  BottomNavigationBarItem(
+                    icon: const Icon(Icons.person_outline),
+                    activeIcon: const Icon(Icons.person),
+                    label: 'Profile'.tr,
+                  ),
+                ],
               ),
             ),
           ),

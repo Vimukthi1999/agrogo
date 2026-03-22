@@ -8,8 +8,22 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:latlong2/latlong.dart';
+import '../../../services/theme_service.dart';
 
 class SettingsController extends GetxController {
+  final _themeService = ThemeService();
+  final isDarkMode = false.obs;
+
+  void onInit() {
+    super.onInit();
+    fetchUserData();
+    isDarkMode.value = _themeService.theme == ThemeMode.dark;
+  }
+
+  void switchTheme() {
+    _themeService.switchTheme();
+    isDarkMode.value = !isDarkMode.value;
+  }
   final loadingUpdateMe = false.obs;
   final loadingUpdatePw = false.obs;
 
@@ -94,11 +108,7 @@ class SettingsController extends GetxController {
     'Kegalle': LatLng(7.2513, 80.3464),
   };
 
-  @override
-  void onInit() {
-    super.onInit();
-    fetchUserData();
-  }
+  // Removed onInit from here as it was added at the top
 
   Future<void> fetchUserData() async {
     try {

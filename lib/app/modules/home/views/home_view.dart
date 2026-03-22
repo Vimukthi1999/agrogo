@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import '../../../models/category_model.dart';
 import '../../../routes/app_pages.dart';
 import '../../common/item_card.dart';
@@ -95,12 +96,14 @@ class HomeView extends GetView<HomeController> {
                                     size: 16,
                                   ),
                                   const SizedBox(width: 8),
-                                  Text(
-                                    "Sunday, 25 Jan 2026".tr,
-                                    style: const TextStyle(
-                                      color: Colors.white70,
-                                      fontSize: 13,
-                                      letterSpacing: 0.3,
+                                  Obx(
+                                    () => Text(
+                                      controller.currentDate.value.tr,
+                                      style: const TextStyle(
+                                        color: Colors.white70,
+                                        fontSize: 13,
+                                        letterSpacing: 0.3,
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -474,7 +477,7 @@ class HomeView extends GetView<HomeController> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "Fresh Deals".tr,
+                        "New Listings".tr,
                         style: const TextStyle(
                           color: Color(0xFF1E7044),
                           fontSize: 18,

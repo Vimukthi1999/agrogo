@@ -87,11 +87,15 @@ class NotificationsView extends StatelessWidget {
                   .limit(50)
                   .snapshots(),
               builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
+                if (snapshot.hasError) {
+                  return _buildErrorState(snapshot.error.toString());
+                }
+
+                if (snapshot.connectionState == ConnectionState.waiting && !snapshot.hasData) {
                   return const Center(child: CircularProgressIndicator());
                 }
 
-                if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                if (!snapshot.hasData || (snapshot.data!.docs.isEmpty && snapshot.connectionState != ConnectionState.waiting)) {
                   return _buildEmptyState();
                 }
 
@@ -153,6 +157,42 @@ class NotificationsView extends StatelessWidget {
                 height: 1.5,
               ),
             ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildErrorState(String error) {
+    bool isIndexError = error.contains('index');
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(32),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.error_outline_rounded, size: 64, color: Colors.red[300]),
+            const SizedBox(height: 16),
+            Text(
+              isIndexError ? 'Index Required' : 'Oops!',
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              isIndexError
+                  ? 'This view requires a Firestore composite index. You can create it in the Firebase Console using the link that should appear in your debug logs.'
+                  : 'Something went wrong: $error',
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.grey[600]),
+            ),
+            if (isIndexError) ...[
+                const SizedBox(height: 16),
+                const Text(
+                  'Note: To fix this quickly, you can temporarily remove the sorting in notifications_view.dart (line 86).',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic),
+                ),
+            ],
           ],
         ),
       ),

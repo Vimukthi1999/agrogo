@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../../models/category_model.dart';
 
@@ -13,6 +14,7 @@ class HomeController extends GetxController {
   final userName = "User".obs;
   final profileImage = "".obs;
   final searchQuery = "".obs;
+  final currentDate = "".obs;
 
   // Filter state
   final filterCategory = ''.obs;
@@ -143,6 +145,12 @@ class HomeController extends GetxController {
   void onInit() {
     super.onInit();
     fetchUserData();
+    _updateCurrentDate();
+  }
+
+  void _updateCurrentDate() {
+    final now = DateTime.now();
+    currentDate.value = DateFormat('EEEE, d MMM yyyy').format(now);
   }
 
   void fetchUserData() {
